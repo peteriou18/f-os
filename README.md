@@ -11,3 +11,8 @@ You could work both level simultaneously.
 
 Included screen editor, blocks fylesystem.
 
+Loader aka Block 0 (zero) written by fasm. 
+Block 0 contain master boot record, kernel, base vocabulary.
+All the rest deployng from source code.
+
+
