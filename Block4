@@ -1,0 +1,28 @@
+( Block 4. )                                                    
+code_top  @ label hc0   rol_ebx,4 mov_al,bl and_al,0fh          
+mov_ah,30h  aaa_17 mov_ah,0eh int_10h ret                      
+BIN: 2/  call pop_code shr_eax,1 call push_code ret            
+BIN: HEX.  call pop_code   mov_ebx,eax call hc0 call hc0        call hc0 call hc0 call hc0 call hc0 call hc0 call hc0   ret     
+HEX.   
+BIN: KEY   xor_ax,ax  int_16h call push_code ret        
+BIN: C@  call pop_code  movzx_eax,b[eax] call push_code ret    
+BIN: 1+  call pop_code inc_eax  call push_code  ret ;BIN       
+BIN: CR   mov_ax,0e0dh  int_10h  mov_ax,0e0ah int_10h ret ;BIN  
+BIN: 1-!  call  pop_code dec_d[eax] ret ;BIN                    
+code_top  @  label for_scroll  mov_bh,1  mov_ch,3  mov_cl,3     mov_dh,13h   mov_dl,43h  mov_al,1  ret                    BIN: scroll_up   call for_scroll mov_ah,6 int_10h ret ;BIN     
+BIN: scroll_down  call for_scroll mov_ah,7 int_10h ret ;BIN     
+BIN: 1-  call pop_code dec_eax  call push_code  ret ;BIN        
+BIN: 2*  call pop_code shl_eax,1 call push_code  ret  ;BIN      
+BIN: v-line   call pop_ab  code_top @ label vl7                               mov_w[fs:ebx], w# 1fba  add_ebx, d# a0  dec_eax                 jne  vl7  ret                                     
+BIN: /  call pop_ab  xor_edx,edx  div_ebx  call push_code               mov_eax,edx     call push_code  ret                     
+BIN: set_cursor call pop_code  mov_dh,al mov_dl,ah                     mov_ah, b# 02 xor_ebx,ebx int_10h  ret                   
+BIN:  h-line   call pop_ab  code_top @ label hl2                      mov_w[fs:ebx], w# 1fcd  inc_ebx inc_ebx  dec_eax                jne hl2  ret                                              
+BIN: draw-corners    call  pop_code  mov_w[fs:eax], w# 1fbc          call  pop_code  mov_w[fs:eax],  w# 1fc8   call  pop_code        mov_w[fs:eax],  w# 1fbb         call  pop_code                  mov_w[fs:eax],  w# 1fc9  ret                               
+BIN: fill-box   call pop_code   mov_edx,eax     call pop_ab     push_eax        mov_ecx,ebx     xor_ebx,ebx     mov_ah, b# 1f   code_top @     label  fb5     mov_al,[edx]    mov_[fs:ebx],ax   inc_edx         inc_ebx         inc_ebx         dec_ecx         jne fb5         dec_di          pop_ecx         dec_ecx         push_ecx        jne  fb5        ret  pop_ecx    ret            
+BIN: fb2        call pop_code   push_eax        call pop_ab     mov_ecx,eax     xor_edx,edx     mov_ah, b# 1f   code_top @     label  fb3       mov_al,[ebx]    mov_[fs:edx],ax inc_ebx         inc_edx         inc_edx         dec_ecx         jne fb3         dec_di          pop_ecx         dec_ecx         push_ecx        jne  fb3        ret  pop_ecx    ret                             
+BIN: print-line call pop_code   mov_ecx,eax     call pop_code   mov_edx,eax     call pop_code   mov_ebx,eax     mov_ah, b# 1f   code_top @    label  pl1      mov_al,[ebx]    mov_[fs:edx],ax   inc_ebx         inc_edx         inc_edx         dec_ecx         jne  pl1  ret                                                                                                                    
+BIN:  <        call pop_ab     cmp_ebx,eax     setl_al          movsx_eax,al   call push_code  ret                             
+BIN:  >=       call pop_ab     cmp_ebx,eax     setge_al         movsx_eax,al   call push_code  ret                             
+BIN: +!         call pop_ab     add_[ebx],eax   ret            
+BIN: pack_2d_b  call pop_ab     mov_ah,al       mov_al,bl       call push_code  ret                                            
+BIN: SWAP     call pop_ab     mov_ecx,eax     mov_eax,ebx       call push_code  mov_eax,ecx    call push_code  ret        ..                 
