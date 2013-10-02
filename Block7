@@ -1,0 +1,27 @@
+.( Block 7 )                                                    
+: do_any   DUP  symbol @  cursor @ + DUP  0x, 2000  right_shift_one poke_symbol  do_right  ;
+: down_edge_string   width @ symbol +! symbol @ 0x, 2000 w*h -   > IF  width @ winname symbol -! THEN   ;  
+: down_edge  cursor @  w*h > IF width @ cursor -!                            down_edge_string THEN  ;                   
+: do_down    width @ cursor +!   down_edge ;                   
+: up_edge_string   width @ symbol -! symbol @ 0x, 1000 < IF                  width @ symbol +! THEN ;                         
+: up_edge  cursor @ 0 < IF width @  cursor +! up_edge_string                            THEN ;                               
+: do_up    width @ cursor -! up_edge ;                       
+: do_home  0x, 1 cursor ! 0x, 1000 symbol ! ;                
+: edit    BEGIN  draw KEY  DUP  home?     IF  
+                           DUP  up?       IF
+                           DUP  down?     IF 
+                           DUP  esc?      IF 
+                           DUP  left?     IF 
+                           DUP  right?    IF 
+                           DUP  delete?   IF 
+                           DUP backspace? IF do_any ELSE do_backspace THEN 
+                           ELSE              do_delete                THEN
+                           ELSE              do_right                 THEN 
+                           ELSE              do_left                  THEN 
+                           ELSE              do_esc                   THEN 
+                           ELSE              do_down                  THEN 
+                           ELSE              do_up                    THEN 
+                           ELSE              do_home                  THEN       DROP     AGAIN ;                    
+: backup ( save blocks 0-0f to blocks 10-1f  )    0x, f BEGIN DUP 0x, 2000  RBLOCK DUP 0x, 10 + 0x, 2000   WBLOCK  1- DUP  0 < UNTIL DROP ;                     
+: block-edit   ( block_number --  )  0x, 1000 RBLOCK edit ;    
+: block-save   backup  0x, 1000 WBLOCK  ;  
