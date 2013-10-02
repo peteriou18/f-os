@@ -1,0 +1,28 @@
+ .( Block 6 )                                                    
+ .( Decompile )                                                 
+ : decompile   0x, 4 - @@1 !  LATEST BEGIN  N>LINK @ DUP                       @@1 @ < UNTIL  COUNT TYPE ;                       
+ .( Windows )                                                   
+ : create_box    CREATE  [ 0x 2 0x 5 xy-a ] , 0x, 40 , 0x, 10 ,      0x, 1000 , 0x,   8 ,               ;                          
+ create_box win1    win1 CONSTANT winname                     
+ : start_adr  winname ;        
+ : width winname +CELL   ;       
+ : height  winname +CELL +CELL ;                               
+ : symbol  winname +CELL +CELL +CELL ;                         
+ : cursor  winname 0x, 10 +  ;                               
+ : fill    0 @@1 ! symbol @  @@2 !  BEGIN  @@2 @  start_adr @              @@1 @ + width @   print-line    0x, a0 @@1 +!                 width @ @@2 +!  height @  0x, a0 *  @@1 @  <> UNTIL  ; 
+ : border   start_adr @ 0x, a2 -   start_adr @  width @ 2* +                0x, a0 -  start_adr @  height @ 0x, a0 * + 0x, 2 -              start_adr @  width @ 2* +  height @ 0x, a0 * +                  draw-corners width @  start_adr @ 0x, a0 -  h-line              width @  start_adr @  height @ 0x, a0 * +   h-line              height @ start_adr @ 1- 1-         v-line                       height @ start_adr @ width @ 2* +  v-line ;        
+ : a-xy    0x, a0 /   2/     ;  
+ : w*h  width @  height @ * ;   
+ : a-xy_in_the_box    ( addr width -- x y )  /       ;         
+ : a_b+c_d  ( a b c d -- a+c b+d) @@1 !  @@2 !  @@1 +! @@2 +!               ( b+d, a+c)     @@1 @  @@2 @    ;  
+ : set_cursor_in_the_box   start_adr  @ a-xy  cursor @  width @       a-xy_in_the_box  a_b+c_d  pack_2d_b  set_cursor  ;        
+ : draw   border fill set_cursor_in_the_box ;                  
+ : do_esc    0x, 114  set_cursor  0x, 2 return  ;              
+ : right-symbol-edge  0x, 2000 w*h - symbol @ < IF  0x, 2000                          w*h - symbol ! THEN ;                     
+ : right-edge   w*h cursor @ < IF cursor 1-! symbol 1+!                         right-symbol-edge THEN ;                        
+ : left-symbol-edge  0x, 1000 symbol @ >= IF 0x, 1000 symbol !      THEN ;                                                      
+ : left-edge   0 cursor @ >= IF cursor 1+! symbol 1-!                          left-symbol-edge  THEN ;                         
+ : do_right    cursor 1+! right-edge   ;                        
+ : do_left     cursor 1-! left-edge ;                           
+ : do_delete   symbol @ cursor @ + 0x, 2000 left_shift_one ;    
+ : do_backspace   do_left do_delete ;                                           .. 
