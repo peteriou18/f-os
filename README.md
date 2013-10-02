@@ -16,3 +16,16 @@ Block 0 contain master boot record, kernel, base vocabulary.
 All the rest deployng from source code.
 
 
+Non standart words.
+
+0x  - input hex number, put it on stack
+0x, - input hex number, compile lit-code, compile hex value. Immediate. 
+HEX. - print value from top of stack as hex.
+HEXa - put 8 bytes on address from stack
+BIN: - set next words as low-level word. 
+opcode - create opcode word. get n dwords from stack and compile it as bytes to code segment
+code_top - address of value of first free byte in code segment
+label - get value from stack, create word with execution semantic: calculate and compile value to code segment
+
+
+
