@@ -1,7 +1,7 @@
 f-os
 ====
 
-FORTH OS loading and developing from it's one sourese code. 
+FORTH OS loading and developing from it's one source code. 
 
 Concept.
 
