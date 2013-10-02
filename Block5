@@ -1,0 +1,39 @@
+.( Block 5. )                                                    
+: MARK  HERE @ ;  : RESOLVE  HERE @ ! ;                         
+: BEGIN  MARK  ; IMMEDIATE  : AGAIN br_label , , ; IMMEDIATE    
+: UNTIL   ?br_label , , ; IMMEDIATE                            
+: ( ) WORD DROP ; IMMEDIATE                                    
+: WORDS  LATEST BEGIN DUP COUNT 3F AND  TYPE SPACE N>LINK @              DUP 0 <>  UNTIL ;    
+: VARIABLE  CREATE 0 , ;         
+: ."   dot_quote_code ,  QUOTE WORD COUNT +  1 + HERE !         ;  IMMEDIATE    
+: TO  BL WORD FIND DROP >BODY ! ;               
+: NAME>    N>LINK +CELL ;   VARIABLE (column) VARIABLE (row)   
+: 0x,  lit_code , 0x , ; IMMEDIATE                             
+.( If..Then..Else )                                             
+: IF ?br_label , MARK 0 , ; IMMEDIATE                           
+: THEN   MARK  SWAP !  ; IMMEDIATE                             
+: ELSE MARK +CELL +CELL SWAP ! br_label , MARK 0 , ; IMMEDIATE  
+.( Key codes )                                                 
+: backspace? 0x, 0e08 = ;  
+: delete? 0x, 5300 = ;              
+: esc? 0x, 11b = ;        
+: left? 0x, 4b00 = ;                
+: right? 0x, 4d00 = ;    
+: up? 0x, 4800 = ;                 
+: down? 0x, 5000 = ;       
+: page_up? 0x, 4900 = ;             
+: page_down? 0x, 5100 = ;  
+: home? 0x, 4700 = ;                
+: end? 0x, 4f00 = ;                                                                                                             
+: xy-a   SWAP   0x, 50 * + 2* ;                               
+.( Local variables )          
+: @@1 HERE @ 0x, 100  + ;       
+: @@2  HERE @    0x, 104  + ;  
+: @@3  HERE @   0x, 108  + ;   
+: @@5  HERE @   0x,    110 + ; 
+: @@4  HERE @   0x, 10c + ;                                                                    
+: (DUMP) DUP @ HEX. SPACE +CELL ;                             
+: (CDUMP)  DUP CODE@ HEX. SPACE +CELL ;                        
+: dump   (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP)          (DUMP)  ;                                                    
+: cdump (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) ;                                                                                                                      
+: pack   2* 2* 2* 2* 2* 2* 2* 2* + ;                                                                               .. 
