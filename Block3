@@ -25,7 +25,7 @@ BIN:  >    call pop_ab  cmp_ebx,eax setg_al  movsx_eax,al                  call 
 BIN: -!  call pop_ab  sub_[ebx],eax ret                        
 BIN: CSP    lea_eax,[esi*4]  call push_code  ret             
 BIN: right_shift_one     call pop_ab   code_top @ label rso          mov_cl,[ebx-1]  mov_[ebx],cl   dec_ebx     cmp_eax,ebx          jne rso  ret                                            
-BIN: poke_symbol     call pop_ab mov_[ebx],al    ret           
+BIN: C!     call pop_ab mov_[ebx],al    ret           
 BIN: left_shift_one   call pop_ab    code_top @ label lso1           mov_cl,[eax+1]  mov_[eax],cl    inc_eax   cmp_eax,ebx           jne lso1  ret 
 0x 42 0x 66 0x 2 opcode inc_edx                                 code_top @                                                      code_top  @ label hc1    rol_ebx,4 mov_al,bl and_al,0fh         mov_ah,30h   aaa_17  mov_[edx],al    inc_edx    ret           
 BIN: HEXa    call pop_code   mov_edx,eax  call pop_code              mov_ebx,eax     call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 ret   
