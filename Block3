@@ -1,31 +1,39 @@
 .( Block 3 )                                                    
-: NAME>    N>LINK +CELL ;     LATEST NAME> CONSTANT  does-d     
-: part-one     call  var_    mov_eax, ;                         
-: part-two     jmp  addr_i  ;                                  
-: DOES>        code_top @ lit_code , , does-d ,  HERE @ part-one        code_top @ dCode,      code_top 4+!      part-two   ret_ ,  ; IMMEDIATE                                
+      0x 4b 0x 66 0x 2  opcode     dec_ebx
+      0x 42 0x 66 0x 2  opcode     inc_edx
 0x d8 0x 89 0x 66 0x 3  opcode     mov_eax,ebx                 
-0x c8 0x 89 0x 66 0x 3  opcode     mov_eax,ecx                
-0x 40 0x 04 0x 8d 0x 66 0x 67 0x 5 opcode  lea_eax,[eax*2+eax]  
-0x 00 0x 04 0x 8d 0x 66 0x 67 0x 5 opcode  lea_eax,[eax*2]        
-0x c4 0x 1 0x 66 0x 3   opcode     add_esp,eax                
-BIN: return     call pop_code   lea_eax,[eax*2+eax]   lea_eax,[eax*2] add_esp,eax     ret                  
-BIN: 2-!   call  pop_code dec_d[eax] dec_d[eax]  ret              
-0x c0 0x 9f 0x 0f 0x 3  opcode    setg_al               
-BIN:  >    call pop_ab  cmp_ebx,eax setg_al  movsx_eax,al                  call push_code  ret                                    
-0x 08 0x 88 0x 67 0x 3  opcode    mov_[eax],cl                
-0x 1 0x 48 0x 8a 0x 67 0x 4  opcode mov_cl,[eax+1]               
-0x d8 0x 39 0x 66 0x 3  opcode  cmp_eax,ebx                          
-0x 4b 0x 66 0x 2  opcode  dec_ebx                      
-0x ff 0x 4b 0x 8a 0x 67 0x 4  opcode mov_cl,[ebx-1]             
-0x 0b 0x 88 0x 67 0x 3  opcode  mov_[ebx],cl                   
-0x 3 0x 88 0x 67 0x 3 opcode  mov_[ebx],al                   
-0 0 0 0 0x b5 0x 4 0x 8d 0x 66 0x 67 0x 9 opcode lea_eax,[esi*4] 
+0x c8 0x 89 0x 66 0x 3  opcode     mov_eax,ecx 
+0x  3 0x 88 0x 67 0x 3  opcode     mov_[ebx],al 
+0x 0b 0x 88 0x 67 0x 3  opcode     mov_[ebx],cl
+0x c4     1 0x 66 0x 3  opcode     add_esp,eax  
+0x c0 0x 9f 0x 0f 0x 3  opcode     setg_al  
+0x 08 0x 88 0x 67 0x 3  opcode     mov_[eax],cl 
+0x d8 0x 39 0x 66 0x 3  opcode     cmp_eax,ebx
+
+    1 0x 48 0x 8a 0x 67 0x 4  opcode mov_cl,[eax+1]
+0x ff 0x 4b 0x 8a 0x 67 0x 4  opcode mov_cl,[ebx-1]
 0x 18 0x 29 0x 66 0x 67 0x 4 opcode sub_[eax],ebx              
 0x 03 0x 29 0x 66 0x 67 0x 4 opcode sub_[ebx],eax
-BIN: -!  call pop_ab  sub_[ebx],eax ret                        
+
+0x 40 0x 04 0x 8d 0x 66 0x 67 0x 5 opcode  lea_eax,[eax*2+eax]  
+0x 00 0x 04 0x 8d 0x 66 0x 67 0x 5 opcode  lea_eax,[eax*2]        
+                          
+0 0 0 0 0x b5 0x 4 0x 8d 0x 66 0x 67 0x 9 opcode lea_eax,[esi*4] 
+
+
+BIN: -!      call pop_ab  sub_[ebx],eax ret 
+BIN: return     call pop_code   lea_eax,[eax*2+eax]   lea_eax,[eax*2] add_esp,eax     ret                  
+BIN: 2-!   call  pop_code dec_d[eax] dec_d[eax]  ret              
+BIN:  >    call pop_ab  cmp_ebx,eax setg_al  movsx_eax,al     call push_code  ret                                    
 BIN: CSP    lea_eax,[esi*4]  call push_code  ret             
 BIN: right_shift_one     call pop_ab   code_top @ label rso          mov_cl,[ebx-1]  mov_[ebx],cl   dec_ebx     cmp_eax,ebx          jne rso  ret                                            
 BIN: C!     call pop_ab mov_[ebx],al    ret           
 BIN: left_shift_one   call pop_ab    code_top @ label lso1           mov_cl,[eax+1]  mov_[eax],cl    inc_eax   cmp_eax,ebx           jne lso1  ret 
-0x 42 0x 66 0x 2 opcode inc_edx                                 code_top @                                                      code_top  @ label hc1    rol_ebx,4 mov_al,bl and_al,0fh         mov_ah,30h   aaa_17  mov_[edx],al    inc_edx    ret           
+    code_top @                                                      code_top  @ label hc1    rol_ebx,4 mov_al,bl and_al,0fh         mov_ah,30h   aaa_17  mov_[edx],al    inc_edx    ret           
 BIN: HEXa    call pop_code   mov_edx,eax  call pop_code              mov_ebx,eax     call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 ret   
+
+: NAME>    N>LINK +CELL ;     LATEST NAME> CONSTANT  does-d     
+: part-one     call  var_    mov_eax, ;                         
+: part-two     jmp  addr_i  ;                                  
+: DOES>        code_top @ lit_code , , does-d ,  HERE @ part-one        code_top @ dCode,      code_top 4+!      part-two   ret_ ,  ; IMMEDIATE                                
+  
