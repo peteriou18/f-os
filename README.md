@@ -1,5 +1,14 @@
 f-os
 ====
+Операционная система, написанная на рабочей смеси форт\ассемблер i386.
+
+Особенности:
+
+1) Файловая система - блочная. Каждый блок размером 4 Кбайт состоит из 8 последовательных секторов по 512 байт.
+Блок 0 является загузочным. Он содержит в себе mstart boot record и код загрузки остальной части 
+кодя ядра и базового словаря.
+2) Код ядра включает в себя адресный интерпретатор, базовый ввод-вывод и константы.
+3) Дальнейшая загрузка системы, равно как и прикладных программ производится исходными текстами.
 
 FORTH OS loading and developing from it's one source code. 
 
@@ -11,7 +20,7 @@ You could work both level simultaneously.
 
 Included screen editor, blocks fylesystem.
 
-Loader aka Block 0 (zero) written by fasm. 
+Loader aka Block 0 (zero) written by fasm . 
 Block 0 contain master boot record, kernel, base vocabulary.
 All the rest deployng from source code.
 
