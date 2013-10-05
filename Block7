@@ -1,10 +1,10 @@
 .( Block 7 )                                                    
 : do_any   DUP  symbol @  cursor @ + DUP  0x, 2000  right_shift_one C!  do_right  ;
-: down_edge_string   width @ symbol +! symbol @ 0x, 2000 w*h -   > IF  width @ winname symbol -! THEN   ;  
-: down_edge  cursor @  w*h > IF width @ cursor -!                            down_edge_string THEN  ;                   
+: down_edge_string   width @ symbol +! symbol @ 0x, 2000 w*h -   > IF  width @  symbol -! THEN   ;  
+: down_edge  cursor @  w*h > IF width @ cursor -! down_edge_string THEN  ;                   
 : do_down    width @ cursor +!   down_edge ;                   
-: up_edge_string   width @ symbol -! symbol @ 0x, 1000 < IF                  width @ symbol +! THEN ;                         
-: up_edge  cursor @ 0 < IF width @  cursor +! up_edge_string                            THEN ;                               
+: up_edge_string   width @ symbol -! symbol @ 0x, 1000 < IF  width @ symbol +! THEN ;                         
+: up_edge  cursor @ 0 < IF width @  cursor +! up_edge_string  THEN ;                               
 : do_up    width @ cursor -! up_edge ;                       
 : do_home  0x, 1 cursor ! 0x, 1000 symbol ! ;                
 : edit    BEGIN  draw KEY  DUP  home?     IF  
