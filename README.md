@@ -28,6 +28,35 @@ f-os
 Там, где встретится конструкция ['] xxx будет скомплировано поле кода для ххх и во время исполнения оно будет 
 положено на стек.
 
+--------------
+
+CMOVE ( addrs addrd n ) move n chars from addrs to addrd incremening addrs.
+CMOVE> ( addrs addrd n ) move n chars from addrs to addrd decremening addrd+n.
+
+BIN: CMOVE  
+           call pop_code
+           mov_ecx,eax
+           call pop_ab ( ebx - addrd, eax - addrs )
+cm1:           
+           mov_dl,[eax]
+           mov_[ebx],dl
+           inc_eax
+           inc_ebx
+           loop cm1
+           ret
+           
+           
+BIN: CMOVE>
+          call pop_code
+          mov_ecx,eax
+          call pop_ab
+ cm2:         
+          mov_dl,[eax+ecx]
+          mov_[ebx+ecx]
+          loop cm2
+          ret
+          
+
 FORTH OS loading and developing from it's one source code. 
 
 Concept.
