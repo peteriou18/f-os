@@ -82,6 +82,7 @@ BIN: - set next words as low-level word.
 opcode - create opcode word. get n dwords from stack and compile it as bytes to code segment
 code_top - address of value of first free byte in code segment
 label - get value from stack, create word with execution semantic: calculate and compile value to code segment
+T->T,N - put on stack counter of string. 
 
 
 
