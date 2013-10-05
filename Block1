@@ -12,10 +12,10 @@
                   0x ba 0x 66 0x 2    opcode    mov_edx, 
                   0x e2 0x 88 0x 2    opcode    mov_dl,ah 
                   0x  d 0x 66 0x 2    opcode    or_eax,
+                  0x  5 0x 66 0x 2    opcode    add_eax,
             0x C3 0x 89 0x 66 0x 3    opcode    mov_ebx,eax
             0x c2 0x 89 0x 66 0x 3    opcode    mov_edx,eax                     
             0x c2 0x 81 0x 81 0x 3    opcode    add_edx,                         
-            0x c0 0x 81 0x 81 0x 3    opcode    add_eax,                          
             0x d8     1 0x 66 0x 3    opcode    add_eax,ebx                       
             0x d8 0x 29 0x 66 0x 3    opcode    sub_eax,ebx                       
             0x d8 0x 21 0x 66 0x 3    opcode    and_eax,ebx                      
