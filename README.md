@@ -73,7 +73,7 @@ BIN: CMOVE>
  начальный блок берется со стека.
  
  
-    current-block @ 0x, 1000 WBLOCK       
+    current-block @ 0x, 1000 WBLOCK  current-block 1+!      
 
 FORTH OS loading and developing from it's one source code. 
 
