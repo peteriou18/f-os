@@ -73,7 +73,19 @@ BIN: CMOVE>
  начальный блок берется со стека.
  
  
-    current-block @ 0x, 1000 WBLOCK  current-block 1+!      
+    current-block @ 0x, 1000 WBLOCK  current-block 1+!    
+ 
+ --------------------
+ 
+ static-segment
+ 
+ Статик сегмент нужен для выживаемости данных после перезагрузки. 
+ 64Кбайт = 128 сектороы = 16 блоков.
+ статик сегмент = gs.
+ при загрузке системы грузим загружаем их. 
+ сохраняем статик по слову restart или static-save
+ при загрузке статика сохраняется его резервная копия.
+
 
 FORTH OS loading and developing from it's one source code. 
 
