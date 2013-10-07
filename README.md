@@ -7,6 +7,9 @@ f-os
 Скачиваете с vden.ru/fsystem последний файл образ и записываете его на флешку или диск, какую не жалко. 
 Загружаетесь и работаете.
 
+Система уже включает в себя ассемблер и редактор. Позволяет вести разработку и отладку сама в себе.
+
+
 Особенности:
 
 1) Файловая система - блочная. Каждый блок размером 4 Кбайт состоит из 8 последовательных секторов по 512 байт.
@@ -88,6 +91,7 @@ opcode - create opcode word. get n dwords from stack and compile it as bytes to 
 code_top - address of value of first free byte in code segment
 label - get value from stack, create word with execution semantic: calculate and compile value to code segment
 T->T,N - put on stack counter of string. 
+restart - quick warm system reload.
 
 
 
