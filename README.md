@@ -63,7 +63,17 @@ BIN: CMOVE>
           mov_[ebx+ecx]
           loop cm2
           ret
-          
+ -----------------
+
+ То, что выдает pci-list мне надо куда-то сохранить. 
+ выделим для этого блоки, начиная с 0х 100.
+ 
+ буфер-заполнен? сохранить-в-блок следующий-блок
+ 
+ начальный блок берется со стека.
+ 
+ 
+    current-block @ 0x, 1000 WBLOCK       
 
 FORTH OS loading and developing from it's one source code. 
 
