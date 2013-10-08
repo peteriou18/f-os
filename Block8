@@ -1,6 +1,6 @@
 .( Block 8.)  
                 
-BIN: restart  int b# 19                             
+                             
 0x 31 0x f 0x 2 opcode rdtsc  0x 32 0x f 0x 2 opcode rdmsr   
 0x a2 0x f 0x 2 opcode cpuid                                
 BIN: timestamp  rdtsc call push_code mov_eax,edx                                call push_code ret                              
