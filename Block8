@@ -2,9 +2,7 @@
                 
                              
                                
-BIN: timestamp  rdtsc call push_code mov_eax,edx                                call push_code ret                              
-BIN: rd-msr  call pop_code mov_ecx,eax rdmsr call push_code                  mov_eax,edx call push_code ret                    
-BIN: cpuid_read call pop_code cpuid call push_code mov_eax,ebx    call push_code mov_eax,ecx call push_code mov_eax,edx           call push_code ret                                           
+
 : msr. ( n of msr -- value of msr double ) rd-msr HEX. HEX. ;   
 : basic_cpuid 0 cpuid_read 0x, 604 ! 0x, 608 ! 0x, 600 !  HEX.  SPACE 0x, 600 0x, c TYPE ;                                     
 : cpu_version 1 cpuid_read HEX. SPACE HEX. SPACE HEX. SPACE        HEX. ;                                                      
