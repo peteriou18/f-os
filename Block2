@@ -13,6 +13,8 @@
      0x 4f     1         opcode    dec_di
      0x e9     1         opcode    jmp
      0x e2     1         opcode    loop
+     0x ea     1         opcode    jmpf  
+     0x cd     1         opcode    int     
 0x 10 0x CD 0x 2         opcode    int_10h
 0x 16 0x CD 0x 2         opcode    int_16h
 0x c4 0x 88 0x 2         opcode    mov_ah,al
