@@ -7,7 +7,7 @@
 : basic_cpuid 0 cpuid_read 0x, 604 ! 0x, 608 ! 0x, 600 !  HEX.  SPACE 0x, 600 0x, c TYPE ;                                     
 : cpu_version 1 cpuid_read HEX. SPACE HEX. SPACE HEX. SPACE        HEX. ;                                                      
                           
-BIN: pci0  call pop_code or_eax, d# 80000000 mov_dx, w# cf8          out_dx,eax  mov_dx, w# cfc  in_eax,dx call push_code ret   
+
 : T->T,N   DUP COUNT SWAP DROP ;                              
 : send-CR   0x, 0a0d @@5 @ W! @@5 2+!  ;                       
 : move-str  DUP @@5 @ SWAP COUNT CMOVE T->T,N @@5 +! DROP  ;    
