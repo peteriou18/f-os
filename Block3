@@ -5,7 +5,7 @@
 
         
                           
-0 0 0 0 0x b5 0x 4 0x 8d 0x 66 0x 67 0x 9 opcode lea_eax,[esi*4] 
+
 
 
 BIN: -!      call pop_ab  sub_[ebx],eax ret 
