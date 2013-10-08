@@ -1,8 +1,7 @@
 .( Block 8.)  
                 
                              
-0x 31 0x f 0x 2 opcode rdtsc  0x 32 0x f 0x 2 opcode rdmsr   
-0x a2 0x f 0x 2 opcode cpuid                                
+                               
 BIN: timestamp  rdtsc call push_code mov_eax,edx                                call push_code ret                              
 BIN: rd-msr  call pop_code mov_ecx,eax rdmsr call push_code                  mov_eax,edx call push_code ret                    
 BIN: cpuid_read call pop_code cpuid call push_code mov_eax,ebx    call push_code mov_eax,ecx call push_code mov_eax,edx           call push_code ret                                           
