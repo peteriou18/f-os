@@ -1,6 +1,5 @@
 .( Block 8.)  
-0x ea 1 opcode jmpf  
-0x cd 1 opcode int                     
+                
 BIN: restart  int b# 19                             
 0x 31 0x f 0x 2 opcode rdtsc  0x 32 0x f 0x 2 opcode rdmsr   
 0x a2 0x f 0x 2 opcode cpuid                                
