@@ -1,0 +1,4 @@
+.( Block 9.)                                                    
+: before_static ( -- segm)     sg_data wCode@ 0x, 4000 sg_data   wCode!  0 off_data wCode! 0x, 80 how_many_sectors wCode! ;
+: after_static ( segm -- )    sg_data wCode! 0x, 2000 off_data  wCode! 0x, 8 how_many_sectors wCode! ;                          : load_static  before_static  0  0x, 100 RBLOCK after_static ;  
+: save_static  before_static  0  0x, 100 WBLOCK after_static ; 
