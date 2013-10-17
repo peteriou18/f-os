@@ -25,4 +25,7 @@ BIN:  <        call pop_ab     cmp_ebx,eax     setl_al          movsx_eax,al   c
 BIN:  >=       call pop_ab     cmp_ebx,eax     setge_al         movsx_eax,al   call push_code  ret                             
 BIN: +!         call pop_ab     add_[ebx],eax   ret            
 BIN: pack_2d_b  call pop_ab     mov_ah,al       mov_al,bl       call push_code  ret                                            
-BIN: SWAP     call pop_ab     mov_ecx,eax     mov_eax,ebx       call push_code  mov_eax,ecx    call push_code  ret        ..                 
+BIN: SWAP     call pop_ab     mov_ecx,eax     mov_eax,ebx       call push_code  mov_eax,ecx    call push_code  ret
+BIN: dCode@   call pop_code  mov_eax,[cs:eax] call push_code    ret   
+BIN: wCode@   call pop_code movzx_eax,w[cs:eax] call push_code ret    
+BIN: bCode@   call pop_code movzx_eax,b[cs:eax] call push_code ret   ..                 
