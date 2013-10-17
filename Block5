@@ -33,7 +33,7 @@
 : @@5  HERE @   0x,    110 + ; 
 : @@4  HERE @   0x, 10c + ;                                                                    
 : (DUMP) DUP @ HEX. SPACE +CELL ;                             
-: (CDUMP)  DUP CODE@ HEX. SPACE +CELL ;                        
+: (CDUMP)  DUP dCode@ HEX. SPACE +CELL ;                        
 : dump   (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP)          (DUMP)  ;                                                    
 : cdump (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) ;                                                                                                                      
 : pack   2* 2* 2* 2* 2* 2* 2* 2* + ;                                                                               .. 
