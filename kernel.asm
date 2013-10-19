@@ -87,7 +87,7 @@
         xor     edx,edx
         mov     eax,edx
         div     edx
-        add     [eax],ebx
+        add     [eax],ebx 
         mov     word [fs:bx],9999h
         inc     bx
         mov     cx,3333h
