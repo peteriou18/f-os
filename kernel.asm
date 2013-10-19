@@ -1,4 +1,5 @@
-
+        st_b equ 3000h
+      
         st_b equ 3000h
         heap equ 200h
         org 7c00h
@@ -15,6 +16,17 @@
         mov     fs,ax
         mov     ax,4000h
         mov     gs,ax
+
+;-----------------
+;ãðóçèì ñòàòèê
+;-----------------
+        mov [sect],dword 800h
+        mov [many_of], word 7fh
+        mov [offset_data], word  0
+        mov [seg_data], word 4000h
+        mov si,dap_p
+        mov ah,42h
+        int 13h
 
 ;-------------
 ; ãðóçèì 3 ñåêòîðà ñ êîäîì
@@ -133,7 +145,7 @@ sect:
         dd 0
 
 
-       rept 57 { db 0 }
+       rept 23 { db 0 }
 ;      align  512-48
 ; partition table
        rept 4 {
@@ -1552,3 +1564,6 @@ nfa_a:
 
 here:
  last_lfa:
+ 
+ 
+ 
