@@ -102,6 +102,10 @@ BIN: CMOVE>
 Берем блоки с 200h  и до конца. 
 Количество секторов на загрузочном диске лежит в статик сегменте по адресу 0ff10f. 8 байт.
 
+Форматирование. Берем блоки с 200h по top_block. В каждый блок пишем 0x nnn block_next.  0x 0 block_next 
+обозначает последний блок в цепи. 
+--------------------
+
 FORTH OS loading and developing from it's one source code. 
 
 Concept.
