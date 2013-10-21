@@ -8,7 +8,9 @@ BIN: toscr  call pop_ab mov_[fs:ebx],ax ret
 : top_of_static 0 dStatic@ ;                                
 : allot_static  top_of_static + 0 dStatic! ;                  
 : fill-static     0x, 0fffc BEGIN DUP DUP dStatic! 0x, 4 - DUP     UNTIL ; 
-: restart save_static boot ;                                 
+
+: restart save_static boot ;   
+
 : top_block 0x, ff10 dStatic@ 0x, 8 / DROP ;                  
 : block-header  0x, 1000 @@5 ! ," next_block " move-str              @@5 @ HEXa 0x, 8 @@5 +!  0x, 200a0d20 @@5 @ ! ;
 : format  0x, 200 @@1 ! @@1 @ 0x, 4 dStatic!   BEGIN @@1 @ HEX. @@1 @ 0x, 1000 RBLOCK  @@1 @ 1+ block-header  
