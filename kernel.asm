@@ -1,5 +1,4 @@
-        st_b equ 3000h
-      
+
         st_b equ 3000h
         heap equ 200h
         org 7c00h
@@ -16,6 +15,19 @@
         mov     fs,ax
         mov     ax,4000h
         mov     gs,ax
+
+;-------------------
+;ñíèìàåì ïàðàìåòðû äèñêà. íàì èíòåðåñíî êîëè÷åñòâî ñåêòîðîâ
+;-------------------
+        mov ah,48h
+        mov dl,80h
+        push ds
+        mov si,4000h
+        mov ds,si
+        mov si,0ff00h
+        mov word [si],1eh
+        int 13h
+        pop ds
 
 ;-----------------
 ;ãðóçèì ñòàòèê
@@ -87,7 +99,7 @@
         xor     edx,edx
         mov     eax,edx
         div     edx
-        add     [eax],ebx 
+        add     [eax],ebx
         mov     word [fs:bx],9999h
         inc     bx
         mov     cx,3333h
@@ -145,7 +157,7 @@ sect:
         dd 0
 
 
-       rept 23 { db 0 }
+       rept 3 { db 0 }
 ;      align  512-48
 ; partition table
        rept 4 {
@@ -679,6 +691,8 @@ load_code:
         xor     eax,eax
         mov     [value_in],eax
         call    interpret_code
+        mov     eax,[value_in]
+        mov     [in_old],eax
         pop     dword [tlb_var]
         pop     dword [value_in]
         pop     dword [blk_var]
@@ -914,6 +928,7 @@ nfa_5:
         dd nfa_4
         dd variable_code
 value_in  dd 0
+in_old  dd      0
 
 nfa_6:
         db 7, "CURRENT"
@@ -1564,6 +1579,3 @@ nfa_a:
 
 here:
  last_lfa:
- 
- 
- 
