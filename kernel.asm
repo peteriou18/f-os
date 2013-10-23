@@ -1,4 +1,3 @@
-
         st_b equ 3000h
         heap equ 200h
         org 7c00h
@@ -1082,7 +1081,7 @@ nfa_22:
         db      0
         dd      nfa_21
         dd      constant_code
-        dd      2000h
+        dd      1000h
 
 
 nfa_23:
