@@ -122,13 +122,15 @@ first_free_block дает номер первого свободного бло�
 В нестандарте в переменной IN> заведена вторая ячейчка, in_old в которую пишется значение переменной ин из предыдущего 
 обработанного блока.
 
+: +OUT?  OUT> +! OUT @ buffer_size < IF ( тут условие выполнено и ничего не делаем ) ELSE ( здесь организуем запись 
+блока и выборку нового ) BLK @ buffer WBLOCK THEN ; 
 --------------------
 
 FORTH OS loading and developing from it's one source code. 
 
 Concept.
 
-Forth system loading fron any device. (Now from flash). Load makes from source code. 
+Forth system loading fron any device. (Now from flash). Load makes from source code.
 Code of system mixed. Low-level code mixed with high-level code. 
 You could work both level simultaneously.
 
