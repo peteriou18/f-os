@@ -1,9 +1,11 @@
+
         st_b equ 3000h
         heap equ 200h
         org 7c00h
 
         cli
         cld
+        jmp 00h:07c07h
         xor ax,ax
         mov ds,ax
         mov ax,3000h
@@ -39,9 +41,25 @@
         mov ah,42h
         int 13h
 
+;-----------------
+; restore timestamp
+;-----------------
+        mov ecx,10h
+
+
+        mov eax,[gs:0ch]
+        mov edx,[gs:10h]
+
+        wrmsr
+   ; rept  { nop }
+    rept 21 { nop}
+  ;  nop
+  ;  nop
+
 ;-------------
 ; ãðóçèì 3 ñåêòîðà ñ êîäîì
 ;------------
+        mov     dl,80h
         mov [sect],dword 1
         mov [many_of], byte 4
         mov [offset_data],word 0
@@ -61,6 +79,7 @@
         mov ah,42h
         int 13h
         jmp 1000h:0
+        rept 3    {nop}
    m1:
         mov     [ebx],ax
         mov     dl,[ebx+ecx]
@@ -76,8 +95,8 @@
         mov     eax,[esp+2]
         or      eax,80000000h
         mov     dx,0adceh
-        mov     edx,eax
-        jmp     0:7c00h
+        mov     edx,ebx
+
         mov     [edx],al
         inc     edx
         sub     [ebx],eax
@@ -112,31 +131,19 @@
         mov     ebx,[top_of_code_val]
         mov     [ebx],ax
         add     dword [top_of_code_val],2
-        ret
+
        mov     bh,1
         mov     ch,3
         mov     cl,3h
         mov     dh,13h
         mov     dl,43h
         mov     al,1
-        add     bx,0a0h
-        mov    word [fs:eax],1f55h
-        inc     eax
-        dec     ebx
-        jne     m1
-        movzx   eax,byte [eax]
-        mov     edx,eax
-        push    eax
-        xor     ebx,ebx
-        mov     al,[edx]
-        mov     [fs:ebx],ax
-        pop     ecx
-        mov     ecx,ebx
-        mov     ecx,eax
-        mov     [fs:edx],ax
-        inc    dword [eax]
-        add     dword [eax],2
-        add     dword [eax],4
+
+
+       nop
+       nop
+
+
      ;   inc     eax
      ;   dec     dword[eax]
 
@@ -156,7 +163,7 @@ sect:
         dd 0
 
 
-       rept 3 { db 0 }
+       rept 21 { db 0 }
 ;      align  512-48
 ; partition table
        rept 4 {
