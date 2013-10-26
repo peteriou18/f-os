@@ -137,7 +137,12 @@ first_free_block дает номер первого свободного бло�
  : w>># in_buf  W! 0x, 2 +out? ;
  : d>># in_buf  ! 0x, 4 +out? ;
  
- : move-str  DUP @@5 @ SWAP COUNT CMOVE T->T,N @@5 +! DROP  ;   
+ : move-str  DUP @@5 @ SWAP COUNT CMOVE T->T,N @@5 +! DROP  ;  
+ 
+ 
+ Такс. Берем номер первого свободного блока из статика. используем для этого аллокейт блок. по итогу имеем в переменной
+ блк текущий блок, который надо будет сохранить. во второй части переменной инЮ адрес, с которого можно писать в буфер.
+ по зполнении буфера сохраняем текущий блок и выполняем аллокейт блок еще раз. 
 --------------------
 
 FORTH OS loading and developing from it's one source code. 
@@ -149,7 +154,7 @@ Code of system mixed. Low-level code mixed with high-level code.
 You could work both level simultaneously.
 
 Included screen editor, blocks fylesystem.
-
+ 
 Loader aka Block 0 (zero) written by fasm . 
 Block 0 contain master boot record, kernel, base vocabulary.
 All the rest deployng from source code.
