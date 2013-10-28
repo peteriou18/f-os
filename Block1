@@ -2,8 +2,7 @@
 : LATEST    CURRENT @ @ ;  : IMMEDIATE  LATEST    80 OR! ;     
 : BIN: CREATE code_top  @  to_cf ;  IMMEDIATE                   
 : ;BIN 0 , ;    IMMEDIATE                                      
-0x 20A label pop_code          
-0x 1FA label push_code 
+
                         0x C3    1    opcode    ret             
                         0x E8    1    opcode    call             
                         0x 90    1    opcode    nop
@@ -45,9 +44,6 @@ BIN: 4+! call pop_code  add_[eax],4  ret
                       
 code_top @   label  pop_ab   call  pop_code  mov_ebx,eax        call  pop_code  ret 
 
-variable_code label var_       
-addr_interpreter label addr_i  
-                           
 
 
 BIN: bCode,     call pop_ab     mov_[cs:ebx],al ret            
