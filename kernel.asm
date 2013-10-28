@@ -259,7 +259,8 @@ wrblock_code:
 disk_code:
         call pop_code             ;address of buffer
         mov [cs:off_data],ax      ;
-        call pop_code      ;block
+        call pop_code ;block
+        mov [block1],eax
         shl eax,3
         mov [cs:rbp_sect],eax
         mov ah,[cs:op]
@@ -1193,10 +1194,10 @@ nfa_34:
         dd      sg_data
 
 nfa_35:
-        db      16,"addr_interpreter"
+        db      6,"addr_i"
         db      0
         dd      nfa_34
-ai:     dd      constant_code
+ai:     dd      label_compile_code
         dd      addr_interp
 
 nfa_36:
@@ -1299,6 +1300,8 @@ buffer_1_:
         dd      variable_code
 buffer_1:
         dd      1000h
+
+block1:
         dd      0
         dd      0
 
@@ -1429,10 +1432,10 @@ drop_:
         dd      0
 
 nfa_61:
-        db      13,"variable_code"
+        db      4,"var_"
         db      0
         dd      nfa_60
-        dd      constant_code ;  and_code
+        dd      label_compile_code
         dd      variable_code
 
 nfa_62:
@@ -1540,11 +1543,11 @@ top_of_code_val:
         dd      top_of_code
 
 nfa_76:
-        db      1," "
+        db      8,"pop_code"
         db      0
         dd      nfa_75
-        dd     0; minus_code
-        dd      0
+        dd      label_compile_code
+        dd      pop_code
 
 nfa_77:
         db      6,"opcode"
@@ -1554,11 +1557,11 @@ nfa_77:
         dd      0
 
 nfa_78:
-        db      1," "
+        db      9,"push_code"
         db      0
         dd      nfa_77
-        dd      0
-        dd      0
+        dd      label_compile_code
+        dd      push_code
 
 nfa_79:
         db      1," "
