@@ -4,7 +4,7 @@ BIN: timestamp  rdtsc call push_code mov_eax,edx  call push_code ret
 BIN: rd-msr  call pop_code mov_ecx,eax rdmsr call push_code    mov_eax,edx call push_code ret                    
 BIN: cpuid_read call pop_code cpuid call push_code mov_eax,ebx   call push_code mov_eax,ecx call push_code mov_eax,edx           call push_code ret                                           
 BIN: pci0  call pop_code or_eax, d# 80000000 mov_dx, w# cf8          out_dx,eax  mov_dx, w# cfc  in_eax,dx call push_code ret       
-
+BIN: 3DUP  call pop_code mov_ecx,eax call pop_code mov_ebx,eax           call pop_code mov_edx,eax mov_eax,ecx call push_code      mov_eax,ebx call push_code mov_eax,edx call push_code           mov_eax,ecx call push_code mov_eax,ebx call push_code           mov_eax,edx call push_code ret   
         
                           
 
