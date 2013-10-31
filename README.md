@@ -164,6 +164,13 @@ first_free_block дает номер первого свободного бло�
  
  BIN: nth+  ( v(n)..3 2 1 v n --- (v(n)+v)..3 2 1 )  call pop_ab sub_ebx,esi neg_ebx add_[ebx*4+st_b],eax ret 
  
+ То-есть решить вообще без +аут.
+ S>># само все делает с блочным буфером. снимает со стека адрес строки со счетчиком. 
+ 
+ : S>># ( addr -- ) DUP  tail? DUP 0 > IF ( tail <0, just move ) DROP ( tail )     ELSE THEN 
+ 
+ 
+ 
 --------------------
 
 FORTH OS loading and developing from it's one source code. 
