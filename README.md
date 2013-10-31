@@ -200,6 +200,7 @@ code_top - address of value of first free byte in code segment
 label - get value from stack, create word with execution semantic: calculate and compile value to code segment
 T->T,N - put on stack counter of string. 
 restart - quick warm system reload.
+_CMOVE ( addr1 addr2 n -- ) - copy string of n char from addr2 to addr1. 
 
 
 
