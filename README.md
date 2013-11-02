@@ -213,9 +213,9 @@ addr_interp:
 --------------------
 Не буду ломать мозг, сделаю еще один стек. Под видом стека возвратов.
 RP - указатель стека возвратов
-R> - снять 
-R@
->R 
+BIN: R>   mov_ebp,[rp_value] mov_eax,[ebp*4] dec_ebp and_ebp, b# 0f  call push_code mov_[rp_value],ebp ret
+BIN: R@   mov_ebp,[rp_value] mov_eax,[ebp*4] call push_code ret 
+BIN: >R   call pop_code mov_ebp,[rp_value] inc_ebp and_ebp, b# 0f  mov_[ebp*4],eax  mov_[rp_value],ebp ret
 
 
 
