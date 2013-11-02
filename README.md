@@ -203,6 +203,13 @@ addr_interp:
  BIN: loc1@ mov eax,[ebp] call push code ret
  BIN: loc1! call pop_code mov [ebp],eax ret
  
+ -------------------
+ Наведение порядка
+ В 1 блоке остается необходимый минимум
+ а блок - однобайтные опкоды
+ 3 блок - двухбайтные опкоды
+ 4 блок - трехбайтные опкоды и т.д.
+ 
 --------------------
 
 FORTH OS loading and developing from it's one source code. 
