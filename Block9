@@ -1,41 +1,49 @@
-.( Block 9.)                                                    
-VARIABLE OUT>  0x 17 OUT> !     
-: before_static ( -- segm)    
-sg_data wCode@ 0x, 4000 sg_data   wCode!  0 off_data wCode! 0x, 7f how_many_sectors wCode! ;    
+.( Block 9.)                                                   
+
+VARIABLE OUT>  0x 17 OUT> !                                   
+: before_static ( -- segm)     
+sg_data wCode@ 0x, 4000 sg_data   wCode!  0 off_data wCode! 0x, 7f how_many_sectors wCode! ;     
 : after_static ( segm -- )    sg_data wCode! 0x, 2000 off_data  wCode! 0x, 8 how_many_sectors wCode! ; 
-: load_static  before_static   0x, 100 0 RBLOCK after_static ;  
-: save_static  before_static   0x, 100 0 WBLOCK after_static ; 
+: load_static  before_static   0x, 100 0 RBLOCK after_static ; 
+: save_static  before_static   0x, 100 0 WBLOCK after_static ;  
 : stdump DUP dStatic@ HEX. SPACE +CELL ;                       
-: top_of_static 0 dStatic@ ;                                   
-: allot_static  top_of_static 0x, 4 + 0 dStatic! ;           
-: fill-static     0x, 0fffc BEGIN DUP DUP dStatic! 0x, 4 - DUP     UNTIL ; 
-: restart  timestamp 0x, 10 dStatic! 0x, c dStatic! save_static  boot ;     
-: top_block 0x, ff10 dStatic@ 0x, 8 / DROP ;                 
+: top_of_static 0 dStatic@ ;                                  
+: allot_static  top_of_static 0x, 4 + 0 dStatic! ;            
+: fill-static     0x, 0fffc BEGIN DUP DUP dStatic! 0x, 4 - DUP     UNTIL ;   
+: restart  timestamp 0x, 10 dStatic! 0x, c dStatic! save_static  boot ;      
+: top_block 0x, ff10 dStatic@ 0x, 8 / DROP ;                  
 : block-header  0x, 1000 @@5 ! ," next_block " move-str              @@5 @ HEXa 0x, 8 @@5 +!  0x, 200a0d20 @@5 @ ! ; 
 : format  0x, 200 @@1 ! @@1 @ 0x, 4 dStatic!   
 BEGIN @@1 @ HEX. @@1 @ 0x, 1000 RBLOCK  @@1 @ 1+ block-header    @@1 @ 0x, 1000  WBLOCK  @@1 1+! @@1 @ 
-0x, 1200 ( top_block ) <> UNTIL   ;      
-: first_free_block@    0x, 4 dStatic@ ;                    
-: first_free_block!    0x, 4 dStatic! ;                       
+0x, 1200 ( top_block ) <> UNTIL   ;     
+: first_free_block@    0x, 4 dStatic@ ;           
+: first_free_block!    0x, 4 dStatic! ;          
 : allocate_block   first_free_block@  LOAD  IN> +CELL @  OUT> !  first_free_block! ;
 : next_block 0x  ; IMMEDIATE                                   
-: +out?  ( n -- )  OUT> +! OUT> @ buffer_size > IF  BUFFER_1     +CELL @  ." blk-" DUP HEX.  BUFFER_1 @ WBLOCK  
-SPACE  ." pumping up " allocate_block THEN ;                                 
-: time. timestamp HEX. HEX. ;                                  
-: S>>#   DUP BUFFER_1 @ OUT> @ + SWAP COUNT CMOVE T->T,N  SWAP  DROP +out? ;  
-CR time. CR                                             
-: HEXadr   BUFFER_1 @ OUT> @ + HEXa 0x, 8 +out?   ;          
-: SPACEadr BL @@5 @ C! @@5 1+!      ;                        
-: pci.  @@1 @ HEX. SPACE @@2 @ HEX. SPACE @@3 @ HEX. CR  ;     
-: pcia  @@1 @ HEXadr ,"  " S>># @@2 @ HEXadr ,"  " S>>#              @@3 @  HEXadr ,"  |   " S>>#  ;   
-: pci_get   @@1 @ pci0 @@2 ! @@2 @  0x, ffffffff = IF            @@1 @ 0x, 8 + pci0 @@3 ! pcia ELSE 1 DROP THEN  ;  
-: ttype  BEGIN DUP 0 TYPE 0x, 100 + KEY esc? 0 = UNTIL ;     
-: set-max-pci-addr 0x, fffff00 @@1 ! ;                        
-: -pci-addr  0x, 100 @@1 -! @@1 @ ;                            
-: header.. ," bus/dev " S>># ," dev/ven " S>>#                             ," cls/rev " S>>#  ;  
-: pci-scan  allocate_block  header.. set-max-pci-addr                       
-BEGIN  pci_get -pci-addr  0 < UNTIL             ,"  . ---  " S>>#  BUFFER_1 +CELL @  BUFFER_1 @ WBLOCK      
-allocate_block  ;    
+: +out?  ( n -- )  OUT> +! OUT> @ buffer_size > IF OUT> @ buffer_size - ." tail:"  HEX. SPACE ( first_free_block@ )
+BUFFER_1 +CELL @  ." blk-" DUP HEX.  BUFFER_1 @ WBLOCK    SPACE  ." pumping up " allocate_block THEN ;          
+: time. timestamp HEX. HEX. ;                                         
 
-: aavl first_free_block@ HEX. SPACE allocate_block BUFFER_1 +CELL @ HEX.  ;  
-.. ..................
+CR time. CR                                           
+
+: csp. CSP ." SP:" HEX. SPACE ;                           
+: tail? ( Taddr -- Taddr tail )  T->T,N OUT> @ + buffer_size -  ;   
+: S>># ( Taddr -- )  tail? DUP 0 <  IF DROP  ." no tail "  DUP  COUNT  BUFFER_1 @ OUT> @ +  rCMOVE  
+COUNT OUT> +! DROP  ELSE   >R DUP COUNT R@ +  CR   ." tail is " 0 SWAP -  HEX. ." bytes "  THEN ;    
+: HEXt   HERE @ SWAP 0x, 8 HERE @ C! HERE @ 1+ HEXa S>>#   ;   
+: SPACEadr BL @@5 @ C! @@5 1+!      ;                          
+: pci.  @@1 @ HEX. SPACE @@2 @ HEX. SPACE @@3 @ HEX. CR  ;     
+: pcia  @@1 @ HEXt ,"  " S>># @@2 @ HEXt ,"  " S>>#              @@3 @  HEXt ,"  |   " S>>#  ;  
+: pci_get   @@1 @ pci0 @@2 ! @@2 @  0x, ffffffff = IF            @@1 @ 0x, 8 + pci0 @@3 ! pcia ELSE 1 DROP THEN  ; 
+: ttype  BEGIN DUP 0 TYPE 0x, 100 + KEY esc? 0 = UNTIL ;  
+: set-max-pci-addr 0x, fffff00 @@1 ! ;                    
+: -pci-addr  0x, 100 @@1 -! @@1 @ ;                       
+: header.. ," bus/dev " S>># ," dev/ven " S>>#                             ," cls/rev " S>>#  ;    
+: pci-scan  allocate_block  header.. set-max-pci-addr                        
+BEGIN  pci_get -pci-addr  0 < UNTIL           
+,"  . ---  " S>>#  BUFFER_1 +CELL @  BUFFER_1 @ WBLOCK          allocate_block  ;      
+
+: aavl first_free_block@ HEX. SPACE allocate_block BUFFER_1 +CELL @ HEX.  ;            
+: kkk 3DUP HEX. SPACE HEX. SPACE HEX. CR HEX. SPACE HEX. SPACE HEX. CR ; 
+: xx csp. ," crab1234 " csp.  S>># ;         
+.. .
