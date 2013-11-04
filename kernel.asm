@@ -79,37 +79,14 @@
         mov ah,42h
         int 13h
         jmp 1000h:0
-        rept 3    {nop}
+        rept 89    {nop}
    m1:
-        mov     [ebx],ax
-        mov     dl,[ebx+ecx]
-        mov     [eax+ecx],dl
-        mov     dl,[ebx]
-        mov     [eax],dl
-        add     eax,40000
-        add     edx,22222
-        mov     ebx,[eax]
-        mov     [esp+2],eax
-        and     ebx,0ffh
-        mov     eax,[eax]
-        mov     eax,[esp+2]
-        or      eax,80000000h
-        mov     dx,0adceh
-        mov     edx,ebx
 
-        mov     [edx],al
-        inc     edx
-        sub     [ebx],eax
-        sub     [eax],ebx
-        lea     eax,[esi*4]
-        mov     cl,[eax+1]
-        mov     [eax],cl
-        mov     [ebx],al
-        dec     ebx
-        cmp     eax,ebx
-        mov     cl,[ebx-1]
-        mov     [ebx],cl
-        add     edx,200h
+        and     ebp,0fh
+        mov     eax,[ebp*4]
+        mov     [ebp*4],eax
+        mov     ebp,[ss:20h]
+        mov     [ss:20h],ebp
         mov     edx,here_var
         lea     eax,[eax*2+eax]
         lea     eax,[eax*2]
