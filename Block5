@@ -1,39 +1,46 @@
-.( Block 5. )                                                    
-: MARK  HERE @ ;  : RESOLVE  HERE @ ! ;                         
-: BEGIN  MARK  ; IMMEDIATE  : AGAIN br_label , , ; IMMEDIATE    
-: UNTIL   ?br_label , , ; IMMEDIATE                            
-: ( ) WORD DROP ; IMMEDIATE                                    
-: WORDS  LATEST BEGIN DUP COUNT 3F AND  TYPE SPACE N>LINK @              DUP 0 <>  UNTIL ;    
-: VARIABLE  CREATE 0 , ;         
-: ."   dot_quote_code ,  QUOTE WORD COUNT +  1 + HERE !         ;  IMMEDIATE    
-: TO  BL WORD FIND DROP >BODY ! ;               
-: NAME>    N>LINK +CELL ;   VARIABLE (column) VARIABLE (row)   
-: 0x,  lit_code , 0x , ; IMMEDIATE                             
-.( If..Then..Else )                                             
-: IF ?br_label , MARK 0 , ; IMMEDIATE                           
-: THEN   MARK  SWAP !  ; IMMEDIATE                             
-: ELSE MARK +CELL +CELL SWAP ! br_label , MARK 0 , ; IMMEDIATE  
-.( Key codes )                                                 
-: backspace? 0x, 0e08 = ;  
-: delete? 0x, 5300 = ;              
-: esc? 0x, 11b = ;        
-: left? 0x, 4b00 = ;                
-: right? 0x, 4d00 = ;    
-: up? 0x, 4800 = ;                 
-: down? 0x, 5000 = ;       
-: page_up? 0x, 4900 = ;             
-: page_down? 0x, 5100 = ;  
-: home? 0x, 4700 = ;                
-: end? 0x, 4f00 = ;                                                                                                             
-: xy-a   SWAP   0x, 50 * + 2* ;                               
-.( Local variables )          
-: @@1 HERE @ 0x, 100  + ;       
-: @@2  HERE @    0x, 104  + ;  
-: @@3  HERE @   0x, 108  + ;   
-: @@5  HERE @   0x,    110 + ; 
-: @@4  HERE @   0x, 10c + ;                                                                    
-: (DUMP) DUP @ HEX. SPACE +CELL ;                             
-: (CDUMP)  DUP dCode@ HEX. SPACE +CELL ;                        
-: dump   (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP) (DUMP)          (DUMP)  ;                                                    
-: cdump (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) (CDUMP) ;                                                                                                                      
-: pack   2* 2* 2* 2* 2* 2* 2* 2* + ;                                                                               .. 
+.( Block 5. )                                                   
+
+BIN: C!     call pop_ab mov_[ebx],al    ret                    
+BIN: W!     call pop_ab mov_[ebx],ax   ret                    
+
+BIN: bStatic@    call pop_code   movzx_eax,b[gs:eax]                    call push_code ret 
+BIN: wStatic@    call pop_code  movzx_eax,w[gs:eax]                     call push_code ret   
+BIN: dStatic@    call pop_code mov_eax,[gs:eax]                         call push_code ret   
+BIN: bStatic! call pop_ab mov_[gs:ebx],al  ret                
+BIN: wStatic! call pop_ab mov_[gs:ebx],ax  ret                
+BIN: dStatic! call pop_ab mov_[gs:ebx],eax ret                
+
+BIN: CMOVE  call pop_code mov_ecx,eax call pop_ab  code_top    @ label cm1 mov_dl,[ebx] mov_[eax],dl inc_ebx 
+             inc_eax dec_ecx jne cm1 ret                        
+             
+BIN: 3DUP  call pop_code mov_ecx,eax call pop_code mov_ebx,eax  call pop_code mov_edx,eax mov_eax,ecx call push_code 
+mov_eax,ebx call push_code mov_eax,edx call push_code           mov_eax,ecx call push_code mov_eax,ebx call push_code 
+mov_eax,edx call push_code ret                              
+
+BIN: LIT" mov_eax,[esp+2] add_eax, d# 4  call push_code   mov_ebx,[eax]  and_ebx, d# ff add_eax,ebx  dec_eax  
+dec_eax mov_[esp+2],eax  ret                         
+
+BIN: boot  int b# 19                                    
+
+BIN: timestamp  rdtsc call push_code mov_eax,edx                                call push_code ret  
+BIN: rd-msr  call pop_code mov_ecx,eax rdmsr call push_code                  mov_eax,edx call push_code ret  
+BIN: cpuid_read call pop_code cpuid call push_code mov_eax,ebx    call push_code mov_eax,ecx call push_code mov_eax,edx 
+call push_code ret                                          
+
+BIN: pci0  call pop_code or_eax, d# 80000000 mov_dx, w# cf8 out_dx,eax  mov_dx, w# cfc  in_eax,dx call push_code ret 
+
+BIN: nth+  call pop_ab sub_ebx,esi neg_ebx inc_ebx                         and_ebx, d# 3f add_[ebx*4+st_b],eax ret
+
+BIN: return     call pop_code   lea_eax,[eax*2+eax]  lea_eax,[eax*2] add_esp,eax     ret                
+
+BIN: 2-!   call  pop_code dec_d[eax] dec_d[eax]  ret         
+BIN:  >    call pop_ab  cmp_ebx,eax setg_al  movsx_eax,al  call push_code  ret   
+BIN: -!  call pop_ab  sub_[ebx],eax ret                      
+BIN: CSP    lea_eax,[esi*4]  call push_code  ret              
+BIN: right_shift_one     call pop_ab   code_top @ label rso          mov_cl,[ebx-1]  mov_[ebx],cl   dec_ebx   
+cmp_eax,ebx          jne rso  ret                                             
+
+BIN: rCMOVE   call pop_code mov_ebx,eax call pop_code                        mov_ecx,eax  call pop_code  
+code_top @ label rcm1               mov_dl,[eax] mov_[ebx],dl inc_ebx inc_eax dec_ecx             jne rcm1 ret  
+
+..      
