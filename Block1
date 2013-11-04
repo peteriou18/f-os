@@ -1,68 +1,43 @@
-.( Block 1 )                                                    
-: LATEST    CURRENT @ @ ;  : IMMEDIATE  LATEST    80 OR! ;     
-: BIN: CREATE code_top  @  to_cf ;  IMMEDIATE                   
-: ;BIN 0 , ;    IMMEDIATE                                      
-
-                        0x C3    1    opcode    ret             
-                        0x E8    1    opcode    call             
-                        0x 90    1    opcode    nop
-                        0x ba    1    opcode    mov_dx,
-                        0x B8    1    opcode    mov_ax,
-                  0x ba 0x 66 0x 2    opcode    mov_edx, 
-                  0x e2 0x 88 0x 2    opcode    mov_dl,ah 
-                  0x  d 0x 66 0x 2    opcode    or_eax,
-                  0x  5 0x 66 0x 2    opcode    add_eax,
-            0x C3 0x 89 0x 66 0x 3    opcode    mov_ebx,eax
-            0x c2 0x 89 0x 66 0x 3    opcode    mov_edx,eax                     
-            0x c2 0x 81 0x 81 0x 3    opcode    add_edx,                         
-            0x d8     1 0x 66 0x 3    opcode    add_eax,ebx                       
-            0x d8 0x 29 0x 66 0x 3    opcode    sub_eax,ebx                       
-            0x d8 0x 21 0x 66 0x 3    opcode    and_eax,ebx                      
-            0x d8 0x 09 0x 66 0x 3    opcode    or_eax,ebx                      
-            0x d8 0x 31 0x 66 0x 3    opcode    xor_eax,ebx                      
-            0x eb 0x f7 0x 66 0x 3    opcode    imul_ebx                          
-            0x  2 0x 88 0x 67 0x 3    opcode    mov_[edx],al        
-            0x c0 0x 9d 0x 0f 0x 3    opcode    setge_al 
-          0 0x ff 0x 66 0x 67 0x 4    opcode    inc_d[eax]                    
-      0x  3 0x 89 0x 67 0x 2e 0x 4    opcode    mov_[cs:ebx],ax 
-      0x  3 0x 88 0x 67 0x 2e 0x 4    opcode    mov_[cs:ebx],al  
-0x  2     0 0x 83 0x 66 0x 67 0x 5    opcode    add_[eax],2         
-0x  4     0 0x 83 0x 66 0x 67 0x 5    opcode    add_[eax],4       
-0x  3 0x 89 0x 67 0x 66 0x 2e 0x 5    opcode    mov_[cs:ebx],eax 
-    0 0x 8b 0x 67 0x 66 0x 2e 0x 5    opcode    mov_eax,[cs:eax]
-    0 0x 8b 0x 67 0x 66 0x 65 0x 5    opcode    mov_eax,[gs:eax]
-    
-    0 0x b6 0x  f 0x 67 0x 66 0x 2e 0x 6  opcode   movzx_eax,b[cs:eax]  
-    0 0x b7 0x  f 0x 67 0x 66 0x 2e 0x 6  opcode   movzx_eax,w[cs:eax]     
-         
-    0 0x b6 0x  f 0x 67 0x 66 0x 65 0x 6  opcode   movzx_eax,b[gs:eax] 
-    0 0x b7 0x  f 0x 67 0x 66 0x 65 0x 6  opcode   movzx_eax,w[gs:eax] 
-
-BIN: 1+!  call pop_code  inc_d[eax] ret 
-BIN: 2+! call pop_code add_[eax],2  ret                         
-BIN: 4+! call pop_code  add_[eax],4  ret                       
-                      
-code_top @   label  pop_ab   call  pop_code  mov_ebx,eax        call  pop_code  ret 
-
-
-
-BIN: bCode,     call pop_ab     mov_[cs:ebx],al ret            
-BIN: wCode,     call pop_ab     mov_[cs:ebx],ax ret             
-BIN: dCode,     call pop_ab     mov_[cs:ebx],eax ret           
-: b# 0x code_top @ bCode, code_top 1+! ;                        
-: w# 0x code_top @ wCode, code_top 2+! ;                       
-: d# 0x code_top @ dCode, code_top 4+! ;                       
-                             
-                   
-BIN:  +    call pop_ab  add_eax,ebx  call push_code  ret      
-BIN:  -    call pop_ab  sub_eax,ebx  call push_code  ret       
-BIN:  *    call pop_ab  imul_ebx     call push_code  ret       
-BIN: AND   call pop_ab  and_eax,ebx  call push_code  ret       
-BIN: XOR   call pop_ab  xor_eax,ebx  call push_code  ret        
-BIN: OR    call pop_ab  or_eax,ebx   call push_code  ret        
-                       
-   
-
-0x 2 LOAD  0x 3 LOAD  0x 4 LOAD  0x 5 LOAD  0x 6 LOAD           
-0x 7 LOAD  0x 8 LOAD  CR  .( All blocks loaded ) CR             
-.( Welcome! ) 
+ .( Block 1.)                                                 
+ : LATEST    CURRENT @ @ ;  : IMMEDIATE  LATEST    80 OR! ;    
+ : BIN: CREATE code_top  @  to_cf ;  IMMEDIATE                 
+ : ;BIN 0 , ;    IMMEDIATE                     
+ 
+ 0x C3 1 opcode ret             0x E8 1 opcode call  
+ 0x 02 0x 88 0x 67 0x 3 opcode mov_[edx],al              
+ 0x c3 0x 89 0x 66 0x 3 opcode mov_ebx,eax                
+ 0x c2 0x 89 0x 66 0x 3 opcode mov_edx,eax                 
+ 0 0x ff 0x 66 0x 67 0x 4  opcode inc_[eax]                
+ 0x  3 0x 89 0x 67 0x 2e 0x 4 opcode   mov_[cs:ebx],ax     
+ 0x  3 0x 89 0x 67 0x 65 0x 4 opcode   mov_[gs:ebx],ax       
+ 0x  3 0x 88 0x 67 0x 2e 0x 4 opcode  mov_[cs:ebx],al        
+ 0x  3 0x 88 0x 67 0x 65 0x 4 opcode  mov_[gs:ebx],al        
+ 0x 02 0x 00 0x 83 0x 66 0x 67 0x 5 opcode  add_[eax],2      
+ 0x 04 0x 00 0x 83 0x 66 0x 67 0x 5 opcode  add_[eax],4      
+ 0x  3 0x 89 0x 67 0x 66 0x 2e 0x 5 opcode    mov_[cs:ebx],eax  
+ 0x  3 0x 89 0x 67 0x 66 0x 65 0x 5 opcode  mov_[gs:ebx],eax      
+ 0 0x 8b 0x 67 0x 66 0x 2e 0x 5 opcode  mov_eax,[cs:eax]     
+ 0 0x b6 0x f 0x 67 0x 66 0x 2e 0x 6 opcode movzx_eax,b[cs:eax] 
+ 0 0x b7 0x f 0x 67 0x 66 0x 2e 0x 6 opcode movzx_eax,w[cs:eax]    
+ 0 0x 8b 0x 67 0x 66 0x 65 0x 5 opcode mov_eax,[gs:eax]     
+ 0 0x b6 0x f 0x 67 0x 66 0x 65 0x 6 opcode movzx_eax,b[gs:eax] 
+ 0 0x b7 0x f 0x 67 0x 66 0x 65 0x 6 opcode movzx_eax,w[gs:eax]  
+ 0 0x b7 0x f 0x 67 0x 66 0x 64 0x 6 opcode movzx_eax,w[fs:eax] 
+ 
+ code_top @   label  pop_ab   call  pop_code  mov_ebx,eax        call  pop_code  ret 
+ 
+ BIN: 1+!  call pop_code  inc_[eax]   ret                       
+ BIN: 2+!  call pop_code  add_[eax],2 ret                       
+ BIN: 4+!  call pop_code  add_[eax],4 ret                        
+ BIN: bCode!     call pop_ab     mov_[cs:ebx],al ret            
+ BIN: wCode!     call pop_ab     mov_[cs:ebx],ax ret            
+ BIN: dCode!     call pop_ab     mov_[cs:ebx],eax ret    
+ 
+ : b# 0x code_top @ bCode! code_top 1+! ;                       
+ : w# 0x code_top @ wCode! code_top 2+! ;                       
+ : d# 0x code_top @ dCode! code_top 4+! ;                     
+ 
+ 0x A LOAD 0x b LOAD  0x c LOAD   0x 2 LOAD  0x 3 LOAD  0x 4 LOAD  0x 5 LOAD  0x 6 LOAD 
+ 0x 7 LOAD  0x 8 LOAD  0x 9 LOAD                                 
+ 
+ CR  .( All blocks loaded ) CR .( Welcome! )   .. ..............
