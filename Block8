@@ -1,22 +1,16 @@
-.( Block 8.)  
-                
-                             
-                               
+.( Block 8.)                                                                                                 
 
 : msr. ( n of msr -- value of msr double ) rd-msr HEX. HEX. ;   
-: basic_cpuid 0 cpuid_read 0x, 604 ! 0x, 608 ! 0x, 600 !  HEX.  SPACE 0x, 600 0x, c TYPE ;                                     
-: cpu_version 1 cpuid_read HEX. SPACE HEX. SPACE HEX. SPACE        HEX. ;                                                      
-                          
+: basic_cpuid 0 cpuid_read 0x, 604 ! 0x, 608 ! 0x, 600 !  HEX.  SPACE 0x, 600 0x, c TYPE ; 
+: cpu_version 1 cpuid_read HEX. SPACE HEX. SPACE HEX. SPACE        HEX. ;                  
+: T->T,N   DUP COUNT SWAP DROP ;                            
+: send-CR   0x, 0a0d @@5 @ W! @@5 2+!  ;                      
+: move-str  DUP @@5 @ SWAP COUNT CMOVE T->T,N @@5 +! DROP  ;  
 
-: T->T,N   DUP COUNT SWAP DROP ;                              
-: send-CR   0x, 0a0d @@5 @ W! @@5 2+!  ;                       
-: move-str  DUP @@5 @ SWAP COUNT CMOVE T->T,N @@5 +! DROP  ;    
-: header-txt ," bus/dev " move-str ," dev/ven " move-str            ," cls/rev "  move-str send-CR ;                           
-: header. @@4 @ IF header-txt  0x, 14 @@4 ! ELSE @@4 1-! THEN ; 
-: adr? 0x, 2000 @@5 @ < IF 0x, 3 return THEN ;                 
-: HEXadr  @@5 @ HEXa  0x, 8 @@5 +! adr? @@5 @ HEX. SPACE ;      
-: SPACEadr BL @@5 @ C! @@5 1+! adr? ;                          
-: pci.  @@1 @ HEX. SPACE @@2 @ HEX. SPACE @@3 @ HEX. CR  ;      
-: pcia  @@1 @ HEXadr SPACEadr @@2 @ HEXadr SPACEadr @@3 @            HEXadr SPACEadr SPACEadr SPACEadr  send-CR ;              
-: pci_get   @@1 @ pci0 @@2 ! @@2 @  0x, ffffffff = IF  header.    @@1 @ 0x, 8 + pci0 @@3 ! pcia ELSE 1 DROP THEN  ;                
-: pci-scan   0x, 1000 @@5 ! @@4 FALSE!  header.  0x, fffff00    @@1 ! BEGIN  pci_get  0x, 100 @@1 -! @@1 @  0 < UNTIL      ;                   
+(                                                                       
+: HEXadr  @@5 @ HEXa  0x, 8 @@5 +! adr? @@5 @ HEX. SPACE ;      : SPACEadr BL @@5 @ C! @@5 1+! adr? ;    
+)                                                                                                     
+
+
+
+..        
