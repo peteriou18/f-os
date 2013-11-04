@@ -1,0 +1,18 @@
+.( Block A. )   .( One byte opcodes )       
+0x fa 1 opcode cli            
+0x fb 1 opcode sti            
+0x B4 1 opcode mov_ah,       
+0x 4f 1 opcode dec_di         
+0x ea 1 opcode jmpf          
+0x cd 1 opcode int          
+0x e9 1 opcode jmp         
+0x ba 1 opcode mov_dx,      
+0x 90 1 opcode nop          
+0x b8 1 opcode mov_ax,       
+0x 43 1 opcode inc_bx        
+0x 58 1 opcode pop_ax        
+0x 50 1 opcode push_ax       
+0x e2 1 opcode loop    
+0x b9 1 opcode mov_cx, 
+
+.. .....
