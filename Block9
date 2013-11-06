@@ -28,9 +28,11 @@ CR time. CR
 
 : csp. CSP ." SP:" HEX. SPACE ;                           
 : tail? ( Taddr -- Taddr tail )  T->T,N OUT> @ + buffer_size -  ;   
-: S>># ( Taddr -- )  tail? DUP 0 <  IF DROP  ." no tail "  DUP  COUNT  BUFFER_1 @ OUT> @ +  rCMOVE  
-COUNT OUT> +! DROP  ELSE   >R DUP COUNT R@ +  CR   ." tail is " 0 SWAP -  HEX. ." bytes "  THEN ;    
-: HEXt   HERE @ SWAP 0x, 8 HERE @ C! HERE @ 1+ HEXa S>>#   ;   
+: S>># ( Taddr -- )   tail? DUP 0 < IF  DROP DUP COUNT BUFFER_1 @ OUT> @ +  rCMOVE   COUNT OUT> +! DROP  ELSE  
+                     >R  DUP  COUNT   R@ -  BUFFER_1 @ OUT> @ + rCMOVE  BUFFER_1 +CELL @  BUFFER_1 @  WBLOCK 
+                     allocate_block COUNT R@ - + R@  BUFFER_1 @   OUT> @ +    rCMOVE    R> OUT> +! THEN ;   
+: HEXt   HERE @ 0x, 500 + >R R@ SWAP 0x, 8 R@ C! R> 1+ HEXa S>>#   ;   
+ 
 : SPACEadr BL @@5 @ C! @@5 1+!      ;                          
 : pci.  @@1 @ HEX. SPACE @@2 @ HEX. SPACE @@3 @ HEX. CR  ;     
 : pcia  @@1 @ HEXt ,"  " S>># @@2 @ HEXt ,"  " S>>#              @@3 @  HEXt ,"  |   " S>>#  ;  
