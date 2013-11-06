@@ -4,13 +4,15 @@
 0x 00 0x 04 0x 8d 0x 66 0x 67 0x 5 opcode  lea_eax,[eax*2]    
 0 0 0 0 0x b5 0x 4 0x 8d 0x 66 0x 67 0x 9 opcode lea_eax,[esi*4] 
 0 0x 20 0x 2e 0x 8b 0x 66 0x 36 0x 6 opcode mov_ebp,[ss:20]   
-0 0x 20 0x 2e 0x 89 0x 66 0x 36 0x 6 opcode mov_[ss:20],ebp   
+0 0x 20 0x 2e 0x 89 0x 66 0x 36 0x 6 opcode mov_[ss:20],ebp  
+
 0 0 0x 30 0 0x 9d 0x 4 1 0x 66 0x 67 0x 9 opcode add_[ebx*4+st_b],eax   
-0 0 0 0 0x ad 0x 4 0x 8b 0x 66 0x 67 0x 9    opcode             mov_eax,[ebp*4]  
-0 0 0 0 0x ad 0x 4 0x 89 0x 66 0x 67 0x 9    opcode             mov_[ebp*4],eax  
+
 0x 4 0x 45 0x 8b 0x 66 0x 67 0x 5 opcode mov_eax,[ebp+4]       
 0x 4 0x 45 0x 89 0x 66 0x 67 0x 5 opcode mov_[ebp+4],eax       
-0x 2 0x 24 0x 44 0x 8b 0x 67 0x 5 opcode mov_ax,[esp+2]       
+0x 2 0x 24 0x 44 0x 8b 0x 67 0x 5 opcode mov_ax,[esp+2]   
+ 0 0 0 0 0x ad 0x 4 0x 8b 0x 66 0x 67 0x 36 0x a    opcode             mov_eax,[ss:ebp*4]                                                
+ 0 0 0 0 0x ad 0x 4 0x 89 0x 66 0x 67 0x 36 0x a    opcode             mov_[ss:ebp*4],eax  
 
 .( BINs . ) 
 BIN:  +    call pop_ab  add_eax,ebx  call push_code  ret      
@@ -27,8 +29,8 @@ code_top  @ label hc1    rol_ebx,4 mov_al,bl and_al,0fh         mov_ah,30h   aaa
 BIN: HEXa    call pop_code   mov_edx,eax  call pop_code              mov_ebx,eax     
             call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 ret     
             
-BIN: R> mov_ebp,[ss:20] mov_eax,[ebp*4] dec_ebp and_ebp, b# 0f call push_code mov_[ss:20],ebp ret 
-BIN: R@ mov_ebp,[ss:20] mov_eax,[ebp*4] call push_code ret
-BIN: >R call pop_code mov_ebp,[ss:20] inc_ebp and_ebp, b# 0f mov_[ebp*4],eax mov_[ss:20],ebp ret 
+BIN: R> mov_ebp,[ss:20] mov_eax,[ss:ebp*4] dec_ebp and_ebp, b# 0f call push_code mov_[ss:20],ebp ret 
+BIN: R@ mov_ebp,[ss:20] mov_eax,[ss:ebp*4] call push_code ret
+BIN: >R call pop_code mov_ebp,[ss:20] inc_ebp and_ebp, b# 0f mov_[ss:ebp*4],eax mov_[ss:20],ebp ret 
 
 ..                       
