@@ -129,9 +129,26 @@
   80	Wireless controller
 
 0e	Intelligent controller	
+  00	I2O
+  
 0f	Satellite communications controller	
+  01	Satellite TV controller	
+  02	Satellite audio communication controller	
+  03	Satellite voice communication controller	
+  04	Satellite data communication controller
+
 10	Encryption controller	
-11	Signal processing controller	
+  00	Network and computing encryption device	
+  10	Entertainment encryption device	
+  80	Encryption controller
+
+11	Signal processing controller
+  00	DPIO module	
+  01	Performance counters	
+  10	Communication synchronizer	
+  20	Signal processing management	
+  80	Signal processing controller
+  
 ff	Unassigned clas
 
 : pci-classes   ( n --- T )  ;
