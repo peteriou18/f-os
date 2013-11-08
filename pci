@@ -3,23 +3,28 @@
 
 Класс писиай утсройства зашифрован в старших 2-х байтах.
 
-Сташий байт:
-
-00	Unclassified device	
-  00	Non-VGA unclassified device	
-  01	VGA compatible unclassified device
+Сташий байт
+  Младший байт
+CASE
+ 00 OF   ,"	Unclassified device	" 
+    CASE
+    00 OF 	," Non-VGA unclassified device	" ENDOF
+    01 OF  ,"	VGA compatible unclassified device " ENDOF
+    ENDCASE ENDOF
   
-01	Mass storage controller	
-  00	SCSI storage controller	
-  01	IDE interface	
-  02	Floppy disk controller	
-  03	IPI bus controller	
-  04	RAID bus controller	
-  05	ATA controller	
-  06	SATA controller	
-  07	Serial Attached SCSI controller	
-  08	Non-Volatile memory controller	
-  80	Mass storage controller
+ 01 OF  ,"	Mass storage controller	" 
+    CASE
+   00 OF	SCSI storage controller	ENDOF
+   01	OF IDE interface	ENDOF
+   02 OF	Floppy disk controller	ENDOF
+   03 OF	IPI bus controller	ENDOF
+   04 OF	RAID bus controller	ENDOF
+   05 OF	ATA controller	ENDOF
+   06 OF	SATA controller	ENDOF
+   07 OF	Serial Attached SCSI controller	ENDOF
+   08 OF	Non-Volatile memory controller	ENDOF
+   80 OF	Mass storage controller ENDOF
+  ENDCASE ENDOF
   
 02	Network controller	
   00	Ethernet controller	
@@ -149,6 +154,11 @@
   20	Signal processing management	
   80	Signal processing controller
   
-ff	Unassigned clas
+ff	Unassigned clas ENDOF
+ ENDCASE
 
-: pci-classes   ( n --- T )  ;
+Значит надо переделать вывод в формат xx. xx.. 
+Стоп. Надо иметь переключаемык контексты, а их пока нет.
+
+
+: pci-classes   ( n --- T ) DUP 0x12345678->0x1234  0x1234->0x12,0x34  ;
