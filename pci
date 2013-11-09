@@ -39,24 +39,31 @@ CASE >R
         R@ 0x, 06 = OF ,"	PICMG controller	" ENDOF
         R@ 0x, 07 = OF ," Unknown " ENDOF		
         R@ 0x, 80 = OF ," Network controller " ENDOF
+    ENDCASE R> DROP ENDOF
   
-03	Display controller	
-  00	VGA compatible controller	
-  01	XGA compatible controller	
-  02	3D controller	
-  80	Display controller
+ R@ 0x, 03 = OF ,"	Display controller "  	
+    CASE >R
+        R@ 0x, 00 = OF ,"	VGA compatible controller	" ENDOF
+        R@ 0x, 01 = OF ,"	XGA compatible controller	" ENDOF
+        R@ 0x, 02 = OF ," 3D controller	"             ENDOF
+        R@ 0x, 80 = OF ," Display controller "        ENDOF
+     ENDCASE R> DROP ENDOF   
   
-04	Multimedia controller	
-  00	Multimedia video controller	
-  01	Multimedia audio controller	
-  02	Computer telephony device	
-  03	Audio device	
-  80	Multimedia controller
+ R@ 0x, 04 = OF ,"	Multimedia controller	"
+    CASE >R
+        R@ 0x, 00 = OF ,"	Multimedia video controller " ENDOF	
+        R@ 0x, 01 = OF ," Multimedia audio controller " ENDOF	
+        R@ 0x, 02 = OF ,"	Computer telephony device	 " ENDOF
+        R@ 0x, 03 = OF ,"	Audio device " ENDOF	
+        R@ 0x, 80 = OF ,"	Multimedia controller" ENDOF
+     ENDCASE R> DROP ENDOF
 
-05	Memory controller	
-  00	RAM memory	
-  01	FLASH memory	
-  80	Memory controller
+ R@ 0x, 05 = OF ,"	Memory controller	"
+     CASE >R
+        R@ 0x, 00 = OF ,"	RAM memory	" ENDOF
+        R@ 0x, 01 = OF ," FLASH memory	" ENDOF 
+        R@ 0x, 80 = OF ," Memory controller " ENDOF
+     ENDCASE R> DROP ENDOF
   
 06	Bridge	
   00	Host bridge	
@@ -80,7 +87,7 @@ CASE >R
   04	GPIB controller	
   05	Smard Card controller	
   80	Communication controller
-  
+   
 08	Generic system peripheral	
   00	PIC	
   01	DMA controller	
