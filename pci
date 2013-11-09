@@ -84,23 +84,24 @@ CASE >R
  R@ 0x, 07 = OF ,"	Communication controller "
       CASE >R
          R@ 0x, 00 = OF ,"	Serial controller	" ENDOF
-  01	Parallel controller	
-  02	Multiport serial controller	
-  03	Modem	
-  04	GPIB controller	
-  05	Smard Card controller	
-  80	Communication controller
-   ENDCASE R> DROP ENDOF
+         R@ 0x, 01 = OF ," Parallel controller	" ENDOF
+         R@ 0x, 02 = OF ,"	Multiport serial controller	" ENDOF
+         R@ 0x, 03 = OF ,"	Modem	" ENDOF
+         R@ 0x, 04 = OF ,"	GPIB controller	" ENDOF
+         R@ 0x, 05 = OF ," 	Smard Card controller	" ENDOF
+         R@ 0x, 80 = OF ,"	Communication controller " ENDOF
+      ENDCASE R> DROP ENDOF
    
-08	Generic system peripheral	
-  00	PIC	
-  01	DMA controller	
-  02	Timer	
-  03	RTC	
-  04	PCI Hot-plug controller	
-  05	SD Host controller	
-  06	IOMMU	
-  80	System peripheral
+ R@ 0x, 08 = OF ,"	Generic system peripheral	"
+      CASE >R
+        R@ 0x, 00 = OF ,"	PIC	" ENDOF
+        R@ 0x, 01 = OF ," DMA controller	" ENDOF
+        R@ 0x, 02 = OF ," Timer	" ENDOF
+        R@ 0x, 03 = OF ,"	RTC	" ENDOF
+        R@ 0x, 04 = OF ,"	PCI Hot-plug controller	" ENDOF
+        R@ 0x, 05 = OF ,"	SD Host controller " ENDOF	
+        R@ 0x, 06 = OF ,"	IOMMU	" ENDOF
+        R@ 0x, 80 = OF ,"	System peripheral " ENDOF
     ENDCASE R> DROP ENDOF
     
 09	Input device controller	
