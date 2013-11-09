@@ -65,22 +65,25 @@ CASE >R
         R@ 0x, 80 = OF ," Memory controller " ENDOF
      ENDCASE R> DROP ENDOF
   
-06	Bridge	
-  00	Host bridge	
-  01	ISA bridge	
-  02	EISA bridge	
-  03	MicroChannel bridge	
-  04	PCI bridge	
-  05	PCMCIA bridge	
-  06	NuBus bridge	
-  07	CardBus bridge	
-  08	RACEway bridge	
-  09	Semi-transparent PCI-to-PCI bridge	
-  0a	InfiniBand to PCI host bridge	
-  80	Bridge
+ R@ 0x, 06 = OF ,"	Bridge	"
+     CASE >R
+        R@ 0x, 00 = OF ,"	Host bridge	" ENDOF
+        R@ 0x, 01 = OF ," ISA bridge " ENDOF	
+        R@ 0x, 02 = OF ," EISA bridge	" ENDOF
+        R@ 0x, 03 = OF ," MicroChannel bridge	" ENDOF
+        R@ 0x, 04 = OF ,"	PCI bridge " ENDOF	
+        R@ 0x, 05 = OF ,"	PCMCIA bridge	" ENDOF
+        R@ 0x, 06 = OF ,"	NuBus bridge " ENDOF	
+        R@ 0x, 07 = OF ,"	CardBus bridge	" ENDOF
+        R@ 0x, 08 = OF ,"	RACEway bridge " ENDOF
+        R@ 0x, 09 = OF ,"	Semi-transparent PCI-to-PCI bridge " ENDOF	
+        R@ 0x, 0a = OF ,"	InfiniBand to PCI host bridge	" ENDOF
+        R@ 0x, 80 = OF ,"	Bridge " ENDOF
+      ENDCASE R> DROP ENDOF
   
-07	Communication controller
-  00	Serial controller	
+ R@ 0x, 07 = OF ,"	Communication controller "
+      CASE >R
+         R@ 0x, 00 = OF ,"	Serial controller	" ENDOF
   01	Parallel controller	
   02	Multiport serial controller	
   03	Modem	
