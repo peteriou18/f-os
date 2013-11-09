@@ -6,10 +6,10 @@
 Сташий байт
   Младший байт
 CASE
- 00 OF   ,"	Unclassified device	" 
+ 0x, 00 = OF   ,"	Unclassified device	" 
     CASE
-    00 OF 	," Non-VGA unclassified device	" ENDOF
-    01 OF  ,"	VGA compatible unclassified device " ENDOF
+    0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
+    0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
     ENDCASE ENDOF
   
  01 OF  ,"	Mass storage controller	" 
