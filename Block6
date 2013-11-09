@@ -7,9 +7,6 @@
  : DOES>   code_top @ lit_code , , does-d ,  HERE @ part-one    code_top @ dCode! code_top 4+!  part-two   ret_ ,  ; 
  IMMEDIATE                                                      
  
- : MARK  HERE @ ;  : RESOLVE  HERE @ ! ;                       
- : BEGIN  MARK  ; IMMEDIATE  : AGAIN br_label , , ; IMMEDIATE   
- : UNTIL   ?br_label , , ; IMMEDIATE                            
  
  : ( ) WORD DROP ; IMMEDIATE                                    
  
@@ -25,13 +22,10 @@
  
  : 0x,  lit_code , 0x , ; IMMEDIATE                            
  
- : '  BL WORD FIND DROP ;  : ['] lit_code , ' , ; IMMEDIATE    
+ : '  BL WORD FIND DROP ;  : ['] lit_code , ' , ; IMMEDIATE 
  
- .( If..Then..Else )                                            
+ 0x d LOAD
  
- : IF ?br_label , MARK 0 , ; IMMEDIATE                          
- : THEN   MARK  SWAP !  ; IMMEDIATE                            
- : ELSE MARK +CELL +CELL SWAP ! br_label , MARK 0 , ; IMMEDIATE 
  
 
  .( Key codes )                                                 
