@@ -5,28 +5,31 @@
 
 Сташий байт
   Младший байт
-CASE
- 0x, 00 = OF   ,"	Unclassified device	" 
-    CASE
-    0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
-    0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
-    ENDCASE ENDOF
   
- 01 OF  ,"	Mass storage controller	" 
-    CASE
-   00 OF	SCSI storage controller	ENDOF
-   01	OF IDE interface	ENDOF
-   02 OF	Floppy disk controller	ENDOF
-   03 OF	IPI bus controller	ENDOF
-   04 OF	RAID bus controller	ENDOF
-   05 OF	ATA controller	ENDOF
-   06 OF	SATA controller	ENDOF
-   07 OF	Serial Attached SCSI controller	ENDOF
-   08 OF	Non-Volatile memory controller	ENDOF
-   80 OF	Mass storage controller ENDOF
-  ENDCASE ENDOF
   
-02	Network controller	
+CASE >R 
+ R@  0x, 00 = OF   ,"	Unclassified device	" 
+    CASE >R
+         R@ 0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
+         R@ 0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
+    ENDCASE R> DROP ENDOF
+  
+ R@ 0x, 01 = OF  ,"	Mass storage controller	" 
+    CASE >R
+         R@ 0x, 00 =  OF ,"	SCSI storage controller "       	ENDOF
+         R@ 0x, 01 =	OF ," IDE interface "                 	ENDOF
+         R@ 0x, 02 =  OF ," Floppy disk controller "        	ENDOF
+         R@ 0x, 03 =  OF ,"	IPI bus controller "            	ENDOF
+         R@ 0x, 04 =  OF ," RAID bus controller "           	ENDOF
+         R@ 0x, 05 =  OF ," ATA controller "                	ENDOF
+         R@ 0x, 06 =  OF ," SATA controller "               	ENDOF
+         R@ 0x, 07 =  OF ," Serial Attached SCSI controller "	ENDOF
+         R@ 0x, 08 =  OF ," Non-Volatile memory controller "	ENDOF
+         R@ 0x, 80 =  OF ," Mass storage controller "         ENDOF
+    ENDCASE R> DROP ENDOF
+  
+ R@ 0x, 02 = OF ,"	Network controller "
+    CASE >R
   00	Ethernet controller	
   01	Token ring network controller	
   02	FDDI network controller	
