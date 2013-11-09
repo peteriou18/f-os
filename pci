@@ -30,15 +30,15 @@ CASE >R
   
  R@ 0x, 02 = OF ,"	Network controller "
     CASE >R
-  00	Ethernet controller	
-  01	Token ring network controller	
-  02	FDDI network controller	
-  03	ATM network controller	
-  04	ISDN controller	
-  05	WorldFip controller	
-  06	PICMG controller	
-  07		
-  80	Network contro
+        R@ 0x, 00 = OF ,"	Ethernet controller	" ENDOF
+        R@ 0x, 01 = OF ,"	Token ring network controller	" ENDOF
+        R@ 0x, 02 = OF ,"	FDDI network controller	" ENDOF
+        R@ 0x, 03 = OF ,"	ATM network controller " ENDOF	
+        R@ 0x, 04 = OF ,"	ISDN controller	" ENDOF
+        R@ 0x, 05 = OF ,"	WorldFip controller	" ENDOF
+        R@ 0x, 06 = OF ,"	PICMG controller	" ENDOF
+        R@ 0x, 07 = OF ," Unknown " ENDOF		
+        R@ 0x, 80 = OF ," Network controller " ENDOF
   
 03	Display controller	
   00	VGA compatible controller	
