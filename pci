@@ -102,36 +102,40 @@ CASE >R
         R@ 0x, 05 = OF ,"	SD Host controller " ENDOF	
         R@ 0x, 06 = OF ,"	IOMMU	" ENDOF
         R@ 0x, 80 = OF ,"	System peripheral " ENDOF
+      ENDCASE R> DROP ENDOF
+    
+ R@ 0x, 09 = OF ,"	Input device controller	"
+      CASE >R
+        R@ 0x, 00 = OF ,"	Keyboard controller	" ENDOF
+        R@ 0x, 01 = OF ,"	Digitizer Pen	" ENDOF
+        R@ 0x, 02	= OF ," Mouse controller " ENDOF	
+        R@ 0x, 03 = OF ,"	Scanner controller	" ENDOF
+        R@ 0x, 04 = OF ,"	Gameport controller	" ENDOF
+        R@ 0x, 80 = OF ,"	Input device controller " ENDOF
     ENDCASE R> DROP ENDOF
     
-09	Input device controller	
-  00	Keyboard controller	
-  01	Digitizer Pen	
-  02	Mouse controller	
-  03	Scanner controller	
-  04	Gameport controller	
-  80	Input device controller
+ R@ 0x, 0a = OF ,"	Docking station	"
+      CASE >R
+        R@ 0x, 00 = OF ,"	Generic Docking Station	" ENDOF
+        R@ 0x, 80 = OF ,"	Docking Station " ENDOF
     ENDCASE R> DROP ENDOF
     
-0a	Docking station	
-  00	Generic Docking Station	
-  80	Docking Station
-    ENDCASE R> DROP ENDOF
-    
-0b	Processor	
-  00	386	
-  01	486	
-  02	Pentium	
-  03		
-  04		
-  10	Alpha	
-  20	Power PC	
-  30	MIPS	
-  40	Co-processor
+ R@ 0x, 0b = OF ,"	Processor	"
+      CASE >R
+        R@ 0x, 00 = OF ,"	386 "	ENDOF
+        R@ 0x, 01 = OF ,"	486 "	ENDOF
+        R@ 0x, 02 = OF ,"	Pentium " ENDOF	
+        R@ 0x, 03	= OF ," Unknown " ENDOF	
+        R@ 0x, 04	= OF ," Unknown " ENDOF	
+        R@ 0x, 10 = OF ,"	Alpha	" ENDOF
+        R@ 0x, 20 = OF ,"	Power PC	" ENDOF
+        R@ 0x, 30 = OF ,"	MIPS " ENDOF	
+        R@ 0x, 40 = OF ," Co-processor " ENDOF
    ENDCASE R> DROP ENDOF
    
-0c	Serial bus controller	
-  00	FireWire (IEEE 1394)	
+ R@ 0x, 0c = ,"	Serial bus controller	"
+      CASE >R
+        R@ 0x, 00	= ," FireWire (IEEE 1394)	" ENDOF
   01	ACCESS Bus	
   02	SSA	
   03	USB controller	
