@@ -90,6 +90,7 @@ CASE >R
   04	GPIB controller	
   05	Smard Card controller	
   80	Communication controller
+   ENDCASE R> DROP ENDOF
    
 08	Generic system peripheral	
   00	PIC	
@@ -100,7 +101,8 @@ CASE >R
   05	SD Host controller	
   06	IOMMU	
   80	System peripheral
-
+    ENDCASE R> DROP ENDOF
+    
 09	Input device controller	
   00	Keyboard controller	
   01	Digitizer Pen	
@@ -108,11 +110,13 @@ CASE >R
   03	Scanner controller	
   04	Gameport controller	
   80	Input device controller
-
+    ENDCASE R> DROP ENDOF
+    
 0a	Docking station	
   00	Generic Docking Station	
   80	Docking Station
-
+    ENDCASE R> DROP ENDOF
+    
 0b	Processor	
   00	386	
   01	486	
@@ -123,7 +127,8 @@ CASE >R
   20	Power PC	
   30	MIPS	
   40	Co-processor
-
+   ENDCASE R> DROP ENDOF
+   
 0c	Serial bus controller	
   00	FireWire (IEEE 1394)	
   01	ACCESS Bus	
@@ -135,6 +140,7 @@ CASE >R
   07	IPMI SMIC interface	
   08	SERCOS interface	
   09	CANBUS
+   ENDCASE R> DROP ENDOF
 
 0d	Wireless controller	
   00	IRDA controller	
@@ -145,20 +151,25 @@ CASE >R
   20	802.1a controller	
   21	802.1b controller	
   80	Wireless controller
-
+  ENDCASE R> DROP ENDOF
+  
+  
 0e	Intelligent controller	
   00	I2O
-  
+ ENDCASE R> DROP ENDOF
+ 
 0f	Satellite communications controller	
   01	Satellite TV controller	
   02	Satellite audio communication controller	
   03	Satellite voice communication controller	
   04	Satellite data communication controller
+ENDCASE R> DROP ENDOF
 
 10	Encryption controller	
   00	Network and computing encryption device	
   10	Entertainment encryption device	
   80	Encryption controller
+ENDCASE R> DROP ENDOF
 
 11	Signal processing controller
   00	DPIO module	
@@ -166,6 +177,7 @@ CASE >R
   10	Communication synchronizer	
   20	Signal processing management	
   80	Signal processing controller
+  ENDCASE R> DROP ENDOF
   
 ff	Unassigned clas ENDOF
  ENDCASE
