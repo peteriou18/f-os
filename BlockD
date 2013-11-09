@@ -1,0 +1,20 @@
+.( Block D.)                                                  
+
+: MARK  HERE @ ;  : RESOLVE  HERE @ SWAP ! ;                  
+: BEGIN  MARK  ; IMMEDIATE 
+: AGAIN br_label , , ; IMMEDIATE  
+: UNTIL   ?br_label , , ; IMMEDIATE  
+
+.( If..Then..Else )                     
+: IF ?br_label , MARK 0 , ; IMMEDIATE   
+: THEN   MARK  SWAP !  ; IMMEDIATE      
+: ELSE MARK +CELL +CELL SWAP ! br_label , MARK 0 , ; IMMEDIATE     
+
+.( CASE..OF..ENDOF..ENDCASE )                                
+: CASE      0     ;  IMMEDIATE                            
+: OF     ?of , MARK  0 ,  ;  IMMEDIATE                    
+: ENDOF   br_label , MARK 0 , >R  RESOLVE R>  ;   IMMEDIATE 
+: ENDCASE   BEGIN DUP 0 <> IF  0   ELSE  RESOLVE  1  THEN                  UNTIL DROP  ; IMMEDIATE  
+
+
+.. ..........
