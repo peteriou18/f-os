@@ -133,59 +133,64 @@ CASE >R
         R@ 0x, 40 = OF ," Co-processor " ENDOF
    ENDCASE R> DROP ENDOF
    
- R@ 0x, 0c = ,"	Serial bus controller	"
+ R@ 0x, 0c = OF ,"	Serial bus controller	"
       CASE >R
-        R@ 0x, 00	= ," FireWire (IEEE 1394)	" ENDOF
-        R@ 0x, 01 = ,"	ACCESS Bus	" ENDOF
-        R@ 0x, 02 = ,"	SSA	" ENDOF
-        R@ 0x, 03	= ," USB controller " ENDOF	
-        R@ 0x, 04	= ," Fibre Channel " ENDOF	
-        R@ 0x, 05 = ,"	SMBus	" ENDOF
-        R@ 0x, 06 = ,"	InfiniBand " ENDOF	
-        R@ 0x, 07 = ,"	IPMI SMIC interface " ENDOF	
-        R@ 0x, 08 = ,"	SERCOS interface " ENDOF	
-        R@ 0x, 09 = ,"	CANBUS " ENDOF
+        R@ 0x, 00	= OF ," FireWire (IEEE 1394)	" ENDOF
+        R@ 0x, 01 = OF ,"	ACCESS Bus	" ENDOF
+        R@ 0x, 02 = OF ,"	SSA	" ENDOF
+        R@ 0x, 03	= OF ," USB controller " ENDOF	
+        R@ 0x, 04	= OF ," Fibre Channel " ENDOF	
+        R@ 0x, 05 = OF ,"	SMBus	" ENDOF
+        R@ 0x, 06 = OF ,"	InfiniBand " ENDOF	
+        R@ 0x, 07 = OF ,"	IPMI SMIC interface " ENDOF	
+        R@ 0x, 08 = OF ,"	SERCOS interface " ENDOF	
+        R@ 0x, 09 = OF ,"	CANBUS " ENDOF
      ENDCASE R> DROP ENDOF
 
-0d	Wireless controller	
-  00	IRDA controller	
-  01	Consumer IR controller	
-  10	RF controller	
-  11	Bluetooth	
-  12	Broadband	
-  20	802.1a controller	
-  21	802.1b controller	
-  80	Wireless controller
-  ENDCASE R> DROP ENDOF
+ R@ 0x, 0d = OF ,"	Wireless controller	"
+      CASE >R
+         R@ 0x, 00 = OF ,"	IRDA controller	" ENDOF
+         R@ 0x, 01 = OF ,"	Consumer IR controller " ENDOF	
+         R@ 0x, 10 = OF ,"	RF controller	" ENDOF
+         R@ 0x, 11 = OF ,"	Bluetooth	" ENDOF
+         R@ 0x, 12 = OF ,"	Broadband	" ENDOF
+         R@ 0x, 20 = OF ,"	802.1a controller	" ENDOF
+         R@ 0x, 21 = OF ,"	802.1b controller	" ENDOF
+         R@ 0x, 80 = OF ,"	Wireless controller " ENDOF
+      ENDCASE R> DROP ENDOF
   
   
-0e	Intelligent controller	
-  00	I2O
- ENDCASE R> DROP ENDOF
+ R@ 0x, 0e = OF ,"	Intelligent controller	"
+      CASE >R
+         R@ 0x, 00 = OF ,"	I2O " ENDOF
+      ENDCASE R> DROP ENDOF
  
-0f	Satellite communications controller	
-  01	Satellite TV controller	
-  02	Satellite audio communication controller	
-  03	Satellite voice communication controller	
-  04	Satellite data communication controller
-ENDCASE R> DROP ENDOF
+ R@ 0x, 0f = OF ,"	Satellite communications controller	"
+      CASE >R
+          R@ 0x, 01	= OF ," Satellite TV controller	" ENDOF
+          R@ 0x, 02 = OF ,"	Satellite audio communication controller " ENDOF	
+          R@ 0x, 03	= OF ," Satellite voice communication controller " ENDOF	
+          R@ 0x, 04 = OF ,"	Satellite data communication controller " ENDOF
+      ENDCASE R> DROP ENDOF
 
-10	Encryption controller	
-  00	Network and computing encryption device	
-  10	Entertainment encryption device	
-  80	Encryption controller
-ENDCASE R> DROP ENDOF
+ R@ 0x, 10 = OF ,"	Encryption controller	" 
+      CASE >R
+         R@ 0x, 00 = OF ,"	Network and computing encryption device	" ENDOF
+         R@ 0x, 10 = OF ,"	Entertainment encryption device	" ENDOF
+         R@ 0x, 80 = OF ,"	Encryption controller " ENDOF
+      ENDCASE R> DROP ENDOF
 
-11	Signal processing controller
-  00	DPIO module	
-  01	Performance counters	
-  10	Communication synchronizer	
-  20	Signal processing management	
-  80	Signal processing controller
+ R@ 0x, 11 = OF ," Signal processing controller "
+      CASE >R
+        R@ 0x, 00 = OF ,"	DPIO module	" ENDOF
+        R@ 0x, 01 = OF ,"	Performance counters	" ENDOF
+        R@ 0x, 10	= OF ," Communication synchronizer	" ENDOF
+        R@ 0x, 20 = OF ,"	Signal processing management	" ENDOF
+        R@ 0x, 80 = OF ,"	Signal processing controller " ENDOF
   ENDCASE R> DROP ENDOF
   
-ff	Unassigned clas ENDOF
- ENDCASE
+ R@ 0x, ff = OF ,"	Unassigned class "  ENDOF
+ ENDCASE R> DROP
 
 Значит надо переделать вывод в формат xx. xx.. 
 Стоп. Надо иметь переключаемык контексты, а их пока нет.
