@@ -136,16 +136,16 @@ CASE >R
  R@ 0x, 0c = ,"	Serial bus controller	"
       CASE >R
         R@ 0x, 00	= ," FireWire (IEEE 1394)	" ENDOF
-  01	ACCESS Bus	
-  02	SSA	
-  03	USB controller	
-  04	Fibre Channel	
-  05	SMBus	
-  06	InfiniBand	
-  07	IPMI SMIC interface	
-  08	SERCOS interface	
-  09	CANBUS
-   ENDCASE R> DROP ENDOF
+        R@ 0x, 01 = ,"	ACCESS Bus	" ENDOF
+        R@ 0x, 02 = ,"	SSA	" ENDOF
+        R@ 0x, 03	= ," USB controller " ENDOF	
+        R@ 0x, 04	= ," Fibre Channel " ENDOF	
+        R@ 0x, 05 = ,"	SMBus	" ENDOF
+        R@ 0x, 06 = ,"	InfiniBand " ENDOF	
+        R@ 0x, 07 = ,"	IPMI SMIC interface " ENDOF	
+        R@ 0x, 08 = ,"	SERCOS interface " ENDOF	
+        R@ 0x, 09 = ,"	CANBUS " ENDOF
+     ENDCASE R> DROP ENDOF
 
 0d	Wireless controller	
   00	IRDA controller	
