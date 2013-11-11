@@ -45,7 +45,8 @@ do_home THEN ELSE do_ctrl_right THEN     DROP     AGAIN ;
 : backup ( save blocks 0-0f to blocks 10-1f  )                    
 0x, f BEGIN DUP 0x, 2000  RBLOCK DUP 0x, 10 + 0x, 2000          WBLOCK  1- DUP  0 < UNTIL DROP ; 
 : block-edit   ( block_number --  )  0x, 1000 RBLOCK edit ;     
-: block-save   backup  0x, 1000 WBLOCK  ;                          
+: block-save   backup  0x, 1000 WBLOCK  ;     
+: -->  BLK @ 1+ LOAD ; IMMEDIATE  ( LOAD next block )
 
 : ,"   ['] LIT" , QUOTE WORD DUP COUNT + 1+ HERE ! ; IMMEDIATE  
 : ,(  ) WORD DUP COUNT + 1+ HERE ! ;  
