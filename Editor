@@ -1,0 +1,17 @@
+: edit 
+
+      BEGIN draw KEY 
+      CASE >R 
+      R@ ctrl_right? OF   do_ctrl_right ENDOF
+      R@ up?         OF   do_up         ENDOF
+      R@ down?       OF   do_down       ENDOF
+      R@ home?       OF   do_home       ENDOF
+      R@ esc?        OF   do_esc        ENDOF
+      R@ left?       OF   do_left       ENDOF
+      R@ right?      OF   do_right      ENDOF
+      R@ delete?     OF   do_delete     ENDOF
+      R@ backspace?  OF   do_backspace  ENDOF
+      >R do_any
+      ENDCASE 
+      
+      ; 
