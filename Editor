@@ -1,3 +1,24 @@
+: do_esc 0x, 114 set_cursor 0x, 2 return ;
+: right-symbol-edge 0x, 2000 w*h - symbol @ < IF 0x, 2000 w*h - symbol ! THEN ;
+: right-edge w*h cursor @ < IF cursor 1-! symbol 1+! right-symbol-edge THEN ;
+: left-symbol-edge 0x, 1000 symbol @ >= IF 0x, 1000 symbol ! THEN ;
+: left-edge 0 cursor @ >= IF cursor 1+! symbol 1-! left-symbol-edge THEN ;
+: do_right cursor 1+! right-edge ; 
+: do_left cursor 1-! left-edge ;
+: do_delete symbol @ cursor @ + 0x, 2000 left_shift_one ;
+: do_backspace do_left do_delete ;
+: do_ctrl_right symbol @ cursor @ + scr@ 0x, 100 + symbol @ cursor @ + scr! cursor 1+! right-edge ;
+: do_any DUP symbol @ cursor @ + DUP 0x, 2000 right_shift_one C! do_right ;
+: down_edge_string width @ symbol +! symbol @ 0x, 2000 w*h - > IF width @ symbol -! THEN ;
+: down_edge cursor @ w*h > IF width @ cursor -! down_edge_string THEN ;
+: do_down width @ cursor +! down_edge ;
+: up_edge_string width @ symbol -! symbol @ 0x, 1000 < IF width @ symbol +! THEN ;
+: up_edge cursor @ 0 < IF width @ cursor +! up_edge_string THEN ;
+: do_up width @ cursor -! up_edge ;
+: do_home 1 cursor ! 0x, 1000 symbol ! ; 
+
+
+
 : edit 
 
       BEGIN draw KEY 
