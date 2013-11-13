@@ -8,6 +8,22 @@
 THRU ( first-block last_block -- ) 
 В итоге сделана стрелочка --> 
 
+Ой-вей. Как красиво, как красиво. Только не работает. 
+Что же делать? Вводить еще S стек? Или извращаться на этом стеке.
+Суть в том, что ветка не должна трогать стеки. 
+Либо сохранять в какой-то переменной выдачу. Или просто SWAP сделать?
+Или так:
+
+>R >R 
+
+CASE  
+ R@  0x, 00 = OF   ,"	Unclassified device	" R> DROP
+    CASE 
+         R@ 0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
+         R@ 0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
+    ENDCASE R> DROP ENDOF
+    
+    
 
 Сташий байт
   Младший байт
