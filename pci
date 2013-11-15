@@ -35,10 +35,10 @@ CASE
     CASE 
          R@ 0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
          R@ 0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
-    ENDCASE R> DROP ENDOF
+    ENDCASE RDROP ENDOF
   
- R@ 0x, 01 = OF  ,"	Mass storage controller	" 
-    CASE >R
+ R@ 0x, 01 = OF  ,"	Mass storage controller	" RDOP
+    CASE 
          R@ 0x, 00 =  OF ,"	SCSI storage controller "       	ENDOF
          R@ 0x, 01 =	OF ," IDE interface "                 	ENDOF
          R@ 0x, 02 =  OF ," Floppy disk controller "        	ENDOF
@@ -49,10 +49,10 @@ CASE
          R@ 0x, 07 =  OF ," Serial Attached SCSI controller "	ENDOF
          R@ 0x, 08 =  OF ," Non-Volatile memory controller "	ENDOF
          R@ 0x, 80 =  OF ," Mass storage controller "         ENDOF
-    ENDCASE R> DROP ENDOF
+    ENDCASE RDROP ENDOF
   
- R@ 0x, 02 = OF ,"	Network controller "
-    CASE >R
+ R@ 0x, 02 = OF ,"	Network controller " RDROP
+    CASE 
         R@ 0x, 00 = OF ,"	Ethernet controller	" ENDOF
         R@ 0x, 01 = OF ,"	Token ring network controller	" ENDOF
         R@ 0x, 02 = OF ,"	FDDI network controller	" ENDOF
@@ -62,34 +62,34 @@ CASE
         R@ 0x, 06 = OF ,"	PICMG controller	" ENDOF
         R@ 0x, 07 = OF ," Unknown " ENDOF		
         R@ 0x, 80 = OF ," Network controller " ENDOF
-    ENDCASE R> DROP ENDOF
+    ENDCASE RDROP ENDOF
   
- R@ 0x, 03 = OF ,"	Display controller "  	
-    CASE >R
+ R@ 0x, 03 = OF ,"	Display controller "  	RDROP
+    CASE 
         R@ 0x, 00 = OF ,"	VGA compatible controller	" ENDOF
         R@ 0x, 01 = OF ,"	XGA compatible controller	" ENDOF
         R@ 0x, 02 = OF ," 3D controller	"             ENDOF
         R@ 0x, 80 = OF ," Display controller "        ENDOF
-     ENDCASE R> DROP ENDOF   
+     ENDCASE RDROP ENDOF   
   
- R@ 0x, 04 = OF ,"	Multimedia controller	"
-    CASE >R
+ R@ 0x, 04 = OF ,"	Multimedia controller	" RDROP
+    CASE 
         R@ 0x, 00 = OF ,"	Multimedia video controller " ENDOF	
         R@ 0x, 01 = OF ," Multimedia audio controller " ENDOF	
         R@ 0x, 02 = OF ,"	Computer telephony device	 " ENDOF
         R@ 0x, 03 = OF ,"	Audio device " ENDOF	
         R@ 0x, 80 = OF ,"	Multimedia controller" ENDOF
-     ENDCASE R> DROP ENDOF
+     ENDCASE RDROP ENDOF
 
  R@ 0x, 05 = OF ,"	Memory controller	"
-     CASE >R
+     CASE 
         R@ 0x, 00 = OF ,"	RAM memory	" ENDOF
         R@ 0x, 01 = OF ," FLASH memory	" ENDOF 
         R@ 0x, 80 = OF ," Memory controller " ENDOF
-     ENDCASE R> DROP ENDOF
+     ENDCASE RDROP ENDOF
   
- R@ 0x, 06 = OF ,"	Bridge	"
-     CASE >R
+ R@ 0x, 06 = OF ,"	Bridge	" RDROP
+     CASE 
         R@ 0x, 00 = OF ,"	Host bridge	" ENDOF
         R@ 0x, 01 = OF ," ISA bridge " ENDOF	
         R@ 0x, 02 = OF ," EISA bridge	" ENDOF
@@ -102,10 +102,10 @@ CASE
         R@ 0x, 09 = OF ,"	Semi-transparent PCI-to-PCI bridge " ENDOF	
         R@ 0x, 0a = OF ,"	InfiniBand to PCI host bridge	" ENDOF
         R@ 0x, 80 = OF ,"	Bridge " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
   
- R@ 0x, 07 = OF ,"	Communication controller "
-      CASE >R
+ R@ 0x, 07 = OF ,"	Communication controller " RDROP
+      CASE 
          R@ 0x, 00 = OF ,"	Serial controller	" ENDOF
          R@ 0x, 01 = OF ," Parallel controller	" ENDOF
          R@ 0x, 02 = OF ,"	Multiport serial controller	" ENDOF
@@ -113,10 +113,10 @@ CASE
          R@ 0x, 04 = OF ,"	GPIB controller	" ENDOF
          R@ 0x, 05 = OF ," 	Smard Card controller	" ENDOF
          R@ 0x, 80 = OF ,"	Communication controller " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
    
- R@ 0x, 08 = OF ,"	Generic system peripheral	"
-      CASE >R
+ R@ 0x, 08 = OF ,"	Generic system peripheral	" RDROP
+      CASE 
         R@ 0x, 00 = OF ,"	PIC	" ENDOF
         R@ 0x, 01 = OF ," DMA controller	" ENDOF
         R@ 0x, 02 = OF ," Timer	" ENDOF
@@ -125,26 +125,26 @@ CASE
         R@ 0x, 05 = OF ,"	SD Host controller " ENDOF	
         R@ 0x, 06 = OF ,"	IOMMU	" ENDOF
         R@ 0x, 80 = OF ,"	System peripheral " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
     
- R@ 0x, 09 = OF ,"	Input device controller	"
-      CASE >R
+ R@ 0x, 09 = OF ,"	Input device controller	" RDROP
+      CASE 
         R@ 0x, 00 = OF ,"	Keyboard controller	" ENDOF
         R@ 0x, 01 = OF ,"	Digitizer Pen	" ENDOF
         R@ 0x, 02	= OF ," Mouse controller " ENDOF	
         R@ 0x, 03 = OF ,"	Scanner controller	" ENDOF
         R@ 0x, 04 = OF ,"	Gameport controller	" ENDOF
         R@ 0x, 80 = OF ,"	Input device controller " ENDOF
-    ENDCASE R> DROP ENDOF
+    ENDCASE RDROP ENDOF
     
- R@ 0x, 0a = OF ,"	Docking station	"
-      CASE >R
+ R@ 0x, 0a = OF ,"	Docking station	" RDROP
+      CASE 
         R@ 0x, 00 = OF ,"	Generic Docking Station	" ENDOF
         R@ 0x, 80 = OF ,"	Docking Station " ENDOF
-    ENDCASE R> DROP ENDOF
+    ENDCASE RDROP ENDOF
     
- R@ 0x, 0b = OF ,"	Processor	"
-      CASE >R
+ R@ 0x, 0b = OF ,"	Processor	" RDROP
+      CASE 
         R@ 0x, 00 = OF ,"	386 "	ENDOF
         R@ 0x, 01 = OF ,"	486 "	ENDOF
         R@ 0x, 02 = OF ,"	Pentium " ENDOF	
@@ -154,10 +154,10 @@ CASE
         R@ 0x, 20 = OF ,"	Power PC	" ENDOF
         R@ 0x, 30 = OF ,"	MIPS " ENDOF	
         R@ 0x, 40 = OF ," Co-processor " ENDOF
-   ENDCASE R> DROP ENDOF
+   ENDCASE RDROP ENDOF
    
- R@ 0x, 0c = OF ,"	Serial bus controller	"
-      CASE >R
+ R@ 0x, 0c = OF ,"	Serial bus controller	" RDROP
+      CASE 
         R@ 0x, 00	= OF ," FireWire (IEEE 1394)	" ENDOF
         R@ 0x, 01 = OF ,"	ACCESS Bus	" ENDOF
         R@ 0x, 02 = OF ,"	SSA	" ENDOF
@@ -168,10 +168,10 @@ CASE
         R@ 0x, 07 = OF ,"	IPMI SMIC interface " ENDOF	
         R@ 0x, 08 = OF ,"	SERCOS interface " ENDOF	
         R@ 0x, 09 = OF ,"	CANBUS " ENDOF
-     ENDCASE R> DROP ENDOF
+     ENDCASE RDROP ENDOF
 
- R@ 0x, 0d = OF ,"	Wireless controller	"
-      CASE >R
+ R@ 0x, 0d = OF ,"	Wireless controller	" RDROP
+      CASE 
          R@ 0x, 00 = OF ,"	IRDA controller	" ENDOF
          R@ 0x, 01 = OF ,"	Consumer IR controller " ENDOF	
          R@ 0x, 10 = OF ,"	RF controller	" ENDOF
@@ -180,40 +180,40 @@ CASE
          R@ 0x, 20 = OF ,"	802.1a controller	" ENDOF
          R@ 0x, 21 = OF ,"	802.1b controller	" ENDOF
          R@ 0x, 80 = OF ,"	Wireless controller " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
   
   
- R@ 0x, 0e = OF ,"	Intelligent controller	"
-      CASE >R
+ R@ 0x, 0e = OF ,"	Intelligent controller	" RDROP
+      CASE 
          R@ 0x, 00 = OF ,"	I2O " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
  
- R@ 0x, 0f = OF ,"	Satellite communications controller	"
-      CASE >R
+ R@ 0x, 0f = OF ,"	Satellite communications controller	" RDROP 
+      CASE 
           R@ 0x, 01	= OF ," Satellite TV controller	" ENDOF
           R@ 0x, 02 = OF ,"	Satellite audio communication controller " ENDOF	
           R@ 0x, 03	= OF ," Satellite voice communication controller " ENDOF	
           R@ 0x, 04 = OF ,"	Satellite data communication controller " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
 
- R@ 0x, 10 = OF ,"	Encryption controller	" 
-      CASE >R
+ R@ 0x, 10 = OF ,"	Encryption controller	" RDROP
+      CASE 
          R@ 0x, 00 = OF ,"	Network and computing encryption device	" ENDOF
          R@ 0x, 10 = OF ,"	Entertainment encryption device	" ENDOF
          R@ 0x, 80 = OF ,"	Encryption controller " ENDOF
-      ENDCASE R> DROP ENDOF
+      ENDCASE RDROP ENDOF
 
- R@ 0x, 11 = OF ," Signal processing controller "
-      CASE >R
+ R@ 0x, 11 = OF ," Signal processing controller " RDROP
+      CASE 
         R@ 0x, 00 = OF ,"	DPIO module	" ENDOF
         R@ 0x, 01 = OF ,"	Performance counters	" ENDOF
         R@ 0x, 10	= OF ," Communication synchronizer	" ENDOF
         R@ 0x, 20 = OF ,"	Signal processing management	" ENDOF
         R@ 0x, 80 = OF ,"	Signal processing controller " ENDOF
-  ENDCASE R> DROP ENDOF
+  ENDCASE RDROP ENDOF
   
- R@ 0x, ff = OF ,"	Unassigned class "  ENDOF
- ENDCASE R> DROP ;
+ R@ 0x, ff = OF ,"	Unassigned class "  ENDOF RDROP
+ ENDCASE  ;
 
 Значит надо переделать вывод в формат xx. xx.. 
 Стоп. Надо иметь переключаемык контексты, а их пока нет.
