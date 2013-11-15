@@ -12,10 +12,10 @@ sg_data wCode@ 0x, 4000 sg_data   wCode!  0 off_data wCode! 0x, 7f how_many_sect
 : fill-static     0x, 0fffc BEGIN DUP DUP dStatic! 0x, 4 - DUP     UNTIL ;   
 : restart  timestamp 0x, 10 dStatic! 0x, c dStatic! save_static  boot ;      
 : top_block 0x, ff10 dStatic@ 0x, 8 / DROP ;                  
-: block-header  0x, 1000 @@5 ! ," next_block " move-str              @@5 @ HEXa 0x, 8 @@5 +!  0x, 200a0d20 @@5 @ ! ; 
-: format  0x, 200 @@1 ! @@1 @ 0x, 4 dStatic!   
-BEGIN @@1 @ HEX. @@1 @ 0x, 1000 RBLOCK  @@1 @ 1+ block-header    @@1 @ 0x, 1000  WBLOCK  @@1 1+! @@1 @ 
-0x, 1200 ( top_block ) <> UNTIL   ;     
+: block-header   ," next_block " COUNT BUFFER_1 @ rCMOVE          BUFFER_1 @ 0x, b +  HEXa 0x, 200a0d20 
+                 BUFFER_1 @ 0x, 13 + ! ; 
+: format  0x, 200 >R R@ 0x, 4 dStatic!   BEGIN ."    Formatting block:" R@ HEX. R@ 0x, 1000 RBLOCK  
+         R@ 1+  block-header     R@ 0x, 1000  WBLOCK  R> 1+ >R  R@  0x, 1200 ( top_block ) <>  UNTIL RDROP   ;       
 : first_free_block@    0x, 4 dStatic@ ;           
 : first_free_block!    0x, 4 dStatic! ;          
 : allocate_block   first_free_block@  LOAD  IN> +CELL @  OUT> !  first_free_block! ;
@@ -26,11 +26,21 @@ BUFFER_1 +CELL @  ." blk-" DUP HEX.  BUFFER_1 @ WBLOCK    SPACE  ." pumping up "
 
 CR time. CR                                           
 
-: csp. CSP ." SP:" HEX. SPACE ;                           
+: csp. CSP ." SP:" HEX. SPACE ;   
+
 : tail? ( Taddr -- Taddr tail )  T->T,N OUT> @ + buffer_size -  ;   
-: S>># ( Taddr -- )   tail? DUP 0 < IF  DROP DUP COUNT BUFFER_1 @ OUT> @ +  rCMOVE   COUNT OUT> +! DROP  ELSE  
-                     >R  DUP  COUNT   R@ -  BUFFER_1 @ OUT> @ + rCMOVE  BUFFER_1 +CELL @  BUFFER_1 @  WBLOCK 
-                     allocate_block COUNT R@ - + R@  BUFFER_1 @   OUT> @ +    rCMOVE    R> OUT> +! THEN ;   
+: save_n_next   BUFFER_1 +CELL @   BUFFER_1 @   WBLOCK                  allocate_block ;  
+: store  DUP  COUNT BUFFER_1 @ OUT> @ + rCMOVE COUNT  OUT> +!      ;     
+: store_left   >R DUP COUNT R> - DUP >R BUFFER_1 @ OUT> @ +         rCMOVE   R>  OUT> +!  ;   
+: store_right  >R  COUNT R@ - + R@ BUFFER_1 @ OUT> @ + rCMOVE       R>  OUT> +!  ;  
+
+: S>># ( Taddr -- )  tail?  >R 
+                           CASE                                 
+                           R@ 0 > OF store ENDOF     
+                           R@ 0 = OF  DROP   save_n_next  ENDOF   
+                           R@ 0 < OF R@  store_left  save_n_next   R@ store_right   1   ENDOF  
+                           ENDCASE  RDROP DROP ;    
+                           
 : HEXt   HERE @ 0x, 500 + >R R@ SWAP 0x, 8 R@ C! R> 1+ HEXa S>>#   ;   
  
 : SPACEadr BL @@5 @ C! @@5 1+!      ;                          
