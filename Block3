@@ -29,8 +29,8 @@ code_top  @ label hc1    rol_ebx,4 mov_al,bl and_al,0fh         mov_ah,30h   aaa
 BIN: HEXa    call pop_code   mov_edx,eax  call pop_code              mov_ebx,eax     
             call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 call hc1 ret     
             
-BIN: R> mov_ebp,[ss:20] mov_eax,[ss:ebp*4] dec_ebp and_ebp, b# 0f call push_code mov_[ss:20],ebp ret 
-BIN: R@ mov_ebp,[ss:20] mov_eax,[ss:ebp*4] call push_code ret
-BIN: >R call pop_code mov_ebp,[ss:20] inc_ebp and_ebp, b# 0f mov_[ss:ebp*4],eax mov_[ss:20],ebp ret 
-
+BIN: R> mov_ebp,[ss:100] mov_eax,[ss:ebp*4] dec_ebp and_ebp, b# 3f call push_code mov_[ss:100],ebp ret 
+BIN: R@ mov_ebp,[ss:100] mov_eax,[ss:ebp*4] call push_code ret
+BIN: >R call pop_code mov_ebp,[ss:100] inc_ebp and_ebp, b# 3f mov_[ss:ebp*4],eax mov_[ss:100],ebp ret 
+BIN: RDROP mov_ebp,[ss:100]  dec_ebp and_ebp, b# 3f  mov_[ss:100],ebp ret 
 ..                       
