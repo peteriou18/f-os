@@ -29,10 +29,10 @@ CASE
   Младший байт
 
 : pci-classes   
-  
-CASE >R 
- R@  0x, 00 = OF   ,"	Unclassified device	" 
-    CASE >R
+  >R >R
+CASE  
+ R@  0x, 00 = OF   ,"	Unclassified device	" RDROP 
+    CASE 
          R@ 0x, 00 = OF 	," Non-VGA unclassified device	" ENDOF
          R@ 0x, 01 = OF  ,"	VGA compatible unclassified device " ENDOF
     ENDCASE R> DROP ENDOF
