@@ -41,7 +41,9 @@ CR time. CR
                            R@ 0 < OF R@  store_left  save_n_next   R@ store_right   1   ENDOF  
                            ENDCASE  RDROP DROP ;    
                            
-: HEXt   HERE @ 0x, 500 + >R R@ SWAP 0x, 8 R@ C! R> 1+ HEXa S>>#   ;   
+: HEXt   HERE @ 0x, 500 + >R R@ SWAP 0x, 8 R@ C! R> 1+ HEXa S>>#   ;  
+
+: #"    ['] LIT" , QUOTE WORD DUP COUNT + 1+ HERE ! ['] S>># , ; IMMEDIATE  
  
 : SPACEadr BL @@5 @ C! @@5 1+!      ;                          
 : pci.  @@1 @ HEX. SPACE @@2 @ HEX. SPACE @@3 @ HEX. CR  ;     
