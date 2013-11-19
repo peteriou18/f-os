@@ -1,9 +1,9 @@
 Address:00000000   Value:27D88086   
-Address:00000004   Value:00100006  
+Address:00000004   Value:00100006  BUS Master Enabled, Memory Space Enabled
 Address:00000008   Value:04030002  
 Address:0000000C   Value:00000010  
-Address:00000010   Value:D0340004 
-Address:00000014   Value:00000000  
+Address:00000010   Value:D0340004 Lower Base Address = D0340000
+Address:00000014   Value:00000000 Upper BAse Address 
 Address:00000018   Value:00000000  
 Address:0000001C   Value:00000000  
 Address:00000020   Value:00000000  
@@ -13,8 +13,8 @@ Address:0000002C   Value:01101025
 Address:00000030   Value:00000000  
 Address:00000034   Value:00000050  
 Address:00000038   Value:00000000  
-Address:0000003C   Value:0000010A  
-Address:00000040   Value:03000003  
+Address:0000003C   Value:0000010A Interrupt Line Pin  
+Address:00000040   Value:03000003  HDA Control HDA selected, BITCLK ENabled
 Address:00000044   Value:00000007  
 Address:00000048   Value:00000000  
 Address:0000004C   Value:00008000  
