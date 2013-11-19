@@ -1,6 +1,6 @@
-                                                                 0x 2 LOAD  0x 3 LOAD  0x 4 LOAD  0x 5 LOAD  0x 6 LOAD           0x 7 LOAD  0x 8 LOAD  0x 9 LOAD                                 CR  .( All blocks loaded ) CR .( Welcome! )   
- �������������������������������������������������������������������������������������������������������������������������������bbbbbbbbc������next_block 0000029C 
-   bus/dev     dev/ven      cls/rev 00000000  Bus:00000000 device:00000000  function:00000000  27A08086  Vendor-ID:00008086 Device-ID:000027A0  06000003 Bridge   Host bridge              ...           Address:00000000   Value:27A08086
+   bus/dev     dev/ven      cls/rev 00000000  Bus:00000000 device:00000000  function:00000000 
+   27A08086  Vendor-ID:00008086 Device-ID:000027A0  06000003 Bridge   Host bridge              ...   
+     Address:00000000   Value:27A08086
      Address:00000004   Value:20900006
      Address:00000008   Value:06000003
      Address:0000000C   Value:00000000
@@ -64,7 +64,11 @@
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00050F86
      Address:000000FC   Value:00000010
- The end. 00001000  Bus:00000000 device:00000002  function:00000000  27A28086  Vendor-ID:00008086 Device-ID:000027A2  03000003 Display controller VGA compatible controller       ...           Address:00000000   Value:27A28086
+ The end. 
+ 
+ 00001000  Bus:00000000 device:00000002  function:00000000  
+ 27A28086  Vendor-ID:00008086 Device-ID:000027A2  03000003 Display controller VGA compatible controller       ...  
+     Address:00000000   Value:27A28086
      Address:00000004   Value:00900007
      Address:00000008   Value:03000003
      Address:0000000C   Value:00800000
@@ -92,8 +96,7 @@
      Address:00000064   Value:00000000
      Address:00000068   Value:00000000
      Address:0000006C   Value:00000000
-     Addresnext_block 0000029D 
- s:00000070   Value:00000000
+     Address:00000070   Value:00000000
      Address:00000074   Value:00000000
      Address:00000078   Value:00000000
      Address:0000007C   Value:00000000
@@ -129,7 +132,11 @@
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00050F86
      Address:000000FC   Value:00000000
- The end. 00001100  Bus:00000000 device:00000002  function:00000001  27A68086  Vendor-ID:00008086 Device-ID:000027A6  03800003 Display controller Display controller       ...           Address:00000000   Value:27A68086
+ The end.
+ 
+ 00001100  Bus:00000000 device:00000002  function:00000001  
+ 27A68086  Vendor-ID:00008086 Device-ID:000027A6  03800003 Display controller Display controller       ...     
+     Address:00000000   Value:27A68086
      Address:00000004   Value:00900007
      Address:00000008   Value:03800003
      Address:0000000C   Value:00800000
@@ -190,11 +197,14 @@
      Address:000000E8   Value:00000000
      Address:000000EC   Value:00000000
      Address:000000F0   Value:34640001
-     Address:000000F4   next_block 0000029E 
- Value:00000000
+     Address:000000F4   Value:00000000
      Address:000000F8   Value:00050F86
      Address:000000FC   Value:00000000
- The end. 0000D800  Bus:00000000 device:0000001B  function:00000000  27D88086  Vendor-ID:00008086 Device-ID:000027D8  04030002 Multimedia controller Audio device       ...           Address:00000000   Value:27D88086
+ The end. 
+ 
+ 0000D800  Bus:00000000 device:0000001B  function:00000000 
+ 27D88086  Vendor-ID:00008086 Device-ID:000027D8  04030002 Multimedia controller Audio device       ...   
+     Address:00000000   Value:27D88086
      Address:00000004   Value:00100006
      Address:00000008   Value:04030002
      Address:0000000C   Value:00000010
@@ -258,7 +268,11 @@
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E000  Bus:00000000 device:0000001C  function:00000000  27D08086  Vendor-ID:00008086 Device-ID:000027D0  06040002 Bridge  PCI bridge       ...           Address:00000000   Value:27D08086
+ The end. 
+ 
+ 0000E000  Bus:00000000 device:0000001C  function:00000000  
+ 27D08086  Vendor-ID:00008086 Device-ID:000027D0  06040002 Bridge  PCI bridge       ...       
+     Address:00000000   Value:27D08086
      Address:00000004   Value:00100007
      Address:00000008   Value:06040002
      Address:0000000C   Value:00810010
@@ -285,8 +299,6 @@
      Address:00000060   Value:00000000
      Address:00000064   Value:00000000
      Address:00000068   Value:00000000
-next_block 0000029F 
- 
      Address:0000006C   Value:00000000
      Address:00000070   Value:00000000
      Address:00000074   Value:00000000
@@ -324,7 +336,10 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E100  Bus:00000000 device:0000001C  function:00000001  27D28086  Vendor-ID:00008086 Device-ID:000027D2  06040002 Bridge  PCI bridge       ...           Address:00000000   Value:27D28086
+ The end. 
+ 0000E100  Bus:00000000 device:0000001C  function:00000001 
+ 27D28086  Vendor-ID:00008086 Device-ID:000027D2  06040002 Bridge  PCI bridge       ...      
+     Address:00000000   Value:27D28086
      Address:00000004   Value:00100007
      Address:00000008   Value:06040002
      Address:0000000C   Value:00810010
@@ -384,12 +399,15 @@ next_block 0000029F
      Address:000000E4   Value:00080706
      Address:000000E8   Value:00000000
      Address:000000EC   Value:00000000
-     Address:000000F0   Value:0next_block 000002A0 
- 0000000
+     Address:000000F0   Value:00000000
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E200  Bus:00000000 device:0000001C  function:00000002  27D48086  Vendor-ID:00008086 Device-ID:000027D4  06040002 Bridge  PCI bridge       ...           Address:00000000   Value:27D48086
+ The end. 
+ 
+ 0000E200  Bus:00000000 device:0000001C  function:00000002 
+ 27D48086  Vendor-ID:00008086 Device-ID:000027D4  06040002 Bridge  PCI bridge       ... 
+     Address:00000000   Value:27D48086
      Address:00000004   Value:00100007
      Address:00000008   Value:06040002
      Address:0000000C   Value:00810010
@@ -453,7 +471,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E300  Bus:00000000 device:0000001C  function:00000003  27D68086  Vendor-ID:00008086 Device-ID:000027D6  06040002 Bridge  PCI bridge       ...           Address:00000000   Value:27D68086
+ The end. 
+ 
+ 0000E300  Bus:00000000 device:0000001C  function:00000003  
+ 27D68086  Vendor-ID:00008086 Device-ID:000027D6  06040002 Bridge  PCI bridge       ...   
+     Address:00000000   Value:27D68086
      Address:00000004   Value:00100007
      Address:00000008   Value:06040002
      Address:0000000C   Value:00810010
@@ -479,8 +501,7 @@ next_block 0000029F
      Address:0000005C   Value:00000000
      Address:00000060   Value:00000000
      Address:00000064   Value:00000000
-     Address:00000068 next_block 000002A1 
-   Value:00000000
+     Address:00000068   Value:00000000
      Address:0000006C   Value:00000000
      Address:00000070   Value:00000000
      Address:00000074   Value:00000000
@@ -518,7 +539,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E800  Bus:00000000 device:0000001D  function:00000000  27C88086  Vendor-ID:00008086 Device-ID:000027C8  0C030002 Serial bus controller USB controller       ...           Address:00000000   Value:27C88086
+ The end.
+ 
+ 0000E800  Bus:00000000 device:0000001D  function:00000000  
+ 27C88086  Vendor-ID:00008086 Device-ID:000027C8  0C030002 Serial bus controller USB controller       ...  
+     Address:00000000   Value:27C88086
      Address:00000004   Value:02800005
      Address:00000008   Value:0C030002
      Address:0000000C   Value:00800000
@@ -577,13 +602,16 @@ next_block 0000029F
      Address:000000E0   Value:00000000
      Address:000000E4   Value:00000000
      Address:000000E8   Value:00000000
-     Address:000000EC   Value:000000next_block 000002A2 
- 00
+     Address:000000EC   Value:00000000
      Address:000000F0   Value:00000000
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000E900  Bus:00000000 device:0000001D  function:00000001  27C98086  Vendor-ID:00008086 Device-ID:000027C9  0C030002 Serial bus controller USB controller       ...           Address:00000000   Value:27C98086
+ The end. 
+ 
+ 0000E900  Bus:00000000 device:0000001D  function:00000001 
+ 27C98086  Vendor-ID:00008086 Device-ID:000027C9  0C030002 Serial bus controller USB controller       ...    
+     Address:00000000   Value:27C98086
      Address:00000004   Value:02800005
      Address:00000008   Value:0C030002
      Address:0000000C   Value:00000000
@@ -647,7 +675,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000EA00  Bus:00000000 device:0000001D  function:00000002  27CA8086  Vendor-ID:00008086 Device-ID:000027CA  0C030002 Serial bus controller USB controller       ...           Address:00000000   Value:27CA8086
+ The end. 
+ 
+ 0000EA00  Bus:00000000 device:0000001D  function:00000002  
+ 27CA8086  Vendor-ID:00008086 Device-ID:000027CA  0C030002 Serial bus controller USB controller       ...  
+     Address:00000000   Value:27CA8086
      Address:00000004   Value:02800005
      Address:00000008   Value:0C030002
      Address:0000000C   Value:00000000
@@ -671,8 +703,7 @@ next_block 0000029F
      Address:00000054   Value:00000000
      Address:00000058   Value:00000000
      Address:0000005C   Value:00000000
-     Address:00000060   Value:0next_block 000002A3 
- 0000010
+     Address:00000060   Value:00000010
      Address:00000064   Value:00000000
      Address:00000068   Value:00000000
      Address:0000006C   Value:00000000
@@ -712,7 +743,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000EB00  Bus:00000000 device:0000001D  function:00000003  27CB8086  Vendor-ID:00008086 Device-ID:000027CB  0C030002 Serial bus controller USB controller       ...           Address:00000000   Value:27CB8086
+ The end.
+ 
+ 0000EB00  Bus:00000000 device:0000001D  function:00000003  
+ 27CB8086  Vendor-ID:00008086 Device-ID:000027CB  0C030002 Serial bus controller USB controller       ...   
+     Address:00000000   Value:27CB8086
      Address:00000004   Value:02800005
      Address:00000008   Value:0C030002
      Address:0000000C   Value:00000000
@@ -770,14 +805,17 @@ next_block 0000029F
      Address:000000DC   Value:00000000
      Address:000000E0   Value:00000000
      Address:000000E4   Value:00000000
-     next_block 000002A4 
- Address:000000E8   Value:00000000
+     Address:000000E8   Value:00000000
      Address:000000EC   Value:00000000
      Address:000000F0   Value:00000000
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000EF00  Bus:00000000 device:0000001D  function:00000007  27CC8086  Vendor-ID:00008086 Device-ID:000027CC  0C032002 Serial bus controller USB controller       ...           Address:00000000   Value:27CC8086
+ The end. 
+ 
+ 0000EF00  Bus:00000000 device:0000001D  function:00000007 
+ 27CC8086  Vendor-ID:00008086 Device-ID:000027CC  0C032002 Serial bus controller USB controller       ... 
+     Address:00000000   Value:27CC8086
      Address:00000004   Value:02900006
      Address:00000008   Value:0C032002
      Address:0000000C   Value:00000000
@@ -841,7 +879,11 @@ next_block 0000029F
      Address:000000F4   Value:00408588
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:20021706
- The end. 0000F000  Bus:00000000 device:0000001E  function:00000000  24488086  Vendor-ID:00008086 Device-ID:00002448  060401E2 Bridge  PCI bridge       ...           Address:00000000   Value:24488086
+ The end. 
+ 
+ 0000F000  Bus:00000000 device:0000001E  function:00000000  
+ 24488086  Vendor-ID:00008086 Device-ID:00002448  060401E2 Bridge  PCI bridge       ...  
+     Address:00000000   Value:24488086
      Address:00000004   Value:00100004
      Address:00000008   Value:060401E2
      Address:0000000C   Value:00010000
@@ -864,8 +906,7 @@ next_block 0000029F
      Address:00000050   Value:0000000D
      Address:00000054   Value:01101025
      Address:00000058   Value:00000000
-     Address:00000next_block 000002A5 
- 05C   Value:00000000
+     Address:0000005C   Value:00000000
      Address:00000060   Value:00000000
      Address:00000064   Value:00000000
      Address:00000068   Value:00000000
@@ -906,7 +947,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000F800  Bus:00000000 device:0000001F  function:00000000  27B98086  Vendor-ID:00008086 Device-ID:000027B9  06010002 Bridge  ISA bridge       ...           Address:00000000   Value:27B98086
+ The end.
+ 
+ 0000F800  Bus:00000000 device:0000001F  function:00000000 
+ 27B98086  Vendor-ID:00008086 Device-ID:000027B9  06010002 Bridge  ISA bridge       ...  
+     Address:00000000   Value:27B98086
      Address:00000004   Value:02100007
      Address:00000008   Value:06010002
      Address:0000000C   Value:00800000
@@ -963,15 +1008,18 @@ next_block 0000029F
      Address:000000D8   Value:0000FFCF
      Address:000000DC   Value:00000000
      Address:000000E0   Value:100C0009
-     Addrenext_block 000002A6 
- ss:000000E4   Value:172402B4
+     Address:000000E4   Value:172402B4
      Address:000000E8   Value:00000000
      Address:000000EC   Value:00000000
      Address:000000F0   Value:FED1C001
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000FA00  Bus:00000000 device:0000001F  function:00000002  27C48086  Vendor-ID:00008086 Device-ID:000027C4  01018002 Mass storage controller IDE interface       ...           Address:00000000   Value:27C48086
+ The end. 
+ 
+ 0000FA00  Bus:00000000 device:0000001F  function:00000002  
+ 27C48086  Vendor-ID:00008086 Device-ID:000027C4  01018002 Mass storage controller IDE interface       ...  
+     Address:00000000   Value:27C48086
      Address:00000004   Value:02B00005
      Address:00000008   Value:01018002
      Address:0000000C   Value:00000000
@@ -1035,7 +1083,11 @@ next_block 0000029F
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 0000FB00  Bus:00000000 device:0000001F  function:00000003  27DA8086  Vendor-ID:00008086 Device-ID:000027DA  0C050002 Serial bus controller        SMBus              ...           Address:00000000   Value:27DA8086
+ The end. 
+ 
+ 0000FB00  Bus:00000000 device:0000001F  function:00000003 
+ 27DA8086  Vendor-ID:00008086 Device-ID:000027DA  0C050002 Serial bus controller        SMBus              ...  
+     Address:00000000   Value:27DA8086
      Address:00000004   Value:02800001
      Address:00000008   Value:0C050002
      Address:0000000C   Value:00000000
@@ -1057,8 +1109,6 @@ next_block 0000029F
      Address:0000004C   Value:00000000
      Address:00000050   Value:00000000
      Address:00000054   Value:00000000
-next_block 000002A7 
- 
      Address:00000058   Value:00000000
      Address:0000005C   Value:00000000
      Address:00000060   Value:00000000
@@ -1101,7 +1151,11 @@ next_block 000002A7
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00020F86
      Address:000000FC   Value:00000000
- The end. 00020000  Bus:00000002 device:00000000  function:00000000  435211AB  Vendor-ID:000011AB Device-ID:00004352  02000014  Network controller Ethernet controller       ...           Address:00000000   Value:435211AB
+ The end.
+ 
+ 00020000  Bus:00000002 device:00000000  function:00000000  
+ 435211AB  Vendor-ID:000011AB Device-ID:00004352  02000014  Network controller Ethernet controller       ... 
+     Address:00000000   Value:435211AB
      Address:00000004   Value:40100007
      Address:00000008   Value:02000014
      Address:0000000C   Value:00000010
@@ -1156,8 +1210,7 @@ next_block 000002A7
      Address:000000D0   Value:00000000
      Address:000000D4   Value:00000000
      Address:000000D8   Value:00000000
-     Addrenext_block 000002A8 
- ss:000000DC   Value:00000000
+     Address:000000DC   Value:00000000
      Address:000000E0   Value:00110010
      Address:000000E4   Value:05040FC0
      Address:000000E8   Value:001B2000
@@ -1166,7 +1219,11 @@ next_block 000002A7
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00000000
      Address:000000FC   Value:00000000
- The end. 000A1800  Bus:0000000A device:00000003  function:00000000  431814E4  Vendor-ID:000014E4 Device-ID:00004318  02800002  Network controller Network controller       ...           Address:00000000   Value:431814E4
+ The end. 
+ 
+ 000A1800  Bus:0000000A device:00000003  function:00000000 
+ 431814E4  Vendor-ID:000014E4 Device-ID:00004318  02800002  Network controller Network controller       ...
+     Address:00000000   Value:431814E4
      Address:00000004   Value:00000006
      Address:00000008   Value:02800002
      Address:0000000C   Value:00002000
@@ -1230,7 +1287,11 @@ next_block 000002A7
      Address:000000F4   Value:00000000
      Address:000000F8   Value:00000000
      Address:000000FC   Value:00000000
- The end. 000A4800  Bus:0000000A device:00000009  function:00000000  8039104C  Vendor-ID:0000104C Device-ID:00008039  06070000 Bridge  CardBus bridge              ...           Address:00000000   Value:8039104C
+ The end. 
+ 
+ 000A4800  Bus:0000000A device:00000009  function:00000000  
+ 8039104C  Vendor-ID:0000104C Device-ID:00008039  06070000 Bridge  CardBus bridge              ...   
+     Address:00000000   Value:8039104C
      Address:00000004   Value:02100007
      Address:00000008   Value:06070000
      Address:0000000C   Value:00823110
@@ -1250,8 +1311,7 @@ next_block 000002A7
      Address:00000044   Value:00000001
      Address:00000048   Value:00000000
      Address:0000004C   Value:00000000
-     Addrenext_block 000002A9 
- ss:00000050   Value:00000000
+     Address:00000050   Value:00000000
      Address:00000054   Value:00000000
      Address:00000058   Value:00000000
      Address:0000005C   Value:00000000
@@ -1295,7 +1355,11 @@ next_block 000002A7
      Address:000000F4   Value:250197D3
      Address:000000F8   Value:00000000
      Address:000000FC   Value:00000000
- The end. 000A4A00  Bus:0000000A device:00000009  function:00000002  803B104C  Vendor-ID:0000104C Device-ID:0000803B  01800000 Mass storage controller Mass storage controller       ...           Address:00000000   Value:803B104C
+ The end. 
+ 
+ 000A4A00  Bus:0000000A device:00000009  function:00000002  
+ 803B104C  Vendor-ID:0000104C Device-ID:0000803B  01800000 Mass storage controller Mass storage controller       ...   
+     Address:00000000   Value:803B104C
      Address:00000004   Value:02100006
      Address:00000008   Value:01800000
      Address:0000000C   Value:00803910
@@ -1348,6 +1412,4 @@ next_block 000002A7
      Address:000000C8   Value:00000000
      Address:000000CC   Value:00000000
      Address:000000D0   Value:00000000
-bbbbbbc������next_block 000002AA 
- 000000D4   Value:00000000
- The end.  !---!
+
