@@ -1,0 +1,165 @@
+1) Ищем на шине PCI устройства USB.
+2) На индексе 20h лежит базовый порт устройства USB.
+3) BASE +
+Offset Mnemonic Register Name Default Type
+00–01h USBCMD USB Command 0000h R/W
+02–03h USBSTS USB Status 0020h R/WC
+04–05h USBINTR USB Interrupt Enable 0000h R/W
+06–07h FRNUM Frame Number 0000h R/W (see Note 1)
+08–0Bh FRBASEADD Frame List Base Address Undefined R/W
+0Ch SOFMOD Start of Frame Modify 40h R/W
+0D–0Fh — Reserved — —
+10–11h PORTSC0 Port 0 Status/Control 0080h R/WC, RO, R/W
+(see Note 1)
+12–13h PORTSC1 Port 1 Status/Control 0080h R/WC, RO, R/W
+(see Note 1)
+
+USBCMD—USB Command Register
+I/O Offset: Base + (00h–01h) Attribute: R/W
+Default Value: 0000h Size: 16 bits
+The Command Register indicates the command to be executed by the serial bus host
+controller. Writing to the register causes a command to be executed. The table
+following the bit description provides additional information on the operation of the
+Run/Stop and Debug bits.
+Bit Description
+15:7 Reserved
+8
+Loop Back Test Mode — R/W.
+0 = Disable loop back test mode.
+1 = Intel® ICH7 is in loop back test mode. When both ports are connected together, a
+write to one port will be seen on the other port and the data will be stored in I/O
+offset 18h.
+7
+Max Packet (MAXP) — R/W. This bit selects the maximum packet size that can be
+used for full speed bandwidth reclamation at the end of a frame. This value is used by
+the host controller to determine whether it should initiate another transaction based on
+the time remaining in the SOF counter. Use of reclamation packets larger than the
+programmed size will cause a Babble error if executed during the critical window at
+frame end. The Babble error results in the offending endpoint being stalled. Software is
+responsible for ensuring that any packet which could be executed under bandwidth
+reclamation be within this size limit.
+0 = 32 bytes
+1 = 64 bytes
+6
+Configure Flag (CF) — R/W. This bit has no effect on the hardware. It is provided only
+as a semaphore service for software.
+0 = Indicates that software has not completed host controller configuration.
+1 = HCD software sets this bit as the last action in its process of configuring the host
+controller.
+5
+Software Debug (SWDBG) — R/W. The SWDBG bit must only be manipulated when
+the controller is in the stopped state. This can be determined by checking the HCHalted
+bit in the USBSTS register.
+0 = Normal Mode.
+1 = Debug mode. In SW Debug mode, the host controller clears the Run/Stop bit after
+the completion of each USB transaction. The next transaction is executed when
+software sets the Run/Stop bit back to 1.
+4
+Force Global Resume (FGR) — R/W.
+0 = Software resets this bit to 0 after 20 ms has elapsed to stop sending the Global
+Resume signal. At that time all USB devices should be ready for bus activity. The 1
+to 0 transition causes the port to send a low speed EOP signal. This bit will remain
+a 1 until the EOP has completed.
+1 = Host controller sends the Global Resume signal on the USB, and sets this bit to 1
+when a resume event (connect, disconnect, or K-state) is detected while in global
+suspend mode
+
+Enter Global Suspend Mode (EGSM) — R/W.
+0 = Software resets this bit to 0 to come out of Global Suspend mode. Software writes
+this bit to 0 at the same time that Force Global Resume (bit 4) is written to 0 or
+after writing bit 4 to 0.
+1 = Host controller enters the Global Suspend mode. No USB transactions occur during
+this time. The Host controller is able to receive resume signals from USB and
+interrupt the system. Software must ensure that the Run/Stop bit (bit 0) is cleared
+prior to setting this bit.
+2
+Global Reset (GRESET) — R/W.
+0 = This bit is reset by the software after a minimum of 10 ms has elapsed as specified
+in Chapter 7 of the USB Specification.
+1 = Global Reset. The host controller sends the global reset signal on the USB and then
+resets all its logic, including the internal hub registers. The hub registers are reset
+to their power on state. Chip Hardware Reset has the same effect as Global Reset
+(bit 2), except that the host controller does not send the Global Reset on USB.
+1
+Host Controller Reset (HCRESET) — R/W. The effects of HCRESET on Hub registers
+are slightly different from Chip Hardware Reset and Global USB Reset. The HCRESET
+affects bits [8,3:0] of the Port Status and Control Register (PORTSC) of each port.
+HCRESET resets the state machines of the host controller including the Connect/
+Disconnect state machine (one for each port). When the Connect/Disconnect state
+machine is reset, the output that signals connect/disconnect are negated to 0,
+effectively signaling a disconnect, even if a device is attached to the port. This virtual
+disconnect causes the port to be disabled. This disconnect and disabling of the port
+causes bit 1 (connect status change) and bit 3 (port enable/disable change) of the
+PORTSC (D29:F0/F1/F2/F3:BASE + 10h) to get set. The disconnect also causes bit 8 of
+PORTSC to reset. About 64 bit times after HCRESET goes to 0, the connect and lowspeed
+detect will take place, and bits 0 and 8 of the PORTSC will change accordingly.
+0 = Reset by the host controller when the reset process is complete.
+1 = Reset. When this bit is set, the host controller module resets its internal timers,
+counters, state machines, etc. to their initial value. Any transaction currently in
+progress on USB is immediately terminated.
+0
+Run/Stop (RS) — R/W. When set to 1, the ICH7 proceeds with execution of the
+schedule. The ICH7 continues execution as long as this bit is set. When this bit is
+cleared, the ICH7 completes the current transaction on the USB and then halts. The HC
+Halted bit in the status register indicates when the host controller has finished the
+transaction and has entered the stopped state. The host controller clears this bit when
+the following fatal errors occur: consistency check failure, PCI Bus errors.
+0 = Stop
+1 = Run
+NOTE: This bit should only be cleared if there are no active Transaction Descriptors in
+the executable schedule or software will reset the host controller prior to setting
+this bit again.
+
+
+USBSTS—USB Status Register
+I/O Offset: Base + (02h–03h) Attribute: R/WC
+Default Value: 0020h Size: 16 bits
+This register indicates pending interrupts and various states of the host controller. The
+status resulting from a transaction on the serial bus is not indicated in this register.
+Bit Description
+15:6 Reserved
+5
+HCHalted — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = The host controller has stopped executing as a result of the Run/Stop bit being set
+to 0, either by software or by the host controller hardware (debug mode or an
+internal error). Default.
+4
+Host Controller Process Error — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = The host controller has detected a fatal error. This indicates that the host controller
+suffered a consistency check failure while processing a Transfer Descriptor. An
+example of a consistency check failure would be finding an invalid PID field while
+processing the packet header portion of the TD. When this error occurs, the host
+controller clears the Run/Stop bit in the Command register (D29:F0/F1/F2/
+F3:BASE + 00h, bit 0) to prevent further schedule execution. A hardware interrupt
+is generated to the system.
+3
+Host System Error — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = A serious error occurred during a host system access involving the host controller
+module. In a PCI system, conditions that set this bit to 1 include PCI Parity error,
+PCI Master Abort, and PCI Target Abort. When this error occurs, the host controller
+clears the Run/Stop bit in the Command register to prevent further execution of
+the scheduled TDs. A hardware interrupt is generated to the system.
+2
+Resume Detect (RSM_DET) — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = The host controller received a “RESUME” signal from a USB device. This is only
+valid if the Host controller is in a global suspend state (Command register, D29:F0/
+F1/F2/F3:BASE + 00h, bit 3 = 1).
+1
+USB Error Interrupt — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = Completion of a USB transaction resulted in an error condition (e.g., error counter
+underflow). If the TD on which the error interrupt occurred also had its IOC bit
+(D29:F0/F1/F2/F3:BASE + 04h, bit 2) set, both this bit and Bit 0 are set.
+0
+USB Interrupt (USBINT) — R/WC.
+0 = Software clears this bit by writing a 1 to it.
+1 = The host controller sets this bit when the cause of an interrupt is a completion of a
+USB transaction whose Transfer Descriptor had its IOC bit set. Also set when a
+short packet is detected (actual length field in TD is less than maximum length field
+in TD), and short packet detection is enabled in that TD.
+
+
