@@ -258,6 +258,12 @@ CASE.
 
 --------------------
 
+Слово, создающее константу внутри определения.
+
+: test   ....  ," constant_name" HERE @ DUP LATEST @ , LATEST @ ! ( LF) constant_code , ,; 
+
+--------------------
+
 FORTH OS loading and developing from it's one source code. 
 
 Concept.
