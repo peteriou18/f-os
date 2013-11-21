@@ -1,5 +1,10 @@
 1) Ищем на шине PCI устройства USB.
+1a) запоминаем адрес устройства на шине PCI
+1б) определяем тип интерфейса юсб устройства
+( индекс 9) 0=UHCI, 10=OHCI, 20=EHCI, 30=XHCI.
+
 2) На индексе 20h лежит базовый порт устройства USB.
+
 3) BASE +
 Offset Mnemonic Register Name Default Type
 00–01h USBCMD USB Command 0000h R/W
