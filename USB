@@ -1,3 +1,6 @@
+Как выглядит ЮСБ для программиста.
+спецификация 1.1 - uhci
+
 1) Ищем на шине PCI устройства USB.
 1a) запоминаем адрес устройства на шине PCI
 1б) определяем тип интерфейса юсб устройства
@@ -12,6 +15,12 @@ Offset Mnemonic Register Name Default Type
 04–05h USBINTR USB Interrupt Enable 0000h R/W
 06–07h FRNUM Frame Number 0000h R/W (see Note 1)
 08–0Bh FRBASEADD Frame List Base Address Undefined R/W
+
+И вот это самое интересное.
+
+uhci контроллер смотрит в память по значению в этом регистре. С этого адреса начинается 1024 байтный блок, выровненный 
+по границе 1024 байт. 000-fff. каждое двойное слово в этом блоке есть указатель на некую структуру данных в памяти.
+
 0Ch SOFMOD Start of Frame Modify 40h R/W
 0D–0Fh — Reserved — —
 10–11h PORTSC0 Port 0 Status/Control 0080h R/WC, RO, R/W
