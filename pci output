@@ -808,9 +808,9 @@ Address:000000FC   Value:00000000.. The end.
 27CC8086  Vendor-ID:00008086 Device-ID:000027CC  0C032002 Serial bus controller USB controller       ... 
 Address:00000000   Value:27CC8086..    
 Address:00000004   Value:02900006..    
-Address:00000008   Value:0C032002..    
+Address:00000008   Value:0C032002..  USB 2.0  
 Address:0000000C   Value:00000000..    
-Address:00000010   Value:D0544000..    
+Address:00000010   Value:D0544000..   BASE addrr = d054000 
 Address:00000014   Value:00000000..    
 Address:00000018   Value:00000000..    
 Address:0000001C   Value:00000000..    
