@@ -297,25 +297,44 @@ _sfind2:
 ;pop            esi
 ;int3
 _find2:
-        movzx   ebx,byte [esi]      ;word in vocab
+        movzx   ebx,byte [esi];word in vocab
+        mov     edx,ebx
         inc     bl
         and     bl,07ch               ;mask immediate in counter
         mov     edi,[here_value]
         movzx     ecx,byte [edi]     ; word on here
         shr     ecx,2
         inc     ecx
-  ;     mov     ebp,[esi]
-  ;     mov     eax,[edi]
+       mov     ebp,[esi]
+       mov     eax,[edi]
 
 ; mov     byte [0xb8152],"l"
 
-
+   ;     int3
   find22:
         cmpsd
 ; int3
-        je     _find11
+        jne     _find11
         loop  find22
+   ;     int3
+         mov     byte [0xb8152],"F"
 
+        cmp     edx,3
+        jne     find23
+        add     esi,4
+ ;       add     esi,ebx
+ find23:
+        mov     eax,esi
+        add     eax,4
+        call    _push
+;        mov     ecx,0xba5e
+      ;  int3
+      ;  xor     eax,eax
+      ;  dec     eax
+      ;  call    _push           ; word found
+        ret
+
+ _find11:
        ; dec       ecx
       ;  test       ecx,ecx
       ;  jne      find22
@@ -324,6 +343,7 @@ _find2:
         add     esi,ebx
         mov     ecx,esi
         mov     esi,[esi]
+        mov     ebp,0x5555
 ;int3
 ;        %if tracefind = 1
 ;                        push    ecx
@@ -355,18 +375,8 @@ _find2:
       ;  call    _push
         ret                     ; nothing to find
         
-_find11:
-        mov     byte [0xb8152],"F"
-        add     esi,ebx
-        mov     eax,esi
-        add     eax,4
-        call    _push
-;        mov     ecx,0xba5e
-;        int3
-      ;  xor     eax,eax
-      ;  dec     eax
-      ;  call    _push           ; word found
-        ret
+
+
 ;-------------------
 
 _ret:
@@ -652,7 +662,7 @@ jne occ1
 ret
 ;--------------------------------
 _sp@:
-        ;mov             eax,r10
+        mov             eax,[stack_pointer]
         call    _push
         ret
 ;--------------------------------
