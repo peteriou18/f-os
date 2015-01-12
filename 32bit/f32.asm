@@ -344,13 +344,13 @@ _find2:
         test    esi,esi
         jne     _find2
         mov             eax,ecx
-        sub             eax,4
+        sub             eax,8
         ;add            eax,24 ;mov     eax,badword_ ;cr_;ret_
 ;call   _break
 ;mov     ebp,[edi]
 ;mov     byte [0xb8152],"N"
         call    _push
- ;       int3
+     ;   int3
       ;  xor     eax,eax
       ;  call    _push
         ret                     ; nothing to find
