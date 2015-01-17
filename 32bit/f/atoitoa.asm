@@ -23,14 +23,14 @@ _hex_dot1:
         call    _pop
         mov     [value],eax
 _hex_dot2:
-        movdqa  xmm0, dqword [value] ;
+        movdqa  xmm0, dqword [value] ;xmm0=000000001234567890ABCDEFh (only eight bytes)
         pxor    xmm1,xmm1
-        punpcklbw     xmm0,xmm1
-        movdqa  xmm1,xmm0
-        pand    xmm1,[fes]
+        punpcklbw     xmm0,xmm1 ;xmm0=0012003400560078009000AB00CD00EFh
+        movdqa  xmm1,xmm0       ;xmm0=xmm1
+        pand    xmm1,[fes]      ;xmm1=0010003000500070009000B000D000Fh
 
-        psllq   xmm0,4
-        pand    xmm0,[fes]
+        psllq   xmm0,4          
+        pand    xmm0,[fes]      ;xmm0=020004000600080000000A000C00E0h        
         por     xmm0,xmm1
         movdqa  xmm1,xmm0
         paddb   xmm1,[sixes]
