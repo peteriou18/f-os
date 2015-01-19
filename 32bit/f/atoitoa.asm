@@ -1,17 +1,68 @@
+_dump:
+        call    _cr
+        call    _pop
+        movdqu     xmm0,[eax]
+        push       eax
+        ;movdqa     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        pop     eax
+         movdqu     xmm0,[eax+16]
+       ; movdqu     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        call    _cr
+        ret
+
+_2hex_bytes:
+         call   _pop
+         mov    [value+4],eax
+         call   _hex_dot1
+_2hb1:
+        ;  mov     esi,hexstr
+      ;  mov     ecx,16
+      ;  call    os_output
+      ;  call    _space
+
+         mov     edi,hexstr;+16
+         mov     ecx,9
+        ; cld
+         push   edi
+ _2hb:
+        pop     edi
+       mov      ax,[edi]
+       add      edi,2
+         push   edi
+         xchg   al,ah
+         mov    [hex_byte],ax
+         mov    esi,hex_byte
+         call   os_output
+         call   _space
+         loop   _2hb
+         pop    edi
+        ret
+
+hex_byte        dw      03132h
+                db      0
+
+
 _2hex_dot:
         call    _pop
         mov     [value+4],eax
         call    _hex_dot1
+        call    _inverse_hex_string
         mov     byte [hexstr+17],0
         call    _space
         mov     esi,hexstr
         mov     ecx,16
         call    os_output
         call    _space
+
         ret
 
 _hex_dot:
         call    _hex_dot1
+        call    _inverse_hex_string
         call    _space
         mov     esi,hexstr+8
         mov     ecx,8
@@ -23,14 +74,21 @@ _hex_dot1:
         call    _pop
         mov     [value],eax
 _hex_dot2:
-        movdqa  xmm0, dqword [value] ;xmm0=000000001234567890ABCDEFh (only eight bytes)
+        movdqa  xmm0, dqword [value] ;
+_hex_dot3:
         pxor    xmm1,xmm1
-        punpcklbw     xmm0,xmm1 ;xmm0=0012003400560078009000AB00CD00EFh
-        movdqa  xmm1,xmm0       ;xmm0=xmm1
-        pand    xmm1,[fes]      ;xmm1=0010003000500070009000B000D000Fh
+        punpcklbw     xmm0,xmm1
+        movdqa  xmm1,xmm0
 
-        psllq   xmm0,4          
-        pand    xmm0,[fes]      ;xmm0=020004000600080000000A000C00E0h        
+        pand    xmm1,[fes]    ; low tetrade
+
+        psllq   xmm0,4
+
+        pand    xmm0,[fes]      ; high tetrade
+        ;swap tetrades
+      ;  psllq   xmm1,4
+     ;   psrlq   xmm0,4
+      ;
         por     xmm0,xmm1
         movdqa  xmm1,xmm0
         paddb   xmm1,[sixes]
@@ -42,6 +100,9 @@ _hex_dot2:
         paddb   xmm0,xmm3
         paddb   xmm0,[zeroes]
         movdqa  [hexstr],xmm0
+        ret
+
+_inverse_hex_string:
         mov     eax,[hexstr]
         mov     ebx,[hexstr+4]
         mov     ecx,[hexstr+8]
