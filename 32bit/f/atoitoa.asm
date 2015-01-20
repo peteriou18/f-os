@@ -16,6 +16,37 @@ _dump:
 
 _2hex_bytes:
          call   _pop
+    _dump:
+        call    _cr
+        call    _pop
+        movdqu     xmm0,[eax]
+        push       eax
+        ;movdqa     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        pop     eax
+        push    eax
+         movdqu     xmm0,[eax+8]
+       ; movdqu     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        call    _cr
+        pop     eax
+        movdqu     xmm0,[eax+16]
+        push       eax
+        ;movdqa     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        pop     eax
+         movdqu     xmm0,[eax+24]
+       ; movdqu     [value],xmm0
+        call    _hex_dot3
+        call    _2hb1
+        call    _cr
+        ret
+
+_2hex_bytes:
+         call   _pop
          mov    [value+4],eax
          call   _hex_dot1
 _2hb1:
