@@ -95,9 +95,9 @@ _fetch:
 ;-------------------------
 _store:
         call    _pop    ; address
-        mov             ebx,eax
+        mov             edx,eax
         call    _pop    ;data
-        mov             [ebx],eax
+        mov             [edx],eax
         ret
 ;-------------------------
 _dup:
@@ -518,14 +518,14 @@ _header:
         mov     esi,[here_value]
         call    nlink2          ;esi - address of lf
         call    latest_code2    ;eax - latest
-        int3
+
         mov     [esi],eax       ;fill link field
         mov     ebx,[here_value]
         mov     eax,[current_value]
         mov     [eax],ebx       ; here to latest
         add     esi,cell_size
         mov     [here_value],esi
-        int3
+
         ret
 ;--------------------------------
 _vocabulary:
@@ -563,7 +563,7 @@ _vocabulary_create:
 mov     dword [esi-cell_size],_abort
 ;add    esi,8
         ; set zero word 
-        mov     dword [esi],6
+        mov     dword [esi],2
         add     esi,cell_size
         xor     eax,eax
         mov     [esi],eax
