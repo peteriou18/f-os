@@ -240,7 +240,7 @@ nfa_25:
         dd      _addr_interp
         dd      word_
         dd      find_
-        dd      pop_
+      ;  dd      pop_
         dd      ret_
         
 nfa_26:
@@ -524,10 +524,19 @@ _0xd_:
         dd      _0xd
         dd      0
 
-nfa_last:
 nfa_62:
         db      5,"2HEX.",0
         alignhe
         dd      nfa_61
         dd      _2hex_dot
+        dd      0
+
+ nfa_last:
+ nfa_63:
+        db      5,"TRACE",0
+        alignhe
+        dd      nfa_62
+;nt_:
+        dd      _variable_code
+trace:
         dd      0
