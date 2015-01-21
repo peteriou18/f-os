@@ -354,19 +354,23 @@ _find2:
         mov     ebp,0x5555
 ;int3
 ;        %if tracefind = 1
-;                        push    ecx
- ;                       push    edi
-  ;                      push    esi
+         cmp dword [ trace],1
+         jne  _find4
+                        push    ecx
+                        push    edi
+                        push    esi
 
-  ;                      mov     eax,esi
-  ;                      call    _push
-  ;                      call    _hex_dot
-  ;                      pop     esi
-   ;                     push    esi
-    ;                    call    os_output
-     ;                   pop     esi
-      ;                  pop     edi
-       ;                 pop     ecx
+                        mov     eax,esi
+                        call    _push
+                        call    _hex_dot
+                        pop     esi
+                       push    esi
+                       call    os_output
+                        pop     esi
+                        pop     edi
+                        pop     ecx
+                        int3
+_find4:
  ;       %endif
         mov     byte [0xb8152],"c"
         test    esi,esi
@@ -545,9 +549,9 @@ latest_code2:
         ret
 ;--------------------------------
 _comma:
-        mov     ebx,[here_value]
+        mov     edx,[here_value]
         call    _pop    
-        mov     [ebx],eax
+        mov     [edx],eax
         add     dword [here_value],cell_size
         ret
 ;--------------------------------
@@ -698,16 +702,16 @@ lit_code:
 _link:
 ; aa bb
                 call    _pop    ;base vocabulary
-                mov             ebx,eax
+                mov             edx,eax
                 call    _pop    ;linking vocabulary
-                mov             ebx,[ebx]
-                add             eax,24
+                mov             ebx,[edx]
+                add             eax,12
                 mov             [eax],ebx
                 ret
 ;--------------------------------
 _unlink:
                 call    _pop
-                mov             dword [eax+24],0
+                mov             dword [eax+12],0
                 ret
 ;--------------------------------       
 label_code:
