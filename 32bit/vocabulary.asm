@@ -105,7 +105,7 @@ nfa_10:
         dd      0
 
 nfa_11: 
-        db      3,"pop",0
+        db      3,"Pop",0
         alignhe
         dd      nfa_10
 pop_:
@@ -113,7 +113,7 @@ pop_:
         dd      0
 
 nfa_12:
-        db      4,"push",0
+        db      4,"Push",0
         alignhe
         dd      nfa_11
 push_:
@@ -531,7 +531,6 @@ nfa_62:
         dd      _2hex_dot
         dd      0
 
- nfa_last:
  nfa_63:
         db      5,"TRACE",0
         alignhe
@@ -539,4 +538,12 @@ nfa_62:
 ;nt_:
         dd      _variable_code
 trace:
+        dd      0
+
+ nfa_last:
+ nfa_64:
+        db      4,"EXIT",0
+        alignhe
+        dd      nfa_63
+        dd      _ret
         dd      0
