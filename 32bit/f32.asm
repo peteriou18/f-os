@@ -63,12 +63,12 @@ msgf:   db      "forth>",0
 _count:
        ; push    ebx
         call    _pop
-        mov     ebx,eax
-        mov     ebx,[eax]
-        and     ebx,03fh
+        mov     edx,eax
+        mov     edx,[eax]
+        and     edx,03fh
         inc     eax
         call    _push
-        mov     eax,ebx
+        mov     eax,edx
         
         call    _push
        ; pop     ebx
@@ -471,7 +471,7 @@ number4:
 number2:
         
         ; empty string
-        mov     dword [ebx],3 ;dl
+        mov     dword [ebx],2 ;dl
         mov     dword [_in_value],0
         ret
 ;--------------------------
@@ -620,13 +620,13 @@ msgbad          db      "  Badword: ",0
 msgabort        db      " Abort!",0
 ;--------------------------------
 _load:
-        push    dword [block_value]
-        push    dword [block_value+cell_size]
-        push    dword [block_value+cell_size+cell_size]
+        push    dword [block_value]    ;block number
+        push    dword [block_value+cell_size]      ; size of buffer
+        push    dword [block_value+cell_size+cell_size]    ;address of buffer
         push    dword [_in_value]
         
-        mov             eax, buffer_+cell_size
-        mov             [block_value+8],eax
+        mov             eax, buffer_+cell_size ; buffer address
+        mov             [block_value+cell_size+cell_size],eax
         call    _push
         call    _rdblock
         
@@ -637,7 +637,7 @@ _load:
         call    _interpret
         
         pop             dword [_in_value]
-        pop             dword [block_value+8]
+        pop             dword [block_value+cell_size+cell_size]
         pop             dword [block_value+cell_size]
         pop     dword [block_value]
         ret
@@ -645,7 +645,10 @@ _load:
 ;--------------------------------
 _plus:
         call    _pop
-        ;add             [r10 + r8],eax
+        mov     edx,eax
+        call    _pop
+        add     eax,edx
+        call    _push ;add             [r10 + r8],eax
         ret
 ;--------------------------------
 
@@ -655,16 +658,16 @@ mov eax,[here_value]
 mov dword [eax-cell_size],op_compile_code
 call _pop
 mov cl,al
-mov ebx,[here_value]
-mov [ebx],al
-inc ebx
+mov edx,[here_value]
+mov [edx],al
+inc edx
 and ecx,0ffh
 add [here_value],ecx
 inc dword [here_value]
 oc1:
 call _pop
-mov [ebx],al
-inc ebx
+mov [edx],al
+inc edx
 loop oc1
 ret
 
