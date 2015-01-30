@@ -44,36 +44,12 @@ start16:
 
 clearcs:
 
-; Configure serial port
-;xor dx, dx      ; First serial port
-;mov ax, 0000000011100011b       ; 9600 baud, no parity, 1 stop bit, 8 data bits
-;int 0x14
-; Make sure the screen is set to 80x25 color text mode
-        mov ax, 0x0003  ; Set to normal (80x25 text) video mode
-        int 0x10
-; Disable blinking
-;mov ax, 0x1003
-;mov bx, 0x0000
-;int 0x10
 ; Print message
         mov si, msg_initializing
         call print_string_16
-; Check to make sure the CPU supports 64-bit mode... If not then bail out
-        ;mov eax, 0x80000000     ; Extended-function 8000000h.
-        ;cpuid ; Is largest extended function
-        ;cmp eax, 0x80000000     ; any function > 80000000h?
-        ;jbe no_long_mode ; If not, no long mode.
-        ;mov eax, 0x80000001     ; Extended-function 8000001h.
-        ;cpuid ; Now EDX = extended-features flags.
-        ;bt edx, 29      ; Test if long mode is supported.
-        ;jnc no_long_mode ; Exit if not supported.
-        ;call init_isa ; Setup legacy hardware
-; Hide the hardware cursor (interferes with print_string_16 if called earlier)
-;mov ax, 0x0200  ; VIDEO - SET CURSOR POSITION
-;mov bx, 0x0000  ; Page number
-;mov dx, 0x2000  ; Row / Column
-;int 0x10
+
 ; At this point we are done with real mode and BIOS interrupts. Jump to 32-bit mode.
+
          lgdt [cs:GDTR32] ; Load GDT register
          mov eax, cr0
          or al, 0x01     ; Set protected mode bit
@@ -96,13 +72,6 @@ print_string_16_done:
           popa
           ret
 
-; Display an error message that the CPU does not support 64-bit mode
-no_long_mode:
-;mov si, msg_no64
-;call print_string_16
-jmp $
-
-;include "init/isa.asm"
 
 align 16
 
@@ -117,15 +86,27 @@ dw 0xFFFF, 0x0000, 0x9200, 0x00CF       ; 0x 10 32-bit flat data descriptor
 dw 0xFFFF, 0x0000, 0x9A10, 0x005F       ; 0x 18 32-bit code descriptor 0x100000-0x1fffff
 dw 0xFFFF, 0x0000, 0x9220, 0x005F       ; 0x 20 32-bit data descriptor 0x200000-0x2fffff
 dw 0x0000, 0xFFFF, 0x9209, 0x0050       ; 0x 28 32-bit stack descriptor 0x9ffff-0x90000
+dw 0xFFFF, 0x0000, 0x9A00, 0x0000       ; 0x 30 real code
+dw 0xFFFF, 0x0000, 0x9200, 0x0000       ; 0x 38 real data
+dw 0xFFFF, 0x8000, 0x920B, 0x0000       ; 0x 40 text video segment
+
 gdt32_end:
 
-;idt:
-;db      2048 dup 0
 
+idtr:   dw      7ffh
+        dd      500h
 
+rlidt:          dw      3ffh
+                dd      0
 
+pmback:
+pmback_offset   dd     0
+pmback_cs       dw     0
+rmback:
+rmback_offset   dw      0
+rwback_cs       dw      0
 
-;db '_32_' ; Debug
+msg2    db      "Real Again",10,13,0
 align 16
 ; =============================================================================
 ; 32-bit mode
@@ -133,6 +114,9 @@ USE32
 include "init/isa.asm"
 include "init/pic.asm"
 include "init/cpu.asm"
+;USE32
+include "init/pm-rm.asm"
+;USE32
 include "interrupt.asm"
 include "screen.asm"
 include "string.asm"
@@ -146,7 +130,7 @@ include "disk.asm"
 ;------------------
 
 create_gate:
-      ;  sidt    [idtr]
+
         mov     edi,[idtr+2]
         shl     ecx,3
         add     edi,ecx
@@ -163,19 +147,17 @@ create_gate:
         shr     ecx,3
         ret
 
-idtr:   dw      7ffh
-        dd      400h
-
-msg:     db     "Wow starting!",0
 
 start32:
         mov eax, 16     ; load 4 GB data descriptor
         mov ds, ax      ; to all data segment registers
         mov es, ax
         mov fs, ax
-        mov gs, ax
-       ; mov eax,0x28
+
+
         mov ss, ax
+        mov eax,0x40
+        mov gs, ax
         xor eax, eax
         xor ebx, ebx
         xor ecx, ecx
@@ -184,23 +166,15 @@ start32:
         xor edi, edi
         xor ebp, ebp
         mov esp,08000h
-       ;xor   esp,esp
-        ;mov esp, 0x8000 ; Set a known free location for the stack
-        mov al, '2'     ; Now in 32-bit protected mode (0x20 = 32)
-        mov [0x000B8098], al
-        mov al, '0'
-        mov [0x000B809a], al
-; Clear out the first 4096 bytes of memory. This will store the 32-bit IDT, GDT, PML4, and PDP
-        push    edx
-        mov ecx, 1024
-        xor eax, eax
-        mov edi, eax
-        rep stosd
-        pop     edx
+        mov dword [gs:0x38], "C D "
 
         call    init_isa
 
-        mov dword [0x000B8030], "I S "
+
+
+        call    remap_irq_pm
+        
+
         xor     ecx,ecx
         mov     eax, exception_gate_00
         call    create_gate
@@ -292,27 +266,32 @@ start32:
         mov ecx, 0x28   ; Set up RTC handler
         mov eax, rtc
         call create_gate
-         mov dword [0x000B8034], "A B "
+
+
         lidt [idtr] ; load IDT register
-         mov dword [0x000B8038], "C D "
+
+        call    unmask_irqs
         call    init_pic
-         mov dword [0x000B803C], "E F "
+        mov dword [0x000B803C], "E F "
         call    init_cpu
-        mov     byte [os_Screen_Cursor_Col],1
-        mov     byte [os_Screen_Cursor_Row],12
-        call    os_cursor_set
+      ;  mov     byte [os_Screen_Cursor_Col],1
+      ;  mov     byte [os_Screen_Cursor_Row],12
+      ;  call    os_cursor_set
 
         mov al, '1'     ; About to make the jump into 64-bit mode
         mov [0x000B809C], al
         mov al, 'E'
         mov [0x000B809E], al
 
-        mov eax,90abcdefh
+        rdtsc
         call    _push
-        mov eax,12345678h
+        mov     eax,edx
         call    _push
-        call    _2hex_bytes
-
+        mov     esi,msg2
+        call    os_output
+    ;    call    _2hex_bytes
+     ;   include  "usb.asm"
+        
         include  "f32.asm"
 
 
@@ -327,10 +306,12 @@ vocabulary:
 
 _here:
 
+;align   8192
 align 4096
-align 2048
-align 1024
-align 512
+db 4096-512 dup 33h
+;align 2048
+;align 1024
+;align 512
 ;----------------------------------
   include       "f/blocks.asm"
 
