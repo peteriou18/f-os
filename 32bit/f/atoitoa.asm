@@ -3,12 +3,10 @@ _dump:
         call    _pop
         movdqu     xmm0,[eax]
         push       eax
-        ;movdqa     [value],xmm0
         call    _hex_dot3
         call    _2hb1
         pop     eax
          movdqu     xmm0,[eax+16]
-       ; movdqu     [value],xmm0
         call    _hex_dot3
         call    _2hb1
         call    _cr
