@@ -36,6 +36,7 @@ switch_to_rm:
 
          jmp    30h:rm3
          nop
+         USE16
  rm3:
         mov   eax,38h
         mov     ds,ax
@@ -52,7 +53,7 @@ switch_to_rm:
 
 
 
-          USE16
+          
  start163:
 
           xor     ax,ax
