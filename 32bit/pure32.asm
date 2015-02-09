@@ -25,8 +25,7 @@ start:
 
         jmp start16 ; This command will be overwritten with 'NOP's before the AP's are started
         nop     ; The 'jmp' is only 3 bytes
-;%include "init/smp_ap.asm"      ; AP's will start execution at 0x8000 and fall through to this code
-;db '_16_' ; Debug
+
         align 16
 USE16
 
@@ -35,11 +34,6 @@ start16:
         jmp 0x0000:clearcs
 
  msg_initializing       db      " Starting Forth32",10,13,0
-
-
-
-
-
 
 
 clearcs:
