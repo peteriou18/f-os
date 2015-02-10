@@ -25,7 +25,8 @@ start:
 
         jmp start16 ; This command will be overwritten with 'NOP's before the AP's are started
         nop     ; The 'jmp' is only 3 bytes
-
+;%include "init/smp_ap.asm"      ; AP's will start execution at 0x8000 and fall through to this code
+;db '_16_' ; Debug
         align 16
 USE16
 
@@ -34,6 +35,11 @@ start16:
         jmp 0x0000:clearcs
 
  msg_initializing       db      " Starting Forth32",10,13,0
+
+
+
+
+
 
 
 clearcs:
@@ -264,8 +270,10 @@ start32:
 
         lidt [idtr] ; load IDT register
 
-        call    unmask_irqs
+
         call    init_pic
+        call    unmask_irqs
+
         mov dword [0x000B803C], "E F "
         call    init_cpu
       ;  mov     byte [os_Screen_Cursor_Col],1
@@ -281,9 +289,13 @@ start32:
         call    _push
         mov     eax,edx
         call    _push
-        mov     esi,msg2
-        call    os_output
-    ;    call    _2hex_bytes
+
+        call   _2hex_dot
+        ;mov     esi,hexstr
+        ;mov     ecx,16
+        ;call    os_output_chars
+
+       ; jmp     $
      ;   include  "usb.asm"
         
         include  "f32.asm"
