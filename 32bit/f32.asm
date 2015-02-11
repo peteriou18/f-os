@@ -13,18 +13,18 @@ _break:
         push    eax
         push    esi
         call    os_print_newline
-        mov             esi,_break2
+        mov     esi,_break2
         call    os_output
-        pop             esi
-        mov             eax,[esp+cell_size]
+        pop     esi
+        mov     eax,[esp+cell_size]
         call    os_debug_dump_eax
-        pop             eax
+        pop     eax
         call    os_dump_regs
         push    eax
 _break1:
         call    os_input_key
         jnb     _break1
-        pop             eax
+        pop      eax
         ret
 _break2 db      "Control point:",0
 
@@ -47,8 +47,6 @@ _break2 db      "Control point:",0
 ;--------------------------------
 _timer: 
         rdtsc
-       ; shl     eax,32
-        ;shrd    eax,edx,32
         call    _push
         mov     eax,edx
         call    _push
