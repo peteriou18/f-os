@@ -124,8 +124,6 @@ _bl:
 ;-------------------------
 ;get string from input buffer parse it and put to top of wordlist
 _word:
-        ;mov            eax,[block_value+8]
-        ;mov            [block_value+8] ; [nkey],eax
         mov             eax,[block_value+8] ;input buffer
         call    _push
         mov             eax,[here_value]    ;here
@@ -150,11 +148,8 @@ _enclose:
         
         mov     edi,ebx
         mov     ecx,[block_value+4] ; size of buffer
-;mov    r14,0x1
-;mov    r13,[esi]
-;call   _break
         cmp     ecx,edx
-        jl      _word2  ;jl
+        jl      _word2  ;
 
         inc     edi
         
