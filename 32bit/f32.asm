@@ -162,7 +162,6 @@ _skip_delimeters:
         cmp     al,20h
         jbe     _skip_delimeters
                         
-        ;call   _skip_delimeters
 
 _word3:
         
@@ -180,14 +179,12 @@ _word4:
         
         ; string to validate
         mov     [ebx],dl
-;or     r14,0x7800
+
         ret
 
 _word2:
         
         ; empty string
-        ;mov    esi,msg7
-        ;call   os_output
         mov     dword [ebx],2 ;dl
       ;  mov     dword [ebx+4],0
         mov     dword [_in_value],0
