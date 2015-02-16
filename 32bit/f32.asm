@@ -155,7 +155,7 @@ _enclose:
         
 _skip_delimeters:
         
-        sub     dword [block_value+4],1 ; [nkey],1
+        sub     dword [block_value+4],1 ; 
         jb      _word2
         lodsb
         inc     dword [_in_value]
@@ -167,7 +167,7 @@ _word3:
         
         stosb
         inc     edx
-        sub     dword [block_value+4],1 ; [nkey],1
+        sub     dword [block_value+4],1 ; 
         jb      _word4
         lodsb
         inc     dword [_in_value]
@@ -186,14 +186,7 @@ _word2:
         
         ; empty string
         mov     dword [ebx],2 ;dl
-      ;  mov     dword [ebx+4],0
         mov     dword [_in_value],0
-;mov            r13,[ebx]
-;mov            r14,0x67
-;call   _break
-        
-        ;mov    eax,[_in_value]
-        
         ret
 ;------------------
 
