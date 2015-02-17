@@ -179,86 +179,14 @@ _word4:
         
         ; string to validate
         mov     [ebx],dl
-
         ret
 
 _word2:
-        
         ; empty string
         mov     dword [ebx],2 ;dl
         mov     dword [_in_value],0
         ret
-;------------------
-
         
-
-
-;msg2   db      ' String prepared to find:',0
-msg7    db      ' empty string ',0
-;msg8   db      ' push symbol ',0
-;msg5   db      ' skips ',0
-;msg6   db      ' source string ',0
-;-------------------------------
-;search string from here in wordlist
-_find_task:
-        call    _pop
-        test    eax,eax
-        je      _find_task2 ; end of task
-        inc     eax
-        je      _find_task      ; empty slot
-        dec     eax
-        mov     esi,eax
-        call    _sfind2
-        call    _pop
-        mov     ebx,eax
-        call    _pop
-        mov     ecx,eax
-        
-_find_task3:
-        call    _pop
-        test    eax,eax
-        jne     _find_task3
-        
-        mov     eax,ecx
-        call    _push
-        mov     eax,ebx
-        call    _push           
-_find_task2:
-        ret
-;----------------------------   
-_find_task_frame:
-        call    _pop    ;address of context frame
-        push    eax
-ftf1:
-        pop             eax
-        add             eax,cell_size ;
-        mov             esi,[eax-cell_size]
-        test    esi,esi
-        je              ftf             ; last slot - zero
-        inc             esi
-        je              ftf1
-        dec             esi
-        push    eax
-mov     byte [0xb8158],"Q"
-        call    _sfind2
-        call    _pop ; flag. on stack rest xt
-        
-        test    eax,eax
-        je              ftf1            ;nothing found in this context
-
-;       call    _push           ;somefind found 
-        pop             eax
-        ret
-ftf:
-        ;
-        ;mov            eax,badword_ ;cr_;_ret
-        ;call   _push
-        ;pop            eax
-;       xor             eax,eax
-;       call    _push
-;       call    _break
-        ret
-
 _find:
         mov     eax,[context_value]
        ; mov     eax,[eax]
