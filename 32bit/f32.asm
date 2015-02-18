@@ -183,13 +183,12 @@ _word4:
 
 _word2:
         ; empty string
-        mov     dword [ebx],2 ;dl
+        mov     dword [ebx],2 
         mov     dword [_in_value],0
         ret
         
 _find:
         mov     eax,[context_value]
-       ; mov     eax,[eax]
         call    _push
 
 _sfind:
@@ -200,14 +199,7 @@ _sfind:
 
 _sfind2:
         mov     esi,[esi] ;vocid
-    ;    mov     byte [0xb8154],"f"
-       ; mov     ebp,esi
-;push   esi
-;mov            esi,edi
-;mov             esi,[esi]
-;call   os_output
-;pop            esi
-;int3
+   
 _find2:
         movzx   ebx,byte [esi];word in vocab
         mov     edx,ebx
