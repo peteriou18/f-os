@@ -57,6 +57,11 @@ repeat_cmnd:
       ;  int3
         mov     esi,[curr_tlb]
         call    os_output
+         mov  edi,[ curr_tlb]
+        mov edx, 64                   ; Max chars to accept
+        mov ecx, [cnt_tlb]
+       ; sub edx,ecx
+        add edi,ecx
         jmp os_input_more
 
 msgrc   db  "did it again",10,13,0
@@ -64,10 +69,11 @@ msgrc   db  "did it again",10,13,0
 os_input_backspace:
         cmp ecx, 0                      ; backspace at the beginning? get a new char
         je os_input_more
-       ; mov al, ' '                     ; 0x20 is the character for a space
-        ;call os_output_char             ; Write over the last typed character with the space
-        ;call os_dec_cursor              ; Decrement the cursor again
-        call os_dec_cursor              ; Decrement the cursor
+         call os_dec_cursor
+        mov al, ' '                     ; 0x20 is the character for a space
+        call os_output_char             ; Write over the last typed character with the space
+        call os_dec_cursor              ; Decrement the cursor again
+        ;call os_dec_cursor              ; Decrement the cursor
         dec edi                         ; go back one in the string
         mov byte [edi], 0x00            ; NULL out the char
         dec ecx                         ; decrement the counter by one
@@ -89,6 +95,7 @@ os_input_done:
         push    edi
         push    esi
         push    ecx
+        mov     [cnt_tlb],ecx
         mov     esi,[curr_tlb]
         mov     edi,prev_tlb
         mov     ecx,16
@@ -98,6 +105,7 @@ os_input_done:
         pop     esi
         pop     edi
         ret
+cnt_tlb         dd      0
 curr_tlb        dd      0
 prev_tlb        db 64    dup 0
 ; -----------------------------------------------------------------------------
