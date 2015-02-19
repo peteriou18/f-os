@@ -12,19 +12,19 @@ include "f/io.asm"
 _break: 
         push    eax
         push    esi
-        call    os_print_newline
-        mov     esi,_break2
+        call    _cr;os_print_newline
+        mov             esi,_break2
         call    os_output
-        pop     esi
-        mov     eax,[esp+cell_size]
+        pop             esi
+        mov             eax,[esp+cell_size]
         call    os_debug_dump_eax
-        pop     eax
+        pop             eax
         call    os_dump_regs
         push    eax
 _break1:
         call    os_input_key
         jnb     _break1
-        pop      eax
+        pop             eax
         ret
 _break2 db      "Control point:",0
 
@@ -35,6 +35,7 @@ _break2 db      "Control point:",0
         sub     ebx , 4
         and     ebx , [data_stack_mask]
         mov     [stack_pointer],ebx
+        mov     ebx,10h
         ret
 ;------------------------------     
   _push:
@@ -47,6 +48,8 @@ _break2 db      "Control point:",0
 ;--------------------------------
 _timer: 
         rdtsc
+       ; shl     eax,32
+        ;shrd    eax,edx,32
         call    _push
         mov     eax,edx
         call    _push
@@ -59,8 +62,9 @@ msgf:   db      "forth>",0
 
 ;-------------------------
 _count:
+       ; push    ebx
         call    _pop
-        mov     edx,eax
+        ;mov     edx,eax
         mov     edx,[eax]
         and     edx,03fh
         inc     eax
@@ -68,16 +72,22 @@ _count:
         mov     eax,edx
         
         call    _push
+       ; pop     ebx
         ret
 ;-------------------------
 _variable_code:
-        add     eax,cell_size
+        add             eax,cell_size
         call    _push
         ret
 ;-------------------------
 _execute_code:
         call    _pop
 _execute:
+;mov        mov     ecx,80000h
+ oo4:
+      ;  nop
+      ;  loop    oo4
+;call   _break
         call  dword [eax]
         ret
 ;------------------------
@@ -106,14 +116,16 @@ _interpret:
 
         call    _word
 
-        mov     eax,context_
-        call    dword [eax]
+        mov     eax,context_value
+        call    _push
+     ;   call    dword [eax]
         call    _fetch
-
+        ;  mov dword [0x000B8040], "Q W "
         call    _sfind ; _find_task_frame
+       ;  mov dword [0x000B8044], "E R "
         ;call   _pop
-        ;call   _hex_dot        
-              ;  call   _dup
+        ;call   _hex_dot
+              ; call   _dup
               ;  call   _hex_dot
         call    _execute_code
         jmp     _interpret
@@ -124,6 +136,8 @@ _bl:
 ;-------------------------
 ;get string from input buffer parse it and put to top of wordlist
 _word:
+        ;mov            eax,[block_value+8]
+        ;mov            [block_value+8] ; [nkey],eax
         mov             eax,[block_value+8] ;input buffer
         call    _push
         mov             eax,[here_value]    ;here
@@ -148,26 +162,30 @@ _enclose:
         
         mov     edi,ebx
         mov     ecx,[block_value+4] ; size of buffer
+;mov    r14,0x1
+;mov    r13,[esi]
+;call   _break
         cmp     ecx,edx
-        jl      _word2  ;
+        jl      _word2  ;jl
 
         inc     edi
         
 _skip_delimeters:
         
-        sub     dword [block_value+4],1 ; 
+        sub     dword [block_value+4],1 ; [nkey],1
         jb      _word2
         lodsb
         inc     dword [_in_value]
         cmp     al,20h
         jbe     _skip_delimeters
                         
+        ;call   _skip_delimeters
 
 _word3:
         
         stosb
         inc     edx
-        sub     dword [block_value+4],1 ; 
+        sub     dword [block_value+4],1 ; [nkey],1
         jb      _word4
         lodsb
         inc     dword [_in_value]
@@ -179,16 +197,98 @@ _word4:
         
         ; string to validate
         mov     [ebx],dl
+;or     r14,0x7800
         ret
 
 _word2:
-        ; empty string
-        mov     dword [ebx],2 
-        mov     dword [_in_value],0
-        ret
         
+        ; empty string
+        ;mov    esi,msg7
+        ;call   os_output
+        mov     dword [ebx],2 ;dl
+      ;  mov     dword [ebx+4],0
+        mov     dword [_in_value],0
+;mov            r13,[ebx]
+;mov            r14,0x67
+;call   _break
+        
+        ;mov    eax,[_in_value]
+        
+        ret
+;------------------
+
+        
+
+
+;msg2   db      ' String prepared to find:',0
+msg7    db      ' empty string ',0
+;msg8   db      ' push symbol ',0
+;msg5   db      ' skips ',0
+;msg6   db      ' source string ',0
+;-------------------------------
+;search string from here in wordlist
+_find_task:
+        call    _pop
+        test    eax,eax
+        je      _find_task2 ; end of task
+        inc     eax
+        je      _find_task      ; empty slot
+        dec     eax
+        mov     esi,eax
+        call    _sfind2
+        call    _pop
+        mov     ebx,eax
+        call    _pop
+        mov     ecx,eax
+        
+_find_task3:
+        call    _pop
+        test    eax,eax
+        jne     _find_task3
+        
+        mov     eax,ecx
+        call    _push
+        mov     eax,ebx
+        call    _push           
+_find_task2:
+        ret
+;----------------------------   
+_find_task_frame:
+        call    _pop    ;address of context frame
+        push    eax
+ftf1:
+        pop             eax
+        add             eax,cell_size ;
+        mov             esi,[eax-cell_size]
+        test    esi,esi
+        je              ftf             ; last slot - zero
+        inc             esi
+        je              ftf1
+        dec             esi
+        push    eax
+mov     word [0xb8158],"Q "
+        call    _sfind2
+        call    _pop ; flag. on stack rest xt
+        
+        test    eax,eax
+        je              ftf1            ;nothing found in this context
+
+;       call    _push           ;somefind found 
+        pop             eax
+        ret
+ftf:
+        ;
+        ;mov            eax,badword_ ;cr_;_ret
+        ;call   _push
+        ;pop            eax
+;       xor             eax,eax
+;       call    _push
+;       call    _break
+        ret
+
 _find:
         mov     eax,[context_value]
+       ; mov     eax,[eax]
         call    _push
 
 _sfind:
@@ -198,8 +298,16 @@ _sfind:
         ret
 
 _sfind2:
+
         mov     esi,[esi] ;vocid
-   
+    ;    mov     byte [0xb8154],"f"
+       ; mov     ebp,esi
+;push   esi
+;mov            esi,edi
+;mov             esi,[esi]
+;call   os_output
+;pop            esi
+;int3
 _find2:
         movzx   ebx,byte [esi];word in vocab
         mov     edx,ebx
@@ -237,6 +345,7 @@ _find2:
       ;  xor     eax,eax
       ;  dec     eax
       ;  call    _push           ; word found
+   ;   call       _cr
         ret
 
  _find11:
@@ -264,6 +373,7 @@ _find2:
                         call    _hex_dot
                         pop     esi
                        push    esi
+                       inc     esi
                        call    os_output
                         pop     esi
                         pop     edi
@@ -271,6 +381,7 @@ _find2:
                         int3
 _find4:
  ;       %endif
+ cli
         mov     byte [0xb8152],"c"
         test    esi,esi
         jne     _find2
@@ -284,6 +395,7 @@ _find4:
      ;   int3
       ;  xor     eax,eax
       ;  call    _push
+    ;  call       _cr
         ret                     ; nothing to find
         
 
@@ -305,7 +417,7 @@ _addr_interp:
         add eax,4
         push eax
         mov eax,[eax]
-        call dword [eax]
+        call near dword [eax]
         pop eax
         jmp _addr_interp
 
