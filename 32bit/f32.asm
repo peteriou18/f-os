@@ -62,9 +62,7 @@ msgf:   db      "forth>",0
 
 ;-------------------------
 _count:
-       ; push    ebx
         call    _pop
-        ;mov     edx,eax
         mov     edx,[eax]
         and     edx,03fh
         inc     eax
@@ -72,22 +70,16 @@ _count:
         mov     eax,edx
         
         call    _push
-       ; pop     ebx
         ret
 ;-------------------------
 _variable_code:
-        add             eax,cell_size
+        add     eax,cell_size
         call    _push
         ret
 ;-------------------------
 _execute_code:
         call    _pop
 _execute:
-;mov        mov     ecx,80000h
- oo4:
-      ;  nop
-      ;  loop    oo4
-;call   _break
         call  dword [eax]
         ret
 ;------------------------
