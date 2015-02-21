@@ -96,7 +96,7 @@ here_value:
 ;----------------------------
         align 4
 nfa_6:
- nfa_last:
+
         db      9,"constant#",0
         alignhe
         dd      nfa_5
@@ -110,6 +110,259 @@ _constant:
 ;----------------------------
         align   4
 
+nfa_7:
+        db      3,"Pop",0
+        alignhe
+        dd      nfa_6
+        dd      _pop
+_pop:
+        mov     ebx,[stack_pointer]
+        mov     eax , [ ebx+data_stack_base]
+        sub     ebx , 4
+        and     ebx , [data_stack_mask]
+        mov     [stack_pointer],ebx
+        mov     ebx,10h
+        ret
+;----------------------------
+        align   4
+
+nfa_8:
+        db      9,"INTERPRET",0
+        alignhe
+        dd      nfa_7
+        dd      _interpret
+_interpret:
+        call    _parse
+        mov     eax,context_value
+        call    _push
+        call    _fetch
+        call    _sfind
+        call    _execute_code
+        jmp     _interpret
+        ret
+;----------------------------
+        align   4
+nfa_9:
+        db      5,"PARSE",0
+        dd      nfa_8
+        dd      _parse
+_parse:
+        mov             eax,[block_value+8] ;input buffer
+        call    _push
+        mov             eax,[here_value]    ;here
+        call    _push
+        call    _enclose
+        ret
+;----------------------------
+        align   4
+nfa_10:
+        db      7,"CONTEXT",0
+        alignhe
+        dd      nfa_9
+context_:
+        dd      _variable_code
+context_value:  
+        dd      f32_list
+;--------------------------------
+        align   4
+nfa_11:
+        db      7,"ENCLOSE",0
+        alignhe
+        dd      nfa_10
+        dd      _enclose
+_enclose:
+        call    _pop    ;       to address
+        mov             edi,eax
+        call    _pop    ; from address
+        mov             esi,eax
+        xor     edx,edx
+        add     esi,[_in_value]
+        mov     ebx,edi
+        ; clear 32 bytes
+        xor     eax,eax
+        mov     ecx,8
+        rep     stosd
+        
+        mov     edi,ebx
+        mov     ecx,[block_value+4] ; size of buffer
+        cmp     ecx,edx
+        jl      _word2  ;jl
+        inc     edi
+        
+_skip_delimeters:
+        sub     dword [block_value+4],1 ; [nkey],1
+        jb      _word2
+        lodsb
+        inc     dword [_in_value]
+        cmp     al,20h
+        jbe     _skip_delimeters
+_word3:
+        stosb
+        inc     edx
+        sub     dword [block_value+4],1 ; [nkey],1
+        jb      _word4
+        lodsb
+        inc     dword [_in_value]
+        cmp     al,20h
+        jnbe    _word3
+
+_word4:
+        ; string to validate
+        mov     [ebx],dl
+        ret
+
+_word2:
+        ; empty string
+        mov     dword [ebx],49584504h ;4,"EXI"
+        mov     dword [ebx+4],054h ;"T",0
+        ret
+;----------------------------
+        align   4
+
+nfa_12:
+        db      1,"@",0
+        alignhe
+        dd      nfa_11
+fetch_:
+        dd      _fetch
+_fetch:
+        call _pop
+        mov eax,[eax]
+        call _push
+        ret
+;----------------------------
+        align   4
+
+nfa_13:
+        db      5,"SFIND",0
+        alignhe
+        dd      nfa_12
+        dd      _sfind
+_sfind:
+        call    _pop
+        mov      esi,eax ;pop context
+        mov     esi,[esi] ;vocid
+_find2:
+        movzx   ebx,byte [esi];word in vocab
+        mov     edx,ebx
+        inc     bl
+        and     bl,07ch               ;mask immediate in counter
+        mov     edi,[here_value]
+        movzx     ecx,byte [edi]     ; word on here
+        shr     ecx,2
+        inc     ecx
+        mov     ebp,esi
+        mov     eax,[edi]
+
+find22:
+        cmpsd
+        jne     _find11
+        loop  find22
+
+        and      edx,3
+        cmp     edx,3
+        jne     find23
+        add     esi,4
+
+find23:
+        mov     eax,esi
+        add     eax,4
+        call    _push
+        ret               ;word found
+
+_find11:
+        mov    esi,ebp
+        add    esi,4
+        add     esi,ebx
+        mov     ecx,esi
+        mov     esi,[esi]
+;        cmp dword [ trace],1
+;        jne  _find4
+;                        push    ecx
+;                        push    edi
+;                        push    esi
+
+;                        mov     eax,esi
+;                        call    _push
+;                        call    _hex_dot
+;                        pop     esi
+;                       push    esi
+ ;                      inc     esi
+ ;                      call    os_output
+ ;                       pop     esi
+ ;                       pop     edi
+ ;                       pop     ecx
+ ;                       int3
+_find4:
+
+        test    esi,esi
+        jne     _find2
+        mov     eax,ecx
+        sub     eax,8
+        call    _push
+        ret                     ; badword
+;----------------------------
+        align   4
+nfa_14:
+        db      7,"EXECUTE",0
+        alignhe
+        dd      nfa_13
+        dd      _execute_code
+_execute_code:
+        call    _pop
+_execute:
+        call  dword [eax]
+        ret
+;----------------------------
+        align   4
+nfa_15:
+        db      5,"BLOCK",0
+        alignhe
+        dd      nfa_14
+block_:
+        dd      _variable_code
+block_value:
+        dd      0               ;block number
+        dd      0              ;size of buffer
+        dd      0    ;address of input buffer
+
+;----------------------------
+        align   4
+nfa_16:
+
+        db      9,"variable#",0
+        alignhe
+        dd      nfa_15
+variableb_:
+        dd      _constant
+        dd      _variable_code
+_variable_code:
+        add     eax,cell_size
+        call    _push
+        ret
+;----------------------------
+        align   4
+nfa_17:
+        db      3,">IN",0
+        alignhe
+        dd      nfa_16
+        dd      _variable_code
+_in_value:
+        dd      0
+
+;----------------------------
+        align   4
+nfa_last:
+nfa_18:
+        db      5,"TRACE",0
+        alignhe
+        dd      nfa_17
+        dd      _variable_code
+trace:
+        dd      0
+
+;----------------------------
+        align   4
         USE32
 os_output:
         pushad
