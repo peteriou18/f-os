@@ -1,13 +1,3 @@
-; -----------------------------------------------------------------------------
-; readsectors -- Read data from a SATA hard drive
-; IN:   RAX = starting sector # to read
-;       RCX = number of sectors to read (up to 8192 = 4MiB)
-;       RDX = disk #
-;       RDI = memory location to store sectors
-; OUT:  RAX = RAX + number of sectors that were read
-;       RCX = number of sectors that were read (0 on error)
-;       RDI = RDI + (number of sectors read * 512)
-;       All other registers preserved
 ;read_sectors:
 _rdblock:
         call    _pop    ;bufadr
@@ -17,7 +7,6 @@ _rdblock:
 
         shld     edx,eax,4
         shl      eax,4
-      ;  mov      eax,2
         mov     [sect],eax
         mov     [sect+2],edx
 
@@ -27,24 +16,23 @@ _rdblock:
 
         mov     [rmback],eax
 
-
         mov     dword [pmback_offset],rdsec2
-        jmp    switch_to_rm
+        jmp     switch_to_rm
 
         USE16
 rdsec1:
         mov     ax,0b800h
         mov     fs,ax
         mov     dword [fs:12h],"D S "
-        mov  dl,[7c00h]
-        mov si,dap_p
-        mov ah,42h
-        int 13h
-        jnb  rdsec3
-         mov     dword [fs:1Ah],"E r "
+        mov     dl,[7c00h]
+        mov     si,dap_p
+        mov     ah,42h
+        int     13h
+        jnb     rdsec3
+        mov     dword [fs:1Ah],"E r "
 
 rdsec3:
-          mov     dword [fs:16h],"D G "
+        mov     dword [fs:16h],"D G "
         jmp   switch_to_pm
 
         USE32
