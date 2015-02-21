@@ -1,5 +1,5 @@
 # f-os
-FORTH OS loading and developing from it's one source code. 
+FORTH OS loading and developing of it's one source code. 
 Baremetal Forth-like system.
 Running in 32-bit PM.
 Goal: make kernel with minimal set of forth words, wich afford to load and deploy the rest of system from source code.
