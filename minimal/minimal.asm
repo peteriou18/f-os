@@ -1,3 +1,14 @@
+; memory map
+;0-3ff - real idt
+;500 -  cff - pm idt
+;d00 - 10ff - temp stack
+;1100- 14ff - real stack
+;1500 - 1fff - pm stack
+;2000 - 3fff buffer
+;7c00-8000 - mbr code
+;4000 - programm code
+;
+
          cell_size      = 4 ; 32bit
          data_stack_base  =     100000h
 
@@ -352,17 +363,112 @@ _in_value:
 
 ;----------------------------
         align   4
-nfa_last:
+
 nfa_18:
-        db      5,"TRACE",0
+        db      4,"LOAD",0
         alignhe
         dd      nfa_17
-        dd      _variable_code
-trace:
-        dd      0
+        dd      _load
+_load:
+        push    dword [block_value]    ;block number
+        push    dword [block_value+cell_size]      ; size of buffer
+        push    dword [block_value+cell_size+cell_size]    ;address of buffer
+        push    dword [_in_value]
+        
+        mov             eax, buffer_+cell_size+cell_size ; buffer address
+        mov             [block_value+cell_size+cell_size],eax
+        call    _push
+        call    _rdblock
+        
+        xor             ebx,ebx
+        mov             [_in_value],ebx
+        mov             dword [block_value+cell_size],8192
+        
+        call    _interpret
+        
+        pop             dword [_in_value]
+        pop             dword [block_value+cell_size+cell_size]
+        pop             dword [block_value+cell_size]
+        pop     dword [block_value]
+        ret
+
 
 ;----------------------------
         align   4
+
+nfa_19:
+        db      6,"BUFFER",0
+        alignhe
+        dd      nfa_18
+buffer_:
+        dd      _constant
+        dd      0D00h
+
+;----------------------------
+        align   4
+nfa_last:
+nga_20:
+        db      7,"rdblock",0
+        alignhe
+        dd      nfa_19
+        dd      _rdblock
+ _rdblock:
+        call    _pop    ;bufadr
+        mov     [offset_data],ax
+        xor     edx,edx
+        call    _pop    ; block
+
+        shld     edx,eax,4
+        shl      eax,4
+        mov     [sect],eax
+        mov     [sect+2],edx
+
+        pushad
+        mov     eax,rdsec1
+        and     eax,0ffffh
+
+        mov     [rmback],eax
+
+
+        mov     dword [pmback_offset],rdsec2
+        jmp    switch_to_rm
+
+        USE16
+rdsec1:
+        mov     ax,0b800h
+        mov     fs,ax
+        mov     dword [fs:12h],"D S "
+        mov  dl,[7c00h]
+        mov si,dap_p
+        mov ah,42h
+        int 13h
+        jnb  rdsec3
+         mov     dword [fs:1Ah],"E r "
+
+rdsec3:
+          mov     dword [fs:16h],"D G "
+        jmp   switch_to_pm
+
+        USE32
+rdsec2:
+        popad
+        ret
+
+dap_p:
+        db 16
+        db 0 ;zero
+many_of:
+        dw 16 ; many of sectors
+offset_data:
+        dw buffer_+4 ;0 ;offset of data
+seg_data:
+        dw 000h ;segment of data
+sect:
+        dd 3 ; number of sector
+        dd 0
+;----------------------------
+        align   4
+
         USE32
 os_output:
         pushad
@@ -418,7 +524,7 @@ switch_to_pm:
         lidt    [idtr]
         call     remap_irq_pm
         call    unmask_irqs
-        mov    esp,0f00h-36
+        mov    esp,01100h-36
         popad
         mov     esp,[esp_save]
         sti
@@ -431,7 +537,7 @@ switch_to_rm:
          cli
 
          mov     [esp_save],esp
-         mov    esp,0f00h
+         mov    esp,01100h
          pushad
          jmp    30h:rm3
          nop
@@ -461,7 +567,7 @@ switch_to_rm:
 
           mov     gs,ax
           mov     fs,ax
-          mov     sp,5000h
+          mov     sp,1500h
           call  remap_irq_real
           lidt     [rlidt]
           sti
