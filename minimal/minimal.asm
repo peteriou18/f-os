@@ -20,8 +20,24 @@ macro alignhe
     db algn dup 0
     }
 
-     align 256
+     ORG 4000h
 ;----------------------------
+;entry point
+;----------------------------
+       USE32
+          mov dword [gs:0x38], "J L "
+        mov esi,msg_entry
+        call    os_output
+        mov     eax,40h
+        mov     gs,ax
+              mov dword [gs:0x42], "O O "
+        jmp     $
+
+
+msg_entry       db      " F32 minimal loaded",10,13,0
+
+;----------------------------
+        align 4
 nfa_0:
         db    7, "FORTH32",0
         alignhe
@@ -475,29 +491,42 @@ os_output:
         mov     eax,prtstr1
         and     eax,0ffffh
         mov     [rmback],eax
-        mov     dword [pmback_offset],prtstr2
+        mov     dword [pmback],prtstr2
+
+
         jmp    switch_to_rm
 
-        USE16
-        cld
-        cli
-prtstr1:
-        mov     al,[si]
-        inc     si
-        cmp    al,0
-        je      prtstr3
-        mov     ah,0eh
-        int     10h
-        jmp     prtstr1
+ prtstr2:
 
- prtstr3:
-        jmp   switch_to_pm
-
-        USE32
-prtstr2:
         popad
         ret
 symbols        dd      0
+
+        USE16
+
+prtstr1:
+
+        call    prtstr4
+
+        jmp   switch_to_pm
+
+prtstr4:
+
+        mov     al,[si]
+        inc     si
+        cmp    al,0
+
+        je      prtstr3
+        mov     ah,0eh
+        int     10h
+        jmp     prtstr4
+
+prtstr3:
+
+        ret
+
+      ;  USE32
+
 ;----------------------------
         align   4
         USE16
@@ -509,6 +538,7 @@ switch_to_pm:
          or al, 0x01     ; Set protected mode bit
          mov cr0, eax
          wbinvd
+
          jmp 8:pm2
 
          USE32
@@ -521,12 +551,15 @@ switch_to_pm:
         mov fs, ax
         mov gs, ax
         mov ss, ax
+
         lidt    [idtr]
         call     remap_irq_pm
         call    unmask_irqs
         mov    esp,01100h-36
+
         popad
         mov     esp,[esp_save]
+
         sti
 
         jmp     dword [pmback]
@@ -539,6 +572,7 @@ switch_to_rm:
          mov     [esp_save],esp
          mov    esp,01100h
          pushad
+
          jmp    30h:rm3
          nop
              USE16
@@ -548,6 +582,7 @@ switch_to_rm:
         mov     es,ax
         mov     ss,ax
         mov     fs,ax
+        mov     ax,40h
         mov     gs,ax
 
         mov eax, cr0
@@ -564,12 +599,17 @@ switch_to_rm:
           mov     es,ax
           mov     ss,ax
           mov     fs,ax
-
+             mov     fs,ax
+             mov     ax,0b800h
           mov     gs,ax
-          mov     fs,ax
+
+
           mov     sp,1500h
           call  remap_irq_real
+
+
           lidt     [rlidt]
+
           sti
           call  unmask_irqs
 
@@ -650,3 +690,5 @@ remap_irq_real:
 ;----------------------------
          align   4
 _here:
+;align   65536
+times 200 db 0
