@@ -1,38 +1,38 @@
- USE16
-org 0x7C00
-DriveNumber equ 0x7c00
+ 	USE16
+	org 0x7C00
+	DriveNumber equ 0x4f0
 ; entry:
-cli ; Disable interrupts
-xor ax, ax
-mov ss, ax
-mov es, ax
-mov ds, ax
-mov fs, ax
-mov ax,0b800h
-mov gs,ax
-mov sp, 0x1500
+	cli ; Disable interrupts
+	xor ax, ax
+	mov ss, ax
+	mov es, ax
+	mov ds, ax
+	mov fs, ax
+	mov ax,0b800h
+	mov gs,ax
+	mov sp, 0x1500
 ;sti ; Enable interrupts
-mov [DriveNumber], dl ; BIOS passes drive number in DL
-mov si, msg_Load
-call prints
-;load 63 sectors
-mov dl,[DriveNumber]
-mov si,dap_p
-mov ah,42h
-int 13h
-jb load_fail
-mov si, msg_LoadDone
-call prints
-lgdt [GDTR32] ; Load GDT register
-mov eax, cr0
-or al, 0x01 ; Set protected mode bit
-mov cr0, eax
-jmp 8:start32 ; Jump to 32-bit protected mode
+	mov [DriveNumber], dl ; BIOS passes drive number in DL
+	mov si, msg_Load
+	call prints
+;load 15 sectors. rest of zero block
+	mov dl,[DriveNumber]
+	mov si,dap_p
+	mov ah,42h
+	int 13h
+	jb load_fail
+	mov si, msg_LoadDone
+	call prints
+	lgdt [GDTR32] ; Load GDT register
+	mov eax, cr0
+	or al, 0x01 ; Set protected mode bit
+	mov cr0, eax
+	jmp 8:start32 ; Jump to 32-bit protected mode
 GDTR32: ; Global Descriptors Table Register
-dw gdt32_end - gdt32 - 1 ; limit of GDT (size minus one)
+	dw gdt32_end - gdt32 - 1 ; limit of GDT (size minus one)
 gdt_base:
-dq gdt32 ; linear address of GDT
-align 16
+	dq gdt32 ; linear address of GDT
+	align 16
 gdt32:
 dw 0x0000, 0x0000, 0x0000, 0x0000 ; Null desciptor
 dw 0xFFFF, 0x0000, 0x9A00, 0x00CF ; 0x 8 32-bit flat code descriptor
@@ -45,63 +45,63 @@ dw 0xFFFF, 0x0000, 0x9200, 0x0000 ; 0x 38 real data
 dw 0xFFFF, 0x8000, 0x920B, 0x0000 ; 0x 40 text video segment
 gdt32_end:
 load_fail:
-mov si, msg_LoadFail
-call prints
+	mov si, msg_LoadFail
+	call prints
 halt:
-hlt
-jmp halt
+	hlt
+	jmp halt
 dap_p:
-db 16
-db 0 ;zero
+	db 16
+	db 0 ;zero
 many_of:
-dw 15 ; many of sectors
+	dw 15 ; many of sectors
 offset_data:
-dw 4000h ;offset of data
+	dw 4000h ;offset of data
 seg_data:
-dw 000h ;segment of data
+	dw 000h ;segment of data
 sect:
-dd 1 ; number of sector
-dd 0
+	dd 1 ; number of sector
+	dd 0
 ;------------------------------------------------------------------------------
 ;------------------------------------------------------------------------------
 ; 16-bit function to print a string to the screen
 ; IN: SI - Address of start of string
 prints: ; Output string in SI to screen
-mov ah, 0x0E ; int 0x10 teletype function
+	mov ah, 0x0E ; int 0x10 teletype function
 print2:
-lodsb ; Get char from string
-cmp al, 0
-je print3 ; If char is zero, end of string
-int 0x10 ; Otherwise, print it
-jmp short print2
+	lodsb ; Get char from string
+	cmp al, 0
+	je print3 ; If char is zero, end of string
+	int 0x10 ; Otherwise, print it
+	jmp short print2
 print3:
-ret
+	ret
 ;------------------------------------------------------------------------------
 msg_Load db "Loading Pure32", 0
 msg_LoadDone db " - done.", 13, 10, "Executing...", 0
 msg_LoadFail db " - Not found!", 0
 ;DriveNumber db 0x00
-USE32
+	USE32
 start32:
-mov eax, 16 ; load 4 GB data descriptor
-mov ds, ax ; to all data segment registers
-mov es, ax
-mov fs, ax
-mov ss, ax
-mov eax,0x40
-mov gs, ax
-xor eax, eax
-xor ebx, ebx
-xor ecx, ecx
-xor edx, edx
-xor esi, esi
-xor edi, edi
-xor ebp, ebp
-mov esp,02000h
-mov dword [0xb8020], "P M "
+	mov eax, 16 ; load 4 GB data descriptor
+	mov ds, ax ; to all data segment registers
+	mov es, ax
+	mov fs, ax
+	mov ss, ax
+	mov eax,0x40
+	mov gs, ax
+	xor eax, eax
+	xor ebx, ebx
+	xor ecx, ecx
+	xor edx, edx
+	xor esi, esi
+	xor edi, edi
+	xor ebp, ebp
+	mov esp,02000h
+	mov dword [0xb8020], "P M "
 ; Enable the A20 gate
 set_A20:
-in al, 0x64
+	in al, 0x64
 test al, 0x02
 jnz set_A20
 mov al, 0xD1
