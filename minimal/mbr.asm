@@ -102,71 +102,71 @@ start32:
 ; Enable the A20 gate
 set_A20:
 	in al, 0x64
-test al, 0x02
-jnz set_A20
-mov al, 0xD1
-out 0x64, al
+	test al, 0x02
+	jnz set_A20
+	mov al, 0xD1
+	out 0x64, al
 check_A20:
-in al, 0x64
-test al, 0x02
-jnz check_A20
-mov al, 0xDF
-out 0x60, al
+	in al, 0x64
+	test al, 0x02
+	jnz check_A20
+	mov al, 0xDF
+	out 0x60, al
 ; Set up RTC
 ; Port 0x70 is RTC Address, and 0x71 is RTC Data
 ; http://www.nondot.org/sabre/os/files/MiscHW/RealtimeClockFAQ.txt
 rtc_poll:
-mov al, 0x0A ; Status Register A
-out 0x70, al ; Select the address
-in al, 0x71 ; Read the data
-test al, 0x80 ; Is there an update in process?
-jne rtc_poll ; If so then keep polling
-mov al, 0x0A ; Status Register A
-out 0x70, al ; Select the address
-mov al, 00100110b ; UIP (0), RTC@32.768KHz (010), Rate@1024Hz (0110)
-out 0x71, al ; Write the data
+	mov al, 0x0A ; Status Register A
+	out 0x70, al ; Select the address
+	in al, 0x71 ; Read the data
+	test al, 0x80 ; Is there an update in process?
+	jne rtc_poll ; If so then keep polling
+	mov al, 0x0A ; Status Register A
+	out 0x70, al ; Select the address
+	mov al, 00100110b ; UIP (0), RTC@32.768KHz (010), Rate@1024Hz (0110)
+	out 0x71, al ; Write the data
 ; Remap PIC IRQ's
-mov al, 00010001b ; begin PIC 1 initialization
-out 0x20, al
-mov al, 00010001b ; begin PIC 2 initialization
-out 0xA0, al
-mov al, 0x20 ; IRQ 0-7: interrupts 20h-27h
-out 0x21, al
-mov al, 0x28 ; IRQ 8-15: interrupts 28h-2Fh
-out 0xA1, al
-mov al, 4
-out 0x21, al
-mov al, 2
-out 0xA1, al
-mov al, 1
-out 0x21, al
-out 0xA1, al
+	mov al, 00010001b ; begin PIC 1 initialization
+	out 0x20, al
+	mov al, 00010001b ; begin PIC 2 initialization
+	out 0xA0, al
+	mov al, 0x20 ; IRQ 0-7: interrupts 20h-27h
+	out 0x21, al
+	mov al, 0x28 ; IRQ 8-15: interrupts 28h-2Fh
+	out 0xA1, al
+	mov al, 4
+	out 0x21, al
+	mov al, 2
+	out 0xA1, al
+	mov al, 1
+	out 0x21, al
+	out 0xA1, al
 ; Mask all PIC interrupts
-mov al, 0xFF
-out 0x21, al
-out 0xA1, al
-wbinvd
+	mov al, 0xFF
+	out 0x21, al
+	out 0xA1, al
+	wbinvd
 ; Enable Floating Point
-mov eax, cr0
-bts eax, 1 ; Set Monitor co-processor (Bit 1)
-btr eax, 2 ; Clear Emulation (Bit 2)
-mov cr0, eax
+	mov eax, cr0
+	bts eax, 1 ; Set Monitor co-processor (Bit 1)
+	btr eax, 2 ; Clear Emulation (Bit 2)
+	mov cr0, eax
 ; Enable SSE
-mov eax, cr4
-bts eax, 9 ; Set Operating System Support for FXSAVE and FXSTOR instructions (Bit 9)
-bts eax, 10 ; Set Operating System Support for Unmasked SIMD Floating-Point Exceptions (Bit 10)
-mov cr4, eax
+	mov eax, cr4
+	bts eax, 9 ; Set Operating System Support for FXSAVE and FXSTOR instructions (Bit 9)
+	bts eax, 10 ; Set Operating System Support for Unmasked SIMD Floating-Point Exceptions (Bit 10)
+	mov cr4, eax
 ; Enable Math Co-processor
-finit
-mov dword [gs:0x38], "C D "
+	finit
+	mov dword [gs:0x38], "C D "
 ; move gdt to 90000h
-mov    edi,0x90000
-mov    esi,gdt32
-mov    ecx,18
-rep    movsd
-mov   dword [gdt_base],0x90000
-lgdt [GDTR32]
-jmp near 4000h
+	mov    edi,0x90000
+	mov    esi,gdt32
+	mov    ecx,18
+	rep    movsd
+	mov   dword [gdt_base],0x90000
+	lgdt [GDTR32]
+	jmp near 4000h
 
 ;times 446-$+$$ db 0
 ; False partition table entry required by some BIOS vendors.
