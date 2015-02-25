@@ -18,26 +18,26 @@ algn = $ - $$
 end virtual
 db algn dup 0
 }
-ORG 4000h
+    ORG 4000h
 ;----------------------------
 ;entry point
 ;----------------------------
-USE32
+    USE32
 
-mov dword [gs:0x0], "J L "
-    mov eax,msg_entry
-    call    _push
-    call    _push
+        mov dword [gs:0x0], "J L "
+        mov eax,msg_entry
+        call    _push
+        call    _push
    ;
-    mov  eax,1
-    call _push
-    call _load
+        mov  eax,1
+        call _push
+        call _load
 
-mov dword [gs:0x4], "O O "
-    mov eax,nfa_0
-    call    _push
-    call _typez
-jmp $
+        mov dword [gs:0x4], "O O "
+        mov eax,nfa_0
+        call    _push
+        call _typez
+        jmp $
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
@@ -78,19 +78,19 @@ ret_:
         pop eax
         ret
 ;----------------------------
-align 4
+        align 4
 nfa_3:
-db 4,"Push",0
+        db 4,"Push",0
 alignhe
-dd nfa_2
-dd _push
+        dd nfa_2
+        dd _push
 _push:
-mov ebx,[stack_pointer]
-add ebx , cell_size
-and ebx , [data_stack_mask]
-mov [ ebx+data_stack_base ] , eax
-mov [stack_pointer],ebx
-ret
+        mov ebx,[stack_pointer]
+        add ebx , cell_size
+        and ebx , [data_stack_mask]
+        mov [ ebx+data_stack_base ] , eax
+        mov [stack_pointer],ebx
+        ret
 data_stack_mask dd 0x00ffff
 stack_pointer dd 0
 ;----------------------------
