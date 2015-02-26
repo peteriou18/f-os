@@ -18,26 +18,26 @@ algn = $ - $$
 end virtual
 db algn dup 0
 }
-    ORG 4000h
+ORG 4000h
 ;----------------------------
 ;entry point
 ;----------------------------
-    USE32
+USE32
 
-        mov dword [gs:0x0], "J L "
-        mov eax,msg_entry
-        call    _push
-        call    _push
+mov dword [gs:0x0], "J L "
+    mov eax,msg_entry
+    call    _push
+    call    _push
    ;
-        mov  eax,1
-        call _push
-        call _load
+    mov  eax,1
+    call _push
+    call _load
 
-        mov dword [gs:0x4], "O O "
-        mov eax,nfa_0
-        call    _push
-        call _typez
-        jmp $
+mov dword [gs:0x4], "O O "
+    mov eax,nfa_0
+    call    _push
+    call _typez
+jmp $
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
@@ -81,7 +81,7 @@ ret_:
         align 4
 nfa_3:
         db 4,"Push",0
-alignhe
+        alignhe
         dd nfa_2
         dd _push
 _push:
@@ -122,33 +122,33 @@ nfa_5:
 here_value:
         dd _here
 ;----------------------------
-align 4
+        align 4
 nfa_6:
-db 9,"constant#",0
-alignhe
-dd nfa_5
-constantb_:
-dd _constant
-dd _constant
+        db 9,"constant#",0
+        alignhe
+        dd nfa_5
+        constantb_:
+        dd _constant
+        dd _constant
 _constant:
-mov eax,[eax+4]
-call _push
-ret
+        mov eax,[eax+4]
+        call _push
+        ret
 ;----------------------------
-align 4
+        align 4
 nfa_7:
-db 3,"Pop",0
-alignhe
-dd nfa_6
-dd _pop
+        db 3,"Pop",0
+        alignhe
+        dd nfa_6
+        dd _pop
 _pop:
-mov ebx,[stack_pointer]
-mov eax , [ ebx+data_stack_base]
-sub ebx , 4
-and ebx , [data_stack_mask]
-mov [stack_pointer],ebx
-mov ebx,10h
-ret
+        mov ebx,[stack_pointer]
+        mov eax , [ ebx+data_stack_base]
+        sub ebx , 4
+        and ebx , [data_stack_mask]
+        mov [stack_pointer],ebx
+        mov ebx,10h
+        ret
 ;----------------------------
         align 4
 nfa_8:
@@ -158,6 +158,8 @@ nfa_8:
         dd _interpret
 _interpret:
         call _parse
+;mov  esi,_here
+;call os_output
         mov eax,context_value
         call _push
         call _fetch
@@ -172,6 +174,7 @@ nfa_9:
         dd nfa_8
         dd _parse
 _parse:
+        mov     eax,[block_value]
         mov eax,[block_value+8] ;input buffer
         call _push
         mov eax,[here_value] ;here
@@ -238,18 +241,18 @@ _word2:
          mov dword [ebx+4],054h ;"T",0
          ret
 ;----------------------------
-align 4
+        align 4
 nfa_12:
-db 1,"@",0
-alignhe
-dd nfa_11
+        db 1,"@",0
+        alignhe
+        dd nfa_11
 fetch_:
-dd _fetch
+        dd _fetch
 _fetch:
-call _pop
-mov eax,[eax]
-call _push
-ret
+        call _pop
+        mov eax,[eax]
+        call _push
+        ret
 ;----------------------------
         align 4
 nfa_13:
@@ -335,17 +338,17 @@ _execute:
         mov dword [gs:28], "E x "
         ret
 ;----------------------------
-align 4
+        align 4
 nfa_15:
-db 5,"BLOCK",0
-alignhe
-dd nfa_14
+        db 5,"BLOCK",0
+        alignhe
+        dd nfa_14
 block_:
-dd _variable_code
+        dd _variable_code
 block_value:
-dd 0 ;block number
-dd 0 ;size of buffer
-dd 0 ;address of input buffer
+        dd 1 ;block number
+        dd 8192 ;size of buffer
+        dd 2000h ;address of input buffer
 ;----------------------------
 align 4
 nfa_16:
@@ -369,7 +372,7 @@ dd _variable_code
 _in_value:
 dd 0
 ;----------------------------
-align 4
+        align 4
 nfa_18:
         db 4,"LOAD",0
         alignhe
@@ -394,6 +397,12 @@ _load:
         pop dword [block_value+cell_size+cell_size]
         pop dword [block_value+cell_size]
         pop dword [block_value]
+
+        mov     eax,[block_value]
+        call    _push
+        mov     eax,[block_value+cell_size+cell_size]
+        call    _push
+        call    _rdblock
         ret
 ;----------------------------
         align 4
@@ -408,25 +417,25 @@ buffer_:
 align 4
 
 nfa_20:
-db 7,"rdblock",0
-alignhe
-dd nfa_19
-dd _rdblock
+        db 7,"rdblock",0
+        alignhe
+        dd nfa_19
+        dd _rdblock
 _rdblock:
-call _pop ;bufadr
-mov [offset_data],ax
-xor edx,edx
-call _pop ; block
-shld edx,eax,4
-shl eax,4
-mov [sect],eax
-mov [sect+2],edx
-pushad
-mov eax,rdsec1
-and eax,0ffffh
-mov [rmback],eax
-mov dword [pmback],rdsec2
-jmp switch_to_rm
+        call _pop ;bufadr
+        mov [offset_data],ax
+        xor edx,edx
+        call _pop ; block
+        shld edx,eax,4
+        shl eax,4
+        mov [sect],eax
+        mov [sect+4],edx
+        pushad
+        mov eax,rdsec1
+        and eax,0ffffh
+        mov [rmback],eax
+        mov dword [pmback],rdsec2
+        jmp switch_to_rm
 
 USE16
 rdsec1:
@@ -978,6 +987,7 @@ number2:
 
 macro alignhe20
 { virtual
+       align 8192
        align 4096
        align 2048
        align 1024
@@ -988,11 +998,11 @@ macro alignhe20
     }
 
  alignhe20
- ;block 1
- db "  0x 4081  TYPEZ    EXIT " ,0
+ ;block 1        badword f32 min...
+ db "  0x 4081  TYPEZ TYPEZ  0x 2 LOAD  0x BADFACE HEX.   EXIT " ,0
 
  alignhe20
- ; block 2
- db "  0x 4045  TYPEZ 0x CCCCC  HEX. 0x 40C1 TYPEZ EXIT ",0
+ ; block 2    f32 mina... cccc push
+ db "  0x 4045  TYPEZ 0x CCCCC  HEX.    0x 40C1 TYPEZ  EXIT ",0
 
  alignhe20
