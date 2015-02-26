@@ -11,6 +11,7 @@
 ;
 cell_size = 4 ; 32bit
 data_stack_base = 100000h
+
 macro alignhe
 { virtual
 align 4
@@ -18,13 +19,13 @@ algn = $ - $$
 end virtual
 db algn dup 0
 }
-ORG 4000h
+    ORG 4000h
 ;----------------------------
 ;entry point
 ;----------------------------
-USE32
+    USE32
 
-mov dword [gs:0x0], "J L "
+    mov dword [gs:0x0], "J L "
     mov eax,msg_entry
     call    _push
     call    _push
@@ -33,11 +34,11 @@ mov dword [gs:0x0], "J L "
     call _push
     call _load
 
-mov dword [gs:0x4], "O O "
+    mov dword [gs:0x4], "O O "
     mov eax,nfa_0
     call    _push
     call _typez
-jmp $
+    jmp $
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
