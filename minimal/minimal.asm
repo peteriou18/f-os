@@ -19,26 +19,26 @@ algn = $ - $$
 end virtual
 db algn dup 0
 }
-    ORG 4000h
+        ORG 4000h
 ;----------------------------
 ;entry point
 ;----------------------------
-    USE32
+        USE32
 
-    mov dword [gs:0x0], "J L "
-    mov eax,msg_entry
-    call    _push
-    call    _push
+        mov dword [gs:0x0], "J L "
+        mov eax,msg_entry
+        call    _push
+        call    _push
    ;
-    mov  eax,1
-    call _push
-    call _load
+        mov  eax,1
+        call _push
+        call _load
 
-    mov dword [gs:0x4], "O O "
-    mov eax,nfa_0
-    call    _push
-    call _typez
-    jmp $
+        mov dword [gs:0x4], "O O "
+        mov eax,nfa_0
+        call    _push
+        call _typez
+        jmp $
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
@@ -148,7 +148,6 @@ _pop:
         sub ebx , 4
         and ebx , [data_stack_mask]
         mov [stack_pointer],ebx
-        mov ebx,10h
         ret
 ;----------------------------
         align 4
@@ -173,6 +172,7 @@ nfa_9:
         db 5,"PARSE",0
         alignhe
         dd nfa_8
+parse_:
         dd _parse
 _parse:
         mov     eax,[block_value]
@@ -260,6 +260,7 @@ nfa_13:
         db 5,"SFIND",0
         alignhe
         dd nfa_12
+sfind_:
         dd _sfind
 _sfind:
         call _pop
@@ -321,9 +322,7 @@ _find4:
         ;sub eax,8
 
         call _push
-         mov dword [gs:24], "b w "
-
-
+        mov dword [gs:24], "b w "
         ret ; badword
 ;----------------------------
         align 4
@@ -351,27 +350,27 @@ block_value:
         dd 8192 ;size of buffer
         dd 2000h ;address of input buffer
 ;----------------------------
-align 4
+        align 4
 nfa_16:
-db 9,"variable#",0
-alignhe
-dd nfa_15
+        db 9,"variable#",0
+        alignhe
+        dd nfa_15
 variableb_:
-dd _constant
-dd _variable_code
+        dd _constant
+        dd _variable_code
 _variable_code:
-add eax,cell_size
-call _push
-ret
+        add eax,cell_size
+        call _push
+        ret
 ;----------------------------
-align 4
+        align 4
 nfa_17:
-db 3,">IN",0
-alignhe
-dd nfa_16
-dd _variable_code
+        db 3,">IN",0
+        alignhe
+        dd nfa_16
+        dd _variable_code
 _in_value:
-dd 0
+        dd 0
 ;----------------------------
         align 4
 nfa_18:
@@ -438,11 +437,11 @@ _rdblock:
         mov dword [pmback],rdsec2
         jmp switch_to_rm
 
-USE16
+        USE16
 rdsec1:
 
-        mov dword [gs:32],"D S "
-        mov dl,80h ;[7c00h]
+
+        mov dl,[7c00h]
         mov si,dap_p
         mov ah,42h
         int 13h
@@ -451,7 +450,7 @@ mov dword [gs:36],"E r "
 rdsec3:
 mov dword [gs:40],"D G "
 
-jmp switch_to_pm
+        jmp switch_to_pm
 
 dap_p:
 db 16
@@ -467,22 +466,20 @@ dd 16 ;  number of sector
 dd 0
 
 
-USE32
+        USE32
 rdsec2:
-popad
-
-
-ret
+        popad
+        ret
 
 ;----------------------------
         align 4
         USE32
 
 nfa_21:
-      db        5,"TYPEZ",0
-      alignhe
-      dd nfa_20
-      dd _typez
+         db        5,"TYPEZ",0
+         alignhe
+         dd nfa_20
+         dd _typez
 _typez:
         call    _pop
         mov     esi,eax
@@ -519,82 +516,84 @@ prtstr3:
         ret
 ; USE32
 ;----------------------------
-align 4
-USE16
-switch_to_pm:
-cli
+        align 4
+        USE16
+        switch_to_pm:
+        cli
 
-mov eax, cr0
-or al, 0x01 ; Set protected mode bit
-mov cr0, eax
-wbinvd
+        mov eax, cr0
+        or al, 0x01 ; Set protected mode bit
+        mov cr0, eax
+        wbinvd
 
 
-jmp far 8:pm2
+        jmp far 8:pm2
 
 esp_save dd 0
-USE32
+         USE32
 pm2:
 
-mov eax, 16 ; load 4 GB data descriptor
-mov ds, ax ; to all data segment registers
-mov es, ax
-mov fs, ax
+        mov eax, 16 ; load 4 GB data descriptor
+        mov ds, ax ; to all data segment registers
+        mov es, ax
+        mov fs, ax
 
-mov ss, ax
-mov eax,40h
-mov gs,ax
+        mov ss, ax
+        mov eax,40h
+        mov gs,ax
 
-lidt [idtr]
-call remap_irq_pm
-call unmask_irqs
-mov esp,01100h-36
-popad
-mov esp,[esp_save]
-sti
+        lidt [idtr]
+        call remap_irq_pm
+        call unmask_irqs
+        mov esp,01100h-36
+        popad
+        mov esp,[esp_save]
+        sti
 
-jmp dword [pmback]
+        jmp dword [pmback]
 ;----------------------------
-align 4
+        align 4
 switch_to_rm:
-cli
-mov [esp_save],esp
-mov esp,01100h
-pushad
-jmp 30h:rm3
-nop
-USE16
+        cli
+        mov [esp_save],esp
+        mov esp,01100h
+        pushad
+        jmp 30h:rm3
+        align 4
+        USE16
 rm3:
-mov eax,38h
-mov ds,ax
-mov es,ax
-mov ss,ax
-mov fs,ax
-mov ax,40h
-mov gs,ax
-mov eax, cr0
-and al, 0xfe
+        mov eax,38h
+        mov ds,ax
+        mov es,ax
+        mov ss,ax
+        mov fs,ax
+        mov ax,40h
+        mov gs,ax
+        mov eax, cr0
+        and al, 0xfe
 ; clear protected mode bit
-mov cr0, eax
-wbinvd
-jmp 0:start163
+        mov cr0, eax
+        wbinvd
+        jmp 0:start163
+        align 4
+
 start163:
-xor ax,ax
-mov ds,ax
-mov es,ax
-mov ss,ax
-mov fs,ax
-mov ax,0b800h
-mov gs,ax
-mov sp,1500h
-call remap_irq_real
-lidt [rlidt]
-sti
-call unmask_irqs
-jmp far [rmback]
-USE32
+        xor ax,ax
+        mov ds,ax
+        mov es,ax
+        mov ss,ax
+        mov fs,ax
+        mov ax,0b800h
+        mov gs,ax
+        mov sp,1500h
+        call remap_irq_real
+        lidt [rlidt]
+        sti
+        call unmask_irqs
+        jmp far [rmback]
+        USE32
 ;----------------------------
-align 4
+        align 4
 rmback dd 0
 pmback dd 0
 pmback_offset dd 0
@@ -603,66 +602,72 @@ dd 500h
 rlidt: dw 3ffh
 dd 0
 ;----------------------------
-align 4
+        align 4
 remap_irq_pm:
 ; Remap PIC IRQ's
-mov al, 00010001b ; begin PIC 1 initialization
-out 0x20, al
-mov al, 00010001b ; begin PIC 2 initialization
-out 0xA0, al
-mov al, 0x20 ; IRQ 0-7: interrupts 20h-27h
-out 0x21, al
-mov al, 0x28 ; IRQ 8-15: interrupts 28h-2Fh
-out 0xA1, al
-mov al, 4
-out 0x21, al
-mov al, 2
-out 0xA1, al
-mov al, 1
-out 0x21, al
-out 0xA1, al
+        mov al, 00010001b ; begin PIC 1 initialization
+        out 0x20, al
+        mov al, 00010001b ; begin PIC 2 initialization
+        out 0xA0, al
+        mov al, 0x20 ; IRQ 0-7: interrupts 20h-27h
+        out 0x21, al
+        mov al, 0x28 ; IRQ 8-15: interrupts 28h-2Fh
+        out 0xA1, al
+        mov al, 4
+        out 0x21, al
+        mov al, 2
+        out 0xA1, al
+        mov al, 1
+        out 0x21, al
+        out 0xA1, al
 ; Mask all PIC interrupts
-mov al, 0xFF
-out 0x21, al
-out 0xA1, al
-ret
+        mov al, 0xFF
+        out 0x21, al
+        out 0xA1, al
+        ret
 ;----------------------------
-align 4
+        align 4
 unmask_irqs:
 ; Enable specific interrupts
-in al, 0x21
-mov al, 11111001b ; Enable Cascade, Keyboard
-out 0x21, al
-in al, 0xA1
-mov al, 11111110b ; Enable RTC
-out 0xA1, al
-ret
+        in al, 0x21
+        mov al, 11111001b ; Enable Cascade, Keyboard
+        out 0x21, al
+        in al, 0xA1
+        mov al, 11111110b ; Enable RTC
+        out 0xA1, al
+        ret
 ;----------------------------
-align 4
+        align 4
 remap_irq_real:
 ; Remap PIC IRQ's
-mov al, 00010001b ; begin PIC 1 initialization
-out 0x20, al
-mov al, 00010001b ; begin PIC 2 initialization
-out 0xA0, al
-mov al, 0x8 ; IRQ 0-7: interrupts 8h-0fh
-out 0x21, al
-mov al, 0x70 ; IRQ 8-15: interrupts 70h-78h
-out 0xA1, al
-mov al, 4
-out 0x21, al
-mov al, 2
-out 0xA1, al
-mov al, 1
-out 0x21, al
-out 0xA1, al
+        mov al, 00010001b ; begin PIC 1 initialization
+        out 0x20, al
+        mov al, 00010001b ; begin PIC 2 initialization
+        out 0xA0, al
+        mov al, 0x8 ; IRQ 0-7: interrupts 8h-0fh
+        out 0x21, al
+        mov al, 0x70 ; IRQ 8-15: interrupts 70h-78h
+        out 0xA1, al
+        mov al, 4
+        out 0x21, al
+        mov al, 2
+        out 0xA1, al
+        mov al, 1
+        out 0x21, al
+        out 0xA1, al
 ; Mask all PIC interrupts
-mov al, 0xFF
-out 0x21, al
-out 0xA1, al
-ret
+        mov al, 0xFF
+        out 0x21, al
+        out 0xA1, al
+        ret
 ;----------------------------
-align 4
+        align 4
+ nfa_last:
+ nfa_35:
+        db      4,"DUMP",0
+        alignhe
+        dd      nfa_34
+        dd      _dump
 _dump:
         call    _cr
         call    _pop
@@ -672,7 +677,7 @@ _dump:
         call    _2hb1
         pop     eax
         push    eax
-         movdqu     xmm0,[eax+8]
+        movdqu     xmm0,[eax+8]
         call    _hex_dot3
         call    _2hb1
         call    _cr
@@ -756,6 +761,7 @@ nfa_22:
         db        4,"HEX.",0
         alignhe
         dd nfa_21
+hex_dot_:
         dd _hex_dot
 _hex_dot:
         call    _hex_dot1
@@ -894,10 +900,7 @@ _0xd:
    ;     int3
         ret
 ;----------------------------
-align 4
-
- nfa_last:
-
+        align 4
 nfa_23:
         db        2,"0x",0
         alignhe
@@ -984,7 +987,222 @@ number2:
         mov     dword [_in_value],0
         ret
 ;--------------------
- _here:
+        align 4
+
+nfa_24:
+        db      1,",",0
+        alignhe
+        dd nfa_23
+        dd _comma
+_comma:
+        mov     edx,[here_value]
+        call    _pop    
+        mov     [edx],eax
+        add     dword [here_value],cell_size
+        ret
+
+;--------------------
+        align 4
+
+nfa_25:
+        db      6,"HEADER",0
+        alignhe
+        dd nfa_24
+        dd _header
+_header:
+        call    _parse
+        mov     esi,[here_value]
+        call    nlink2          ;esi - address of lf
+        call    latest_code2    ;eax - latest
+
+        mov     [esi],eax       ;fill link field
+        mov     ebx,[here_value]
+        mov     eax,[current_value]
+        mov     [eax],ebx       ; here to latest
+        add     esi,cell_size
+        mov     [here_value],esi
+
+        ret
+
+;--------------------
+        align 4
+
+nlink2:
+        movzx   ebx,byte [esi]
+        inc     bl
+        and     bl,07Ch
+        add     esi,ebx
+        add     esi,4
+        ret
+
+;--------------------
+        align 4
+
+latest_code2:
+        mov     eax,[current_value]
+        mov     eax,[eax] ; eax = latest nfa of curent vocabulary
+        ret
+;--------------------
+        align 4
+nfa_26:
+        db      1,"'",0
+        alignhe
+        dd      nfa_25
+        dd      _addr_interp
+        dd      parse_
+      ;  dd      context_
+      ;  dd      fetch_
+      ;  dd      hex_dot_
+
+        dd      context_
+        dd      fetch_
+        dd      sfind_
+        dd      ret_
+
+;----------------------------
+        align 4
+
+nfa_27:
+        db 7,"CURRENT",0
+        alignhe
+        dd nfa_26
+current_:
+        dd _variable_code
+current_value:
+        dd f32_list
+;--------------------------------
+        align 4
+
+_addr_interp:
+        add eax,4
+        push eax
+        mov eax,[eax]
+        call near dword [eax]
+        pop eax
+        jmp _addr_interp
+
+;--------------------------------
+        align 4
+
+nfa_28:
+        db      5,"CELL+",0
+        alignhe
+        dd      nfa_27
+cellp_:
+        dd      _cellp
+_cellp:
+        call    _pop
+        add     eax,cell_size
+        call    _push
+        ret
+;--------------------------------
+        align 4
+
+nfa_29:
+        db      5,"ALIGN",0
+        alignhe
+        dd      nfa_28
+align_:
+        dd      _align
+
+_align:
+        mov     eax,[here_value]
+        and    eax,3
+        setne  al
+        and    dword [here_value],0fffffffch
+        shl    al,2
+        add    [here_value],eax
+        ret
+
+;--------------------------------
+        align 4
+
+nfa_30:
+        db      9,"ASSEMBLER",0
+        alignhe
+        dd     nfa_29
+        dd     _vocabulary
+        dd     _nfa_assembler_last
+;----------------------------
+        align 4
+nfa_31:
+        db 7,"BADWORD",0
+        alignhe
+        dd nfa_last ; zero LFA. End of search or link winth another vocabulary if not zero
+        dd _vect
+        dd abort_
+
+;----------------------------
+        align 4
+nfa_32:
+
+        db 4,"EXIT",0
+        alignhe
+        dd nfa_31
+        dd _ret
+;----------------------------
+        align 4
+_nfa_assembler_last:
+nfa_33:
+        db      6,"opcode",0
+        alignhe
+        dd      nfa_32
+        dd      _opcode_code
+_opcode_code:
+        call    _header
+        mov     eax,[here_value]
+        mov     dword [eax],op_compile_code
+        call _pop
+        mov cl,al
+        mov edx,[here_value]
+        add edx,4
+        mov [edx],al
+        inc edx
+        and ecx,0ffh
+        add dword [here_value],16 ;ecx
+       ; inc dword [here_value]
+oc1:
+        call _pop
+        mov [edx],al
+        inc edx
+        loop oc1
+        call _align
+        ret
+
+        align 4
+
+op_compile_code:
+        movzx ecx,byte [eax+cell_size]
+        inc eax
+        mov edx,[here_value]
+        add [here_value],ecx
+occ1:
+        mov bl,[eax+cell_size]
+        mov [edx],bl
+        inc eax
+        inc edx
+        dec cl
+        jne occ1
+        ret
+;----------------------------
+        align 4
+
+nfa_34:
+        db      1,"!",0
+        alignhe
+        dd      nfa_30
+        dd      _store
+
+_store:
+        call    _pop    ; address
+        mov             edx,eax
+        call    _pop    ;data
+        mov             [edx],eax
+        ret
+;----------------------------
+        align 4
+
+_here:
 
 macro alignhe20
 { virtual
@@ -999,11 +1217,34 @@ macro alignhe20
     }
 
  alignhe20
- ;block 1        badword f32 min...
- db "  0x 4081  TYPEZ TYPEZ  0x 2 LOAD  0x BADFACE HEX.   EXIT " ,0
+ ;block 1
+
+ db     "  HERE HEX.  ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !   "
+ db     "       0x C3 0x 1 opcode ret                "
+ db     "       0x BA 0x 1 opcode mov_edx,#          "
+ db     " 0x D2 0x FF 0x 2 opcode call_edx           "
+ db     " 0x C5 0x 89 0x 2 opcode mov_ebp,eax        "
+ db     " 0x C5 0x 2B 0x 2 opcode sub_eax,ebp        "
+
+ db     " 0x 2 LOAD  0x 66666666 0x 11111111 - HEX.  "
+ db     " 0x 4000 0x 6000 - HEX. EXIT "
 
  alignhe20
- ; block 2    f32 mina... cccc push
- db "  0x 4045  TYPEZ 0x CCCCC  HEX.    0x 40C1 TYPEZ  EXIT ",0
+ ; block 2   - "minus" code
+ db "    HERE HEX. HERE    "
+ db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
+ db " HEADER -  "                     ;name+link fields
+ db " HERE CELL+ ,   "               ; code field
+ db " mov_edx,# ' Pop ,   "    ;parameters field
+ db " call_edx "
+ db " mov_ebp,eax "
+ db " call_edx "
+ db " sub_eax,ebp "
+ db " mov_edx,#  ' Push , "
+ db " call_edx  "
+ db " ret "
+ db " ALIGN "
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+ db " EXIT " ,0
 
  alignhe20
