@@ -10,7 +10,7 @@
 ;90000-GDT
 ;
 cell_size = 4 ; 32bit
-data_stack_base = 100000h
+data_stack_base = 8000h
 
 macro alignhe
 { virtual
@@ -28,8 +28,13 @@ db algn dup 0
         mov dword [gs:0x0], "J L "
         mov eax,msg_entry
         call    _push
+
+   ;   rdtsc
         call    _push
-   ;
+        mov     eax,edx
+        call    _push
+        call    _2hex_dot
+
         mov  eax,1
         call _push
         call _load
@@ -38,7 +43,16 @@ db algn dup 0
         mov eax,nfa_0
         call    _push
         call _typez
+        rdtsc
+        call    _push
+        mov     eax,edx
+        call    _push
+        call    _2hex_dot
         jmp $
+        mov eax,0xAAAAAAAA
+        mov edx,0xBBBBBBBB
+        call    edx
+
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
@@ -1218,30 +1232,29 @@ macro alignhe20
 
  alignhe20
  ;block 1
-
- db     "  HERE HEX.  ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !   "
+ db     " TYPEZ "
+ db     "  HERE   ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !   "
  db     "       0x C3 0x 1 opcode ret                "
  db     "       0x BA 0x 1 opcode mov_edx,#          "
+ db     "       0x B8 0x 1 opcode mov_eax,#          "
  db     " 0x D2 0x FF 0x 2 opcode call_edx           "
  db     " 0x C5 0x 89 0x 2 opcode mov_ebp,eax        "
  db     " 0x C5 0x 2B 0x 2 opcode sub_eax,ebp        "
-
- db     " 0x 2 LOAD  0x 66666666 0x 11111111 - HEX.  "
- db     " 0x 4000 0x 6000 - HEX. EXIT "
+ db     " 0x 2 LOAD    "
+ db     " 0x 4356 0x 1234 - HEX. HEX. EXIT "
 
  alignhe20
  ; block 2   - "minus" code
- db "    HERE HEX. HERE    "
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
  db " HEADER -  "                     ;name+link fields
  db " HERE CELL+ ,   "               ; code field
- db " mov_edx,# ' Pop ,   "    ;parameters field
+ db " mov_edx,# ' Pop @ ,   "    ;parameters field
  db " call_edx "
  db " mov_ebp,eax "
  db " call_edx "
- db " sub_eax,ebp "
- db " mov_edx,#  ' Push , "
- db " call_edx  "
+ db " sub_eax,ebp HERE "
+ db " mov_edx,#  ' Push @ , "
+ db " call_edx "
  db " ret "
  db " ALIGN "
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
