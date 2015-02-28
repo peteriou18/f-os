@@ -17,3 +17,6 @@ Difference wint traditional Forths:
 2) Number translation withdrawn from interpretator to special word 0x - interpret next word as hex number.
 ...
 3) some else
+
+
+Minimal-debug version working system. It has not obligatory words used for debugging  ( TYPEZ HEX. DUMP )
