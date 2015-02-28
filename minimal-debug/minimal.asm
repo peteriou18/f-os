@@ -29,7 +29,7 @@ db algn dup 0
         mov eax,msg_entry
         call    _push
 
-   ;   rdtsc
+        rdtsc
         call    _push
         mov     eax,edx
         call    _push
