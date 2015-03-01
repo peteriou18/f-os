@@ -19,4 +19,4 @@ Difference wint traditional Forths:
 3) some else
 
 
-Minimal-debug version working system. It has not obligatory words used for debugging  ( TYPEZ HEX. DUMP )
+Minimal-debug version working system. It has not obligatory words used for debugging  ( HEX. DUMP )
