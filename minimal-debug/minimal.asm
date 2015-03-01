@@ -1240,13 +1240,28 @@ macro alignhe20
  db     " 0x D2 0x FF 0x 2 opcode call_edx           "
  db     " 0x C5 0x 89 0x 2 opcode mov_ebp,eax        "
  db     " 0x C5 0x 2B 0x 2 opcode sub_eax,ebp        "
+ db     "       0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
  db     " 0x 2 LOAD    "
  db     " 0x 4356 0x 1234 - HEX. HEX. EXIT "
 
  alignhe20
  ; block 2   - "minus" code
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
- db " HEADER -  "                     ;name+link fields
+
+ db " HEADER   CELL-  HERE CELL+ ,  "
+ db " mov_edx,#  ' Pop @ , "
+ db " call_edx "
+ db " sub_eax,4 "
+ db " mov_edx,#  ' Push @ , "
+ db " call_edx "
+ db " ret "
+ db " CURRENT @ CONTEXT ! "
+
+ db " HERE HEX.   HERE CELL- HEX. "
+
+ db " HERE HEADER  hdv variable#  , 0x 0 , 0x 0 , 0x 0 , 0x 0 , DUMP   "
+ db "  FORTH32 CONTEXT !  hdv HEX.  hdv @ HEX. "
+ db " ASSEMBLER CONTEXT ! HEADER -  "                     ;name+link fields
  db " HERE CELL+ ,   "               ; code field
  db " mov_edx,# ' Pop @ ,   "    ;parameters field
  db " call_edx "
