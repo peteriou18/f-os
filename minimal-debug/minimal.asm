@@ -676,7 +676,7 @@ remap_irq_real:
         ret
 ;----------------------------
         align 4
- nfa_last:
+
  nfa_35:
         db      4,"DUMP",0
         alignhe
@@ -1216,6 +1216,61 @@ _store:
 ;----------------------------
         align 4
 
+nfa_36:
+        db      6,"UNLINK",0
+        alignhe
+        dd      nfa_35
+        dd      _unlink
+
+_unlink:
+        call    _badword_xt
+        call    _pop
+        mov      dword [eax-4],0
+        ret
+;----------------------------
+        align 4
+
+nfa_37:
+        db      10,"BADWORD-xt",0
+        alignhe
+        dd      nfa_36
+        dd      _badword_xt
+_badword_xt:
+        mov     edx,[here_value]
+        mov     dword [edx], 44414207h
+        mov     dword [edx+4],"WORD"
+        mov     dword [edx+8],0
+        call    _sfind
+        ret
+
+;----------------------------
+        align 4
+nfa_last:
+nfa_38:
+        db      4,"LINK",0
+        alignhe
+        dd      nfa_37
+        dd      _link
+_link:
+       ; call    _pop
+        ;call    _push
+        ;mov     ebp,[eax]
+        ;mov     eax,ebp
+        ;call    _push
+        ;call    _hex_dot
+        call    _pop
+
+        mov     ecx,[eax]
+        push    ecx
+        call    _badword_xt
+        call    _pop
+        pop     ebx
+        mov     dword [eax-4],ebx
+        ret
+;----------------------------
+        align 4
+
+
 _here:
 
 macro alignhe20
@@ -1232,8 +1287,9 @@ macro alignhe20
 
  alignhe20
  ;block 1
+ db     " FORTH32 HEX. FORTH32 @ HEX. ASSEMBLER DUMP ASSEMBLER UNLINK ASSEMBLER DUMP ASSEMBLER FORTH32 LINK ASSEMBLER DUMP EXIT "
  db     " TYPEZ "
- db     "  HERE   ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !   "
+ db     "  HERE   ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !    "
  db     "       0x C3 0x 1 opcode ret                "
  db     "       0x BA 0x 1 opcode mov_edx,#          "
  db     "       0x B8 0x 1 opcode mov_eax,#          "
@@ -1256,7 +1312,6 @@ macro alignhe20
  db " call_edx "
  db " ret "
  db " CURRENT @ CONTEXT ! "
-
  db " HERE HEX.   HERE CELL- HEX. "
 
  db " HERE HEADER  hdv variable#  , 0x 0 , 0x 0 , 0x 0 , 0x 0 , DUMP   "
