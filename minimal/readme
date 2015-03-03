@@ -1,0 +1,7 @@
+Welcome to the f-os wiki!
+
+Minimal is minimal wordset of forth system. This is system baremetal, loading from MBR. It working in flat PM 32 mode.  Filesystem very simpe based on 8192 bytes blocks, numbering 1 - 2^32-1. Block 0 mbr and kernel, further loading going from source code located in blocks 1 - 2^32-1.
+
+Kernel calls 1 LOAD word, where (in 1st block) present other LOADs.
+
+In this version of Forth numbers enters with spcecial words 0x (zero exs) 0xd (zero exs di) for only hexadecimal unsigned numbers single (32 bits) and double (64 bits) precision. 
