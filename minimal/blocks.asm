@@ -50,7 +50,7 @@ macro alignhe20
  db " ret "
 
  db " HEADER   hex_dot_value  variable#  , 0x 33323130 , 0x 40363534 , 0x 0 , 0x 0 ,  FORTH32 CONTEXT !  "
- db "  CURRENT @ CONTEXT !       hex_dot_value TYPEZ  "
+ db "  ASSEMBLER FORTH32 LINK      hex_dot_value TYPEZ  "
 
  db " HEADER (hex_dot) HERE CELL+ , "
  db "  ASSEMBLER CONTEXT ! "
@@ -91,12 +91,8 @@ macro alignhe20
  ; @ ( get last nfa in base vocab ) >R
  ; BADWORD SFIND CELL- ( find badword in linked vocab, get lfa )
  ; !  ( store )
- ; CURRENT ! ( save )   CONTEXT !
- ; ' BADWORD CELL- CURRENT @ !
-
  db " HEADER CHAIN  HERE CELL+ ,             "
  db " mov_edx,# ' Pop @ ,  call_edx          "
  db " mov_ebp,eax                            "
- db " call_edx                               "    ; pop
- db " mov_[],eax ' CONTEXT @
+ db " call_edx                               "
 
