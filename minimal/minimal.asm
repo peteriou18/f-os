@@ -663,7 +663,12 @@ nfa_22:
         db        3,"0xd",0
         alignhe
         dd nfa_21
-        dd _0xd
+        dd _0xd1
+_0xd1:
+        call    _number
+        call    _0xd
+        ret
+
 _0xd:
         call            _pop
         mov             ebx,[eax+8]
@@ -720,8 +725,7 @@ nfa_23:
         dd nfa_22
         dd _0x
 _0x:
-        call    _number
-        call    _0xd
+        call    _0xd1
         call    _pop
         ret
 
@@ -958,7 +962,7 @@ _store:
         ret
 ;--------------------------------
         align 4
-nfa_last:
+
 nfa_35:
         db      9,"ASSEMBLER",0
         alignhe
@@ -1026,22 +1030,77 @@ occ1:
         dec cl
         jne occ1
         ret
+;----------------------------
+        align 4
+
+nfa_39:
+        db      6,"UNLINK",0
+        alignhe
+        dd      nfa_35
+        dd      _unlink
+
+_unlink:
+        call    _badword_xt
+        call    _pop
+        mov      dword [eax-4],0
+        ret
 
 ;----------------------------
         align 4
 
+nfa_40:
+        db      10,"BADWORD-xt",0
+        alignhe
+        dd      nfa_39
+        dd      _badword_xt
+_badword_xt:
+        mov     edx,[here_value]
+        mov     dword [edx], 44414207h
+        mov     dword [edx+4],"WORD"
+        mov     dword [edx+8],0
+        call    _sfind
+        ret
+;----------------------------
+        align 4
+nfa_last:
+nfa_41:
+        db      4,"LINK",0
+        alignhe
+        dd      nfa_40
+        dd      _link
+_link:
+        call    _pop
+        mov     ecx,[eax]
+        push    ecx
+        call    _badword_xt
+        call    _pop
+        pop     ebx
+        mov     dword [eax-4],ebx
+        ret
+;----------------------------
+        align 4
+
 _here:
+        align   4096
+        db      0
+        align   2048
+        db      0
+        align   1024
+        db      0
+        align   512
+        db      20h
 
+;macro alignhe20
+;{ virtual
+ ;      align 8192
+  ;     align 4096
+   ;    align 2048
+    ;   align 1024
+     ;  align 512
+      ;  algn = $ - $$
+   ; end virtual
+   ; db algn dup 20h
+   ; }
 
-macro alignhe20
-{ virtual
-       align 8192
-       align 4096
-       align 2048
-       align 1024
-       align 512
-        algn = $ - $$
-    end virtual
-    db algn dup 20h
-    }
-  alignhe20
+  ;alignhe20
+  ;db 20h
