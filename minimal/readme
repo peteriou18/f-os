@@ -5,3 +5,10 @@ Minimal is minimal wordset of forth system. This is system baremetal, loading fr
 Kernel calls 1 LOAD word, where (in 1st block) present other LOADs.
 
 In this version of Forth numbers enters with spcecial words 0x (zero exs) 0xd (zero exs di) for only hexadecimal unsigned numbers single (32 bits) and double (64 bits) precision. 
+
+
+FORTH32  - base vocabulary.
+BADWORD - vector word with zero Link Field. End of search on vocabulary in wich BADWORD is. By default poits to ABORT.
+EXIT - exit. End of interpretation. 
+       This two words present in any vocabulary.
+ASSEMBLER - vocabulary for opcodes by default based on FORTH32
