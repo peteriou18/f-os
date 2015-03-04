@@ -17,5 +17,9 @@ ABORT - message wrong word. Called by BADWORD.
 HERE - top of codofile. Above HERE  free memory.
 constanst# - constant. Points to code for CONSTANT-defined words.
 INTERPRET - interpretator.
+PARSE - take word form input stream and place it to HERE as zero by 4 aligned string with counter.
+CONTEXT - variable where lays vocid of searching vocabulary.
+CURRENT - variable where lays vocid of appending vocabulary.
+ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning it. If at addra empty place to addrb  EXIT word.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
