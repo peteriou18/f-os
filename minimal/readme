@@ -1,4 +1,4 @@
-Welcome to the f-os wiki!
+Welcome to the f-os readme!
 
 Minimal is minimal wordset of forth system. This is system baremetal, loading from MBR. It working in flat PM 32 mode.  Filesystem very simpe based on 8192 bytes blocks, numbering 1 - 2^32-1. Block 0 mbr and kernel, further loading going from source code located in blocks 1 - 2^32-1.
 
