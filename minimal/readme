@@ -11,4 +11,11 @@ FORTH32  - base vocabulary.
 BADWORD - vector word with zero Link Field. End of search on vocabulary in wich BADWORD is. By default poits to ABORT.
 EXIT - exit. End of interpretation. 
        This two words present in any vocabulary.
+Push - push data on stack.
+Pop - pop data from stack.
+ABORT - message wrong word. Called by BADWORD.
+HERE - top of codofile. Above HERE  free memory.
+constanst# - constant. Points to code for CONSTANT-defined words.
+INTERPRET - interpretator.
+
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
