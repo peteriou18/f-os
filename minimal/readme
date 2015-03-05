@@ -21,5 +21,7 @@ PARSE - take word form input stream and place it to HERE as zero by 4 aligned st
 CONTEXT - variable where lays vocid of searching vocabulary.
 CURRENT - variable where lays vocid of appending vocabulary.
 ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning it. If at addra empty place to addrb  EXIT word.
+@  - fetch. 
+SFIND - finds word from HERE in CONTEXT from stack.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
