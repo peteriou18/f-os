@@ -22,6 +22,6 @@ CONTEXT - variable where lays vocid of searching vocabulary.
 CURRENT - variable where lays vocid of appending vocabulary.
 ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning it. If at addra empty place to addrb  EXIT word.
 @  - fetch. 
-SFIND - finds word from HERE in CONTEXT from stack.
+SFIND - finds word from HERE in CONTEXT from stack and put xt of this word to stack.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
