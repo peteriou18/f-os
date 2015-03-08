@@ -24,5 +24,6 @@ ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning
 @  - fetch. 
 SFIND - finds word from HERE in CONTEXT from stack and put xt of this word to stack.
 EXECUTE - execute xt from top of stack.
-
+BLOCK - variable-defined word,  puts on stack address of block structure.
+variable# - constant. 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
