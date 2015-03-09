@@ -27,5 +27,6 @@ EXECUTE - execute xt from top of stack.
 BLOCK - variable-defined word,  puts on stack address of block structure.
 variable# - constant. Points to code for VARIABLE-defined words.
 constant# - constant. Points to code for CONSTANT-defined words.
+>IN    - variable. Counts symbols in input stream.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
