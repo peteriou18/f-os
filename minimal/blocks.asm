@@ -26,13 +26,42 @@ macro alignhe20
  db     "                   0x BA 0x 1 opcode mov_edx,#                 "
  db     "                   0x B8 0x 1 opcode mov_eax,#                 "
  db     "                   0x A3 0x 1 opcode mov_[],eax                "
+ db     "                   0x A1 0x 1 opcode mov_eax,[]                "
+
+ db     "             0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
+ db     "             0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
+ db     "             0x 15 0x 8B 0x 2 opcode mov_edx,[]                "
+ db     "             0x 15 0x 89 0x 2 opcode mov_[],edx                "
+ db     "             0x 0D 0x 89 0x 2 opcode mov_[],ecx                "
+ db     "             0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
+
+ db     "             0x C8 0x 0F 0x 2 opcode bswap_eax                 "
+ db     "             0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
+ db     "             0x C9 0x 0F 0x 2 opcode bswap_ecx                 "
+ db     "             0x CA 0x 0F 0x 2 opcode bswap_edx                 "
+
  db     "             0x D2 0x FF 0x 2 opcode call_edx                  "
  db     "             0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
  db     "             0x C2 0x 89 0x 2 opcode mov_edx,eax               "
  db     "             0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
  db     "       0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
  db     " 0x 05 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm0,[]            "
+ db     " 0x 05 0x 7F 0x 0F 0x 66 0x 4 opcode movdqa_[],xmm0            "
  db     " 0x C9 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm1,xmm1            "
+ db     " 0x DB 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm3,xmm3            "
+ db     " 0x C1 0x EB 0x 0F 0x 66 0x 4 opcode por_xmm0,xmm1             "
+ db     " 0x D9 0x F8 0x 0F 0x 66 0x 4 opcode psubb_xmm3,xmm1           "
+ db     " 0x C3 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm3           "
+ db     " 0x C1 0x 60 0x 0F 0x 66 0x 4 opcode punpcklbw_xmm0,xmm1       "
+ db     " 0x C8 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm1,xmm0          "
+ db     " 0x 0D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm1,[]              "
+ db     " 0x 05 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm0,[]              "
+ db     " 0x 1D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm3,[]              "
+ db     " 0x 0D 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,[]             "
+ db     " 0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
+
+ db     " 0x 04 0x F0 0x 73 0x 0F 0x 66 0x 5 opcode psllq_xmm0,4        "
+ db     " 0x 04 0x D1 0x 73 0x 0F 0x 66 0x 5 opcode psrlq_xmm1,4        "
 
  db     " EXIT "
  db 0
@@ -49,22 +78,52 @@ macro alignhe20
  db " call_edx "
  db " ret "
 
- db " HEADER   hex_dot_value  variable#  , 0x 33323130 , 0x 40363534 , 0x 0 , 0x 0 ,  FORTH32 CONTEXT !  "
- db "  ASSEMBLER FORTH32 LINK      hex_dot_value TYPEZ  "
+ db " HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,   "
+ db " HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , , "
+ db " HEADER   efes           variable#  , 0xd 0F0F0F0F0F0F0F0F , , 0xd   0F0F0F0F0F0F0F0F , , "
+ db " HEADER   sevens         variable#  , 0xd 0707070707070707 , , 0xd   0707070707070707 , , "
+ db " HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , , "
+ db " HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,  "
+ db " ASSEMBLER FORTH32 LINK       "
 
  db " HEADER (hex_dot) HERE CELL+ , "
- db "  ASSEMBLER CONTEXT ! "
+ db "   "
  db " mov_edx,#  ' Pop @ , "
  db " call_edx "
  db " mov_[],eax   hex_dot_value  ,  "
  db " movdqa_xmm0,[]   hex_dot_value  , "
  db " pxor_xmm1,xmm1 "
+ db " punpcklbw_xmm0,xmm1 "
+ db " movdqa_xmm1,xmm0    "
+ db " pand_xmm1,[] efes , "
+ db " psllq_xmm0,4 "
+ db " pand_xmm0,[] efes , "
+ db " por_xmm0,xmm1     "
+ db " movdqa_xmm1,xmm0  "
+ db " paddb_xmm1,[] sixes , "
+ db " psrlq_xmm1,4  "
+ db " pand_xmm1,[]  efes , "
+ db " pxor_xmm3,xmm3       "
+ db " psubb_xmm3,xmm1      "
+ db " pand_xmm3,[] sevens , "
+ db " paddb_xmm0,xmm3     "
+ db " paddb_xmm0,[] zeroes , "
+ db " movdqa_[],xmm0 hexstr ,   "
  db " ret "
+
+ db " ALIGN "
+ db " ASSEMBLER FORTH32 LINK       "
 
  db " HEADER 2HEX.   HERE CELL+ , "
  db " mov_edx,#  ' Pop @ , "
  db " call_edx "
  db " mov_[],eax  hex_dot_value CELL+ ,  "
+ db " mov_edx,#  ' (hex_dot) @ , "
+ db " call_edx "
+ db " mov_eax,# hexstr , "
+ db " mov_edx,# ' Push @ , call_edx "
+; db " mov_edx,# ' hexstr @ , call_edx "
+ db " mov_edx,# ' TYPEZ @ , call_edx "
  db " ret "
 
  db " ALIGN "
@@ -79,18 +138,21 @@ macro alignhe20
  db " mov_edx,#  ' Push @ , "
  db " call_edx "
  db " ret "
+
  db " ALIGN "
+
+ db " HEADER nn   HERE CELL+ ,     "
+ db " mov_eax,# ' zeroes @ , mov_edx,# ' Push @ ,  call_edx ret  "
+
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+ db " nn  (hex_dot)  hexstr TYPEZ "
+ db " hexstr TYPEZ  0x 12345678 (hex_dot)  hexstr TYPEZ   0xd 12345678ABCDEF89 2HEX.  "
+
  db " EXIT " ,0
 
  alignhe20
  ;block 4 CHAIN UNCHAIN
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
- ; aa bb CHAIN links vocabulary aa to bb i.e makes aa based on bb
- ; HEADER CHAIN  interpret# ,
- ; @ ( get last nfa in base vocab ) >R
- ; BADWORD SFIND CELL- ( find badword in linked vocab, get lfa )
- ; !  ( store )
  db " HEADER CHAIN  HERE CELL+ ,             "
  db " mov_edx,# ' Pop @ ,  call_edx          "
  db " mov_ebp,eax                            "
