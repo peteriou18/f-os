@@ -15,7 +15,7 @@ Push - push data on stack.
 Pop - pop data from stack.
 ABORT - message wrong word. Called by BADWORD.
 HERE - top of codofile. Above HERE  free memory.
-constanst# - constant. Points to code for CONSTANT-defined words.
+
 INTERPRET - interpretator.
 PARSE - take word form input stream and place it to HERE as zero by 4 aligned string with counter.
 CONTEXT - variable where lays vocid of searching vocabulary.
@@ -25,5 +25,7 @@ ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning
 SFIND - finds word from HERE in CONTEXT from stack and put xt of this word to stack.
 EXECUTE - execute xt from top of stack.
 BLOCK - variable-defined word,  puts on stack address of block structure.
-variable# - constant. 
+variable# - constant. Points to code for VARIABLE-defined words.
+constant# - constant. Points to code for CONSTANT-defined words.
+
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
