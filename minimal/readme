@@ -30,4 +30,5 @@ constant# - constant. Points to code for CONSTANT-defined words.
 >IN    - variable. Counts symbols in input stream.
 LOAD - load and interpret block.
 BUFFER - constant. Points to block buffer.
+rdblock - read block from bootable disk.
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
