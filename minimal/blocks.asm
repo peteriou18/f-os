@@ -67,7 +67,8 @@ macro alignhe20
  db 0
 
   alignhe20
- ; block 3   HEX. , "minus" code
+ ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
+ ;           (hex_dot) 2HEX.  "minus"
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
 
  db " HEADER   CELL-  HERE CELL+ ,  "
@@ -84,7 +85,22 @@ macro alignhe20
  db " HEADER   sevens         variable#  , 0xd 0707070707070707 , , 0xd   0707070707070707 , , "
  db " HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , , "
  db " HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,  "
+
  db " ASSEMBLER FORTH32 LINK       "
+
+ db " HEADER    inverse_hexstr  HERE CELL+ , "
+ db " mov_eax,[] hexstr , "
+ db " mov_ebx,[] hexstr CELL+ , "
+ db " mov_ecx,[] hexstr CELL+ CELL+ , "
+ db " mov_edx,[] hexstr CELL+ CELL+ CELL+ , "
+ db " bswap_eax  bswap_ebx    bswap_ecx   bswap_edx "
+ db " mov_[],edx hexstr , "
+ db " mov_[],ecx hexstr CELL+ , "
+ db " mov_[],ebx hexstr CELL+ CELL+ , "
+ db " mov_[],eax hexstr CELL+ CELL+ CELL+ , "
+ db " ret "
+
+ db " ALIGN "
 
  db " HEADER (hex_dot) HERE CELL+ , "
  db "   "
@@ -115,15 +131,24 @@ macro alignhe20
  db " ASSEMBLER FORTH32 LINK       "
 
  db " HEADER 2HEX.   HERE CELL+ , "
- db " mov_edx,#  ' Pop @ , "
- db " call_edx "
- db " mov_[],eax  hex_dot_value CELL+ ,  "
- db " mov_edx,#  ' (hex_dot) @ , "
- db " call_edx "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " mov_[],eax   hex_dot_value CELL+ ,  "
+ db " mov_edx,#  ' (hex_dot) @ ,      call_edx "
+ db " mov_edx,#  ' inverse_hexstr @ , call_edx "
+
  db " mov_eax,# hexstr , "
- db " mov_edx,# ' Push @ , call_edx "
-; db " mov_edx,# ' hexstr @ , call_edx "
- db " mov_edx,# ' TYPEZ @ , call_edx "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " mov_edx,#  ' TYPEZ @ ,          call_edx "
+ db " ret "
+
+ db " ALIGN "
+
+ db " HEADER HEX.   HERE CELL+ , "
+ db " mov_edx,#  ' (hex_dot) @ ,      call_edx "
+ db " mov_edx,#  ' inverse_hexstr @ , call_edx "
+ db " mov_eax,# hexstr , "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " mov_edx,#  ' TYPEZ @ ,          call_edx "
  db " ret "
 
  db " ALIGN "
@@ -141,12 +166,7 @@ macro alignhe20
 
  db " ALIGN "
 
- db " HEADER nn   HERE CELL+ ,     "
- db " mov_eax,# ' zeroes @ , mov_edx,# ' Push @ ,  call_edx ret  "
-
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
- db " nn  (hex_dot)  hexstr TYPEZ "
- db " hexstr TYPEZ  0x 12345678 (hex_dot)  hexstr TYPEZ   0xd 12345678ABCDEF89 2HEX.  "
 
  db " EXIT " ,0
 
