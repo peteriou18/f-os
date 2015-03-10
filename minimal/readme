@@ -29,4 +29,5 @@ variable# - constant. Points to code for VARIABLE-defined words.
 constant# - constant. Points to code for CONSTANT-defined words.
 >IN    - variable. Counts symbols in input stream.
 LOAD - load and interpret block.
+BUFFER - constant. Points to block buffer.
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
