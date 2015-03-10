@@ -31,4 +31,6 @@ constant# - constant. Points to code for CONSTANT-defined words.
 LOAD - load and interpret block.
 BUFFER - constant. Points to block buffer.
 rdblock - read block from bootable disk.
+TYPEZ - type ASCIIZ string.
+0xd - response next word like hexadecimal double ( 64 bits) unsigned number and put it onto stack.
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
