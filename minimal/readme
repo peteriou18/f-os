@@ -33,4 +33,6 @@ BUFFER - constant. Points to block buffer.
 rdblock - read block from bootable disk.
 TYPEZ - type ASCIIZ string.
 0xd - response next word like hexadecimal double ( 64 bits) unsigned number and put it onto stack.
+0x - the same like previuos but for 32 bits numbers.
+
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
