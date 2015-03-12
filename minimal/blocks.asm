@@ -14,10 +14,13 @@ macro alignhe20
 ;block1
  db     " TYPEZ  "
  db     " 0x 2 LOAD  "
-
-; db     " 0x 4 LOAD    "
  db     " 0x 3 LOAD  "
  db     "  TIMER@ 2HEX. TIMER@ HEX.  HEX. "
+ db     " 0x 55555  HEADER ttt constant# , ,  ttt HEX. "
+ db     " 0x 4 LOAD    "
+
+ db     " 0x AAAA CONSTANT mmm   mmm  HEX. "
+ db     " EXIT "
  db     0
  alignhe20
 
@@ -181,10 +184,7 @@ macro alignhe20
 
  db " HEADER TIMER@     HERE CELL+ , "
  db " rdtsc "
-; db " mov_eax,# 0x ABCDEF01 ,  "
-; db " mov_edx,# 0x 23456789 , "
  db " mov_ebp,edx       "
-; db " mov_eax,edx       "
  db " mov_edx,#  ' Push @ ,           call_edx "
  db " mov_eax,ebp  "
  db " call_edx     "
@@ -197,10 +197,15 @@ macro alignhe20
  db " EXIT " ,0
 
  alignhe20
- ;block 4 CHAIN UNCHAIN
- db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
- db " HEADER CHAIN  HERE CELL+ ,             "
- db " mov_edx,# ' Pop @ ,  call_edx          "
- db " mov_ebp,eax                            "
- db " call_edx                               "
+ ;block 4 CONSTANT VARIABLE
+ db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
+ db " HEADER CONSTANT   interpret# ,           "
+
+ db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
+ ;db " mov_ebp,eax                            "
+ ;db " call_edx                               "
+ db  0
+ alignhe20
+ ;block 5
+ db     0
