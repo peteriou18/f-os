@@ -14,51 +14,62 @@ macro alignhe20
 ;block1
  db     " TYPEZ  "
  db     " 0x 2 LOAD  "
+
 ; db     " 0x 4 LOAD    "
  db     " 0x 3 LOAD  "
+ db     "  TIMER@ 2HEX. TIMER@ HEX.  HEX. "
  db     0
  alignhe20
 
 ;block 2    opcodes
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !               "
- db     "                   0x C3 0x 1 opcode ret                       "
- db     "                   0x BA 0x 1 opcode mov_edx,#                 "
- db     "                   0x B8 0x 1 opcode mov_eax,#                 "
- db     "                   0x A3 0x 1 opcode mov_[],eax                "
- db     "                   0x A1 0x 1 opcode mov_eax,[]                "
+ db     "                         0x C3 0x 1 opcode ret                       "
+ db     "                         0x BA 0x 1 opcode mov_edx,#                 "
+ db     "                         0x B8 0x 1 opcode mov_eax,#                 "
+ db     "                         0x A3 0x 1 opcode mov_[],eax                "
+ db     "                         0x A1 0x 1 opcode mov_eax,[]                "
 
- db     "             0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
- db     "             0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
- db     "             0x 15 0x 8B 0x 2 opcode mov_edx,[]                "
- db     "             0x 15 0x 89 0x 2 opcode mov_[],edx                "
- db     "             0x 0D 0x 89 0x 2 opcode mov_[],ecx                "
- db     "             0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
+ db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
+ db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
+ db     "                   0x 15 0x 8B 0x 2 opcode mov_edx,[]                "
+ db     "                   0x 15 0x 89 0x 2 opcode mov_[],edx                "
+ db     "                   0x 0D 0x 89 0x 2 opcode mov_[],ecx                "
+ db     "                   0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
 
- db     "             0x C8 0x 0F 0x 2 opcode bswap_eax                 "
- db     "             0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
- db     "             0x C9 0x 0F 0x 2 opcode bswap_ecx                 "
- db     "             0x CA 0x 0F 0x 2 opcode bswap_edx                 "
+ db     "                   0x C8 0x 0F 0x 2 opcode bswap_eax                 "
+ db     "                   0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
+ db     "                   0x C9 0x 0F 0x 2 opcode bswap_ecx                 "
+ db     "                   0x CA 0x 0F 0x 2 opcode bswap_edx                 "
 
- db     "             0x D2 0x FF 0x 2 opcode call_edx                  "
- db     "             0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
- db     "             0x C2 0x 89 0x 2 opcode mov_edx,eax               "
- db     "             0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
- db     "       0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
- db     " 0x 05 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm0,[]            "
- db     " 0x 05 0x 7F 0x 0F 0x 66 0x 4 opcode movdqa_[],xmm0            "
- db     " 0x C9 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm1,xmm1            "
- db     " 0x DB 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm3,xmm3            "
- db     " 0x C1 0x EB 0x 0F 0x 66 0x 4 opcode por_xmm0,xmm1             "
- db     " 0x D9 0x F8 0x 0F 0x 66 0x 4 opcode psubb_xmm3,xmm1           "
- db     " 0x C3 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm3           "
- db     " 0x C1 0x 60 0x 0F 0x 66 0x 4 opcode punpcklbw_xmm0,xmm1       "
- db     " 0x C8 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm1,xmm0          "
- db     " 0x 0D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm1,[]              "
- db     " 0x 05 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm0,[]              "
- db     " 0x 1D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm3,[]              "
- db     " 0x 0D 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,[]             "
- db     " 0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
+ db     "                   0x 31 0x 0F 0x 2 opcode rdtsc                     "
+
+ db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
+ db     "                   0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
+ db     "                   0x E8 0x 89 0x 2 opcode mov_eax,ebp               "
+ db     "                   0x C2 0x 89 0x 2 opcode mov_edx,eax               "
+ db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
+ db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
+ db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
+
+
+ db     "             0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
+
+ db     "       0x 05 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm0,[]            "
+ db     "       0x 05 0x 7F 0x 0F 0x 66 0x 4 opcode movdqa_[],xmm0            "
+ db     "       0x C0 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm0,xmm0            "
+ db     "       0x C9 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm1,xmm1            "
+ db     "       0x DB 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm3,xmm3            "
+ db     "       0x C1 0x EB 0x 0F 0x 66 0x 4 opcode por_xmm0,xmm1             "
+ db     "       0x D9 0x F8 0x 0F 0x 66 0x 4 opcode psubb_xmm3,xmm1           "
+ db     "       0x C3 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm3           "
+ db     "       0x C1 0x 60 0x 0F 0x 66 0x 4 opcode punpcklbw_xmm0,xmm1       "
+ db     "       0x C8 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm1,xmm0          "
+ db     "       0x 0D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm1,[]              "
+ db     "       0x 05 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm0,[]              "
+ db     "       0x 1D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm3,[]              "
+ db     "       0x 0D 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,[]             "
+ db     "       0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
 
  db     " 0x 04 0x F0 0x 73 0x 0F 0x 66 0x 5 opcode psllq_xmm0,4        "
  db     " 0x 04 0x D1 0x 73 0x 0F 0x 66 0x 5 opcode psrlq_xmm1,4        "
@@ -68,7 +79,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  "minus"
+ ;           (hex_dot) 2HEX.  "minus"  TIMER@
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
 
  db " HEADER   CELL-  HERE CELL+ ,  "
@@ -103,7 +114,7 @@ macro alignhe20
  db " ALIGN "
 
  db " HEADER (hex_dot) HERE CELL+ , "
- db "   "
+
  db " mov_edx,#  ' Pop @ , "
  db " call_edx "
  db " mov_[],eax   hex_dot_value  ,  "
@@ -144,6 +155,8 @@ macro alignhe20
  db " ALIGN "
 
  db " HEADER HEX.   HERE CELL+ , "
+ db " pxor_xmm0,xmm0  "
+ db " movdqa_[],xmm0  hex_dot_value  ,   "
  db " mov_edx,#  ' (hex_dot) @ ,      call_edx "
  db " mov_edx,#  ' inverse_hexstr @ , call_edx "
  db " mov_eax,# hexstr , "
@@ -163,6 +176,19 @@ macro alignhe20
  db " mov_edx,#  ' Push @ , "
  db " call_edx "
  db " ret "
+
+ db " ALIGN "
+
+ db " HEADER TIMER@     HERE CELL+ , "
+ db " rdtsc "
+; db " mov_eax,# 0x ABCDEF01 ,  "
+; db " mov_edx,# 0x 23456789 , "
+ db " mov_ebp,edx       "
+; db " mov_eax,edx       "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " mov_eax,ebp  "
+ db " call_edx     "
+ db " ret          "
 
  db " ALIGN "
 
