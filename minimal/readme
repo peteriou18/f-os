@@ -39,5 +39,6 @@ number - take word form input stream and place it to HERE as 30h left-aligned st
 HEADER - create header - name filed and link field. 
 N>LINK - converts NFA to LFA.
 LATEST - put to stack latest NFA from CURRENT list.
+' "tick" - enter word and put it xt to stack.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
