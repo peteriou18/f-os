@@ -213,7 +213,7 @@ macro alignhe20
  db " EXIT " ,0
 
  alignhe20
- ;block 4 CONSTANT VARIABLE
+ ;block 4 CONSTANT 0 VARIABLE
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
  db " HEADER CONSTANT   interpret# ,           "
