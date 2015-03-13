@@ -23,6 +23,7 @@ macro alignhe20
 
  db     " 0x AAAA CONSTANT mmm   mmm  HEX. "
  db     " VARIABLE rrr  rrr HEX. rrr @ HEX. 0x CCCCA rrr ! rrr @ HEX. "
+ db     " make_badword "
  db     " EXIT "
  db     0
  alignhe20
@@ -60,6 +61,7 @@ macro alignhe20
 
 
  db     "             0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
+ db     "             0x 04 0x 40 0x 8B 0x 3 opcode mov_eax,[eax+4]           "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
  db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
@@ -85,6 +87,10 @@ macro alignhe20
  db     "       0x CC 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,xmm4           "
  db     "       0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
  db     "       0x C2 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm2           "
+
+ db     "       0x 04 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+4]     "
+
+ db     " 0x 04 0x 04 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+4],4      "
  db     " 0x 04 0x F0 0x 73 0x 0F 0x 66 0x 5 opcode psllq_xmm0,4        "
  db     " 0x 04 0x D1 0x 73 0x 0F 0x 66 0x 5 opcode psrlq_xmm1,4        "
 
@@ -93,7 +99,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  "minus"  TIMER@
+ ;           (hex_dot) 2HEX.  "minus"  TIMER@  lit#
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
 
  db " HEADER   CELL-  HERE CELL+ ,  "
@@ -208,6 +214,18 @@ macro alignhe20
 
  db " ALIGN "
 
+ db " HEADER lit#       HERE CELL+ , "
+ db " mov_eax,[esp+4] "
+ db " mov_eax,[eax+4] "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " add_d[esp+4],4    "
+ db " ret "
+
+ db " ALIGN "
+
+ ;db " HEADER 0x,  interpret# , "
+; db "  ' lit# , ' lit# ,  ' , ,  ' 0x ,  ' , , ' EXIT , "
+
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
  db " EXIT " ,0
@@ -224,7 +242,12 @@ macro alignhe20
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
+ db " HEADER make_badword   interpret# , ' lit# , 0x 888 , ' HEX. ,  ' EXIT , "
 
+ db " HEADER VOCABULARY  interpret# , "
+ db " ' HEADER ,    ' variable# ,  ' , ,  ' HERE ,    ' 0 , ' , ,  " ;create header, code and reserve place for parameters field
+ ; make BADWORD and EXIT words.
+ db " "
  db  0
  alignhe20
  ;block 5
