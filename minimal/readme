@@ -27,6 +27,7 @@ EXECUTE - execute xt from top of stack.
 BLOCK - variable-defined word,  puts on stack address of block structure.
 variable# - constant. Points to code for VARIABLE-defined words.
 constant# - constant. Points to code for CONSTANT-defined words.
+interpret# - constant. Point to code for high-level aka colon-defined words.
 >IN    - variable. Counts symbols in input stream.
 LOAD - load and interpret block.
 BUFFER - constant. Points to block buffer.
@@ -40,5 +41,6 @@ HEADER - create header - name filed and link field.
 N>LINK - converts NFA to LFA.
 LATEST - put to stack latest NFA from CURRENT list.
 ' "tick" - enter word and put it xt to stack.
+CELL+ - add cell size to top of stack element.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
