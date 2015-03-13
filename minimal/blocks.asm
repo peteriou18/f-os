@@ -12,14 +12,17 @@ macro alignhe20
     }
 
 ;block1
- db     " TYPEZ  "
+ db     " TYPEZ   "
  db     " 0x 2 LOAD  "
  db     " 0x 3 LOAD  "
- db     "  TIMER@ 2HEX. TIMER@ HEX.  HEX. "
- db     " 0x 55555  HEADER ttt constant# , ,  ttt HEX. "
+ db     "  TIMER@  2HEX.  TIMER@ HEX.  HEX.  "
+ db     " 0x 55555  HEADER ttt constant# , ,  ttt HEX.  "
+ db     " HEADER rrt variable# , 0x 333 ,  rrt HEX. rrt @ HEX. 0x 2233 rrt ! rrt @ HEX. "
+
  db     " 0x 4 LOAD    "
 
  db     " 0x AAAA CONSTANT mmm   mmm  HEX. "
+ db     " VARIABLE rrr  rrr HEX. rrr @ HEX. 0x CCCCA rrr ! rrr @ HEX. "
  db     " EXIT "
  db     0
  alignhe20
@@ -58,8 +61,12 @@ macro alignhe20
 
  db     "             0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
 
- db     "       0x 05 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm0,[]            "
- db     "       0x 05 0x 7F 0x 0F 0x 66 0x 4 opcode movdqa_[],xmm0            "
+ db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
+ db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
+ db     "       0x 25 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm4,[]            "
+ db     "       0x 35 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm6,[]            "
+ db     "       0x 3D 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm7,[]            "
+ db     "       0x 05 0x 7F 0x 0F 0x F3 0x 4 opcode movdqu_[],xmm0            "
  db     "       0x C0 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm0,xmm0            "
  db     "       0x C9 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm1,xmm1            "
  db     "       0x DB 0x EF 0x 0F 0x 66 0x 4 opcode pxor_xmm3,xmm3            "
@@ -69,11 +76,15 @@ macro alignhe20
  db     "       0x C1 0x 60 0x 0F 0x 66 0x 4 opcode punpcklbw_xmm0,xmm1       "
  db     "       0x C8 0x 6F 0x 0F 0x 66 0x 4 opcode movdqa_xmm1,xmm0          "
  db     "       0x 0D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm1,[]              "
+ db     "       0x CA 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm1,xmm2            "
  db     "       0x 05 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm0,[]              "
+ db     "       0x C2 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm0,xmm2            "
  db     "       0x 1D 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm3,[]              "
+ db     "       0x DA 0x DB 0x 0F 0x 66 0x 4 opcode pand_xmm3,xmm2            "
  db     "       0x 0D 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,[]             "
+ db     "       0x CC 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm1,xmm4           "
  db     "       0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
-
+ db     "       0x C2 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm2           "
  db     " 0x 04 0x F0 0x 73 0x 0F 0x 66 0x 5 opcode psllq_xmm0,4        "
  db     " 0x 04 0x D1 0x 73 0x 0F 0x 66 0x 5 opcode psrlq_xmm1,4        "
 
@@ -92,6 +103,7 @@ macro alignhe20
  db " mov_edx,#  ' Push @ , "
  db " call_edx "
  db " ret "
+
 
  db " HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,   "
  db " HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , , "
@@ -121,24 +133,28 @@ macro alignhe20
  db " mov_edx,#  ' Pop @ , "
  db " call_edx "
  db " mov_[],eax   hex_dot_value  ,  "
- db " movdqa_xmm0,[]   hex_dot_value  , "
+ db " movdqu_xmm0,[]   hex_dot_value  , "
  db " pxor_xmm1,xmm1 "
  db " punpcklbw_xmm0,xmm1 "
  db " movdqa_xmm1,xmm0    "
- db " pand_xmm1,[] efes , "
+ db " movdqu_xmm2,[] efes , "
+ db " pand_xmm1,xmm2 "
  db " psllq_xmm0,4 "
- db " pand_xmm0,[] efes , "
+ db " pand_xmm0,xmm2     "
  db " por_xmm0,xmm1     "
  db " movdqa_xmm1,xmm0  "
- db " paddb_xmm1,[] sixes , "
+ db " movdqu_xmm4,[] sixes , "
+ db " paddb_xmm1,xmm4      "
  db " psrlq_xmm1,4  "
- db " pand_xmm1,[]  efes , "
+ db " pand_xmm1,xmm2     "
  db " pxor_xmm3,xmm3       "
  db " psubb_xmm3,xmm1      "
- db " pand_xmm3,[] sevens , "
+ db " movdqu_xmm2,[] sevens , "
+ db " pand_xmm3,xmm2      "
  db " paddb_xmm0,xmm3     "
- db " paddb_xmm0,[] zeroes , "
- db " movdqa_[],xmm0 hexstr ,   "
+ db " movdqu_xmm2,[] zeroes , "
+ db " paddb_xmm0,xmm2       "
+ db " movdqu_[],xmm0 hexstr ,   "
  db " ret "
 
  db " ALIGN "
@@ -159,7 +175,7 @@ macro alignhe20
 
  db " HEADER HEX.   HERE CELL+ , "
  db " pxor_xmm0,xmm0  "
- db " movdqa_[],xmm0  hex_dot_value  ,   "
+ db " movdqu_[],xmm0  hex_dot_value  ,   "
  db " mov_edx,#  ' (hex_dot) @ ,      call_edx "
  db " mov_edx,#  ' inverse_hexstr @ , call_edx "
  db " mov_eax,# hexstr , "
@@ -201,10 +217,14 @@ macro alignhe20
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
  db " HEADER CONSTANT   interpret# ,           "
-
  db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
- ;db " mov_ebp,eax                            "
- ;db " call_edx                               "
+
+ db " 0x 0  CONSTANT 0      "
+
+ db " HEADER VARIABLE   interpret# ,    "
+ db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
+
+
  db  0
  alignhe20
  ;block 5
