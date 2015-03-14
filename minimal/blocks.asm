@@ -223,8 +223,7 @@ macro alignhe20
 
  db " ALIGN "
 
- ;db " HEADER 0x,  interpret# , "
-; db "  ' lit# , ' lit# ,  ' , ,  ' 0x ,  ' , , ' EXIT , "
+
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
@@ -234,6 +233,8 @@ macro alignhe20
  ;block 4 CONSTANT 0 VARIABLE
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
+
+
  db " HEADER CONSTANT   interpret# ,           "
  db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
@@ -242,11 +243,29 @@ macro alignhe20
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
- db " HEADER make_badword   interpret# , ' lit# , 0x 888 , ' HEX. ,  ' EXIT , "
+ db " HEADER LIT,  interpret# , "
+ db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
+
+ db " HEADER EXIT,     interpret# ,  ' EXIT LIT,  ' , ,    ' EXIT , "
+
+ db " HEADER 0x,   interpret# , ' 0x ,  '  LIT, ,    EXIT, "
+
+ db " HEADER make_badword   interpret# ,  0x, 7773 ' HEX. ,  EXIT, "
 
  db " HEADER VOCABULARY  interpret# , "
  db " ' HEADER ,    ' variable# ,  ' , ,  ' HERE ,    ' 0 , ' , ,  " ;create header, code and reserve place for parameters field
  ; make BADWORD and EXIT words.
+
+; enter xt compile
+; when executing word put_xt, comple_it.
+; lit# xt comma
+ db " HEADER ',       interpret# , "
+ db  "  ' lit# , ' lit# ,  ' , ,   ' ' ,  ' , ,  ' EXIT , "
+
+ db " HEADER lll     interpret# , "
+ db " ', 0  ', HEX. ', EXIT "
+
+; db " lll  EXIT "
  db " "
  db  0
  alignhe20
