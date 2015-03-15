@@ -15,15 +15,14 @@ macro alignhe20
  db     " TYPEZ   "
  db     " 0x 2 LOAD  "
  db     " 0x 3 LOAD  "
- db     "  TIMER@  2HEX.  TIMER@ HEX.  HEX.  "
- db     " 0x 55555  HEADER ttt constant# , ,  ttt HEX.  "
- db     " HEADER rrt variable# , 0x 333 ,  rrt HEX. rrt @ HEX. 0x 2233 rrt ! rrt @ HEX. "
+ db     "  TIMER@  2HEX.   "
+
 
  db     " 0x 4 LOAD    "
 
- db     " 0x AAAA CONSTANT mmm   mmm  HEX. "
- db     " VARIABLE rrr  rrr HEX. rrr @ HEX. 0x CCCCA rrr ! rrr @ HEX. "
+
  db     " make_badword "
+ db     " TIMER@ 2HEX. "
  db     " EXIT "
  db     0
  alignhe20
@@ -230,9 +229,8 @@ macro alignhe20
  db " EXIT " ,0
 
  alignhe20
- ;block 4 CONSTANT 0 VARIABLE
+ ;block 4 CONSTANT 0 VARIABLE LIT, ;Word Word: 0x,
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
-
 
 
  db " HEADER CONSTANT   interpret# ,           "
@@ -246,11 +244,15 @@ macro alignhe20
  db " HEADER LIT,  interpret# , "
  db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
 
- db " HEADER EXIT,     interpret# ,  ' EXIT LIT,  ' , ,    ' EXIT , "
+ db " HEADER ;Word     interpret# ,   ' EXIT LIT,  ' , ,    ' EXIT , "
 
- db " HEADER 0x,   interpret# , ' 0x ,  '  LIT, ,    EXIT, "
+ db " HEADER Word:     interpret# ,  "
+ db "        ' HEADER , ' interpret# ,  ' , ,  ;Word "
 
- db " HEADER make_badword   interpret# ,  0x, 7773 ' HEX. ,  EXIT, "
+
+ db " Word: 0x,     ' 0x ,  '  LIT, ,    ;Word "
+
+ db " Word: make_badword     0x, 7773 ' HEX. ,  ;Word  "
 
  db " HEADER VOCABULARY  interpret# , "
  db " ' HEADER ,    ' variable# ,  ' , ,  ' HERE ,    ' 0 , ' , ,  " ;create header, code and reserve place for parameters field
