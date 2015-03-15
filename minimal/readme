@@ -42,5 +42,6 @@ N>LINK - converts NFA to LFA.
 LATEST - put to stack latest NFA from CURRENT list.
 ' "tick" - enter word and put it xt to stack.
 CELL+ - add cell size to top of stack element.
+ALIGN - Align HERE to 4. Useful after low-lvel definitions.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
