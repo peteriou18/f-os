@@ -22,6 +22,7 @@ macro alignhe20
 
 
  db     " make_badword "
+ db     " .(  876 kjhjkhjkh) "
  db     " TIMER@ 2HEX. "
  db     " EXIT "
  db     0
@@ -35,6 +36,7 @@ macro alignhe20
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
  db     "                         0x A3 0x 1 opcode mov_[],eax                "
  db     "                         0x A1 0x 1 opcode mov_eax,[]                "
+ db     "                         0x 40 0x 1 opcode inc_eax                   "
 
  db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
  db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
@@ -98,7 +100,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  "minus"  TIMER@  lit#
+ ;           (hex_dot) 2HEX.  "minus"  TIMER@  lit# 1+
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
 
  db " HEADER   CELL-  HERE CELL+ ,  "
@@ -222,6 +224,13 @@ macro alignhe20
 
  db " ALIGN "
 
+ db " HEADER 1+         HERE CELL+ , "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " inc_eax    "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " ret        "
+
+ db " ALIGN "
 
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
@@ -229,7 +238,7 @@ macro alignhe20
  db " EXIT " ,0
 
  alignhe20
- ;block 4 CONSTANT 0 VARIABLE LIT, ;Word Word: 0x,
+ ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .(
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
 
@@ -237,6 +246,8 @@ macro alignhe20
  db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
  db " 0x 0  CONSTANT 0      "
+ db " 0x 29 CONSTANT )      "
+ db ' 0x 22 CONSTANT "      '
 
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
@@ -252,6 +263,10 @@ macro alignhe20
 
  db " Word: 0x,     ' 0x ,  '  LIT, ,    ;Word "
 
+ db " Word: ',      ' ' ,  ' , ,  ;Word       "
+
+ db " Word: .(   ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ  ;Word "
+
  db " Word: make_badword     0x, 7773 ' HEX. ,  ;Word  "
 
  db " HEADER VOCABULARY  interpret# , "
@@ -261,8 +276,6 @@ macro alignhe20
 ; enter xt compile
 ; when executing word put_xt, comple_it.
 ; lit# xt comma
- db " HEADER ',       interpret# , "
- db  "  ' lit# , ' lit# ,  ' , ,   ' ' ,  ' , ,  ' EXIT , "
 
  db " HEADER lll     interpret# , "
  db " ', 0  ', HEX. ', EXIT "
