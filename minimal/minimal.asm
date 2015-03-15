@@ -41,10 +41,14 @@ db algn dup 0
         mov dword [gs:44], "h   "
 
         jmp $
+        movdqu  xmm0,[data_stack_base]
+        movdqu  [data_stack_base],xmm0
         mov eax,0xAAAAAAAA
         mov edx,0xBBBBBBBB
         call    edx
-
+        mov     eax,[esp+4]
+        mov     eax,[eax+4]
+        add     dword [esp+4],4
 msg_entry db " F32 minimal loaded",10,13,0
 ;----------------------------
         align 4
@@ -244,6 +248,8 @@ _word2:
          mov dword [ebx],49584504h ;4,"EXI"
          mov dword [ebx+4],054h ;"T",0
          ret
+
+
 ;----------------------------
         align 4
 nfa_12:
@@ -612,7 +618,7 @@ unmask_irqs:
         mov al, 11111001b ; Enable Cascade, Keyboard
         out 0x21, al
         in al, 0xA1
-        mov al, 11111110b ; Enable RTC
+        mov al, 11111101b ; Enable RTC
         out 0xA1, al
         ret
 ;----------------------------
@@ -1062,7 +1068,7 @@ _badword_xt:
         ret
 ;----------------------------
         align 4
-nfa_last:
+
 nfa_41:
         db      4,"LINK",0
         alignhe
@@ -1078,6 +1084,59 @@ _link:
         mov     dword [eax-4],ebx
         ret
 ;----------------------------
+        align 4
+nfa_last:
+nfa_42:
+        db 4,"WORD",0
+        alignhe
+        dd nfa_41
+        dd _word
+_word:
+        ;call _pop ; to address
+        mov edi,[here_value]
+       ; call _pop ; from address
+        mov esi,[block_value+8]
+        call _pop       ; symbol
+        mov  [word_symb],al
+        xor edx,edx
+        add esi,[_in_value]
+        mov ebx,edi
+; clear 32 bytes
+        xor eax,eax
+        mov ecx,8
+        rep stosd
+        mov edi,ebx
+        mov ecx,[block_value+4] ; size of buffer
+        cmp ecx,edx
+        jl _word42 ;jl
+        inc edi
+_word45:
+        sub dword [block_value+4],1 ; [nkey],1
+        jb _word42
+        lodsb
+        inc dword [_in_value]
+        cmp al,[word_symb]
+        je _word45
+_word43:
+        stosb
+        inc edx
+        sub dword [block_value+4],1 ; [nkey],1
+        jb _word44
+        lodsb
+        inc dword [_in_value]
+        cmp al,[word_symb]
+        jne _word43
+_word44:
+; string to validate
+         mov [ebx],dl
+         ret
+_word42:
+; empty string
+         mov dword [ebx],49584504h ;4,"EXI"
+         mov dword [ebx+4],054h ;"T",0
+         ret
+word_symb       db      20h
+;--------------------------------
         align 4
 
 _here:
