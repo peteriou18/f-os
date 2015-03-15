@@ -27,6 +27,38 @@ f-os
 
 
 -------
+KERNEL words
+
+FORTH86
+EMIT
+TYPE
+ret_
+RBLOCK
+IN>
+CURRENT
+lit_code
+0x
+COUNT
+DUP
+SPACE
+@
+!
+EXECUTE
+FIND
+WORD
+HERE
+CONTEXT
+CREATE
+BL
+,
+buffer_size
+QUOTE
+ENCLOSE
+:
+FALSE!
+TRUE!
+)
+
 
 Как комплировать значение со стека в виде литерала?
 Есть слово 0x, немедленного исполнения, которое транслирует следующую строку и комплирует значение как литерал. 
