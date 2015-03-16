@@ -22,6 +22,7 @@ CONTEXT - variable where lays vocid of searching vocabulary.
 CURRENT - variable where lays vocid of appending vocabulary.
 ENCLOSE - transfer string form addra to addrb, setting counter and zero aligning it. If at addra empty place to addrb  EXIT word.
 @  - fetch. 
+!  - store.
 SFIND - finds word from HERE in CONTEXT from stack and put xt of this word to stack.
 EXECUTE - execute xt from top of stack.
 BLOCK - variable-defined word,  puts on stack address of block structure.
