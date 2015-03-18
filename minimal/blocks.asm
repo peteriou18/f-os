@@ -23,6 +23,7 @@ macro alignhe20
 
  db     " make_badword "
  db     " .(  876 kjhjkhjkh) "
+ db     ' S" hhhhuyjh" TYPEZ '
  db     " TIMER@ 2HEX. "
  db     " EXIT "
  db     0
@@ -44,6 +45,7 @@ macro alignhe20
  db     "                   0x 15 0x 89 0x 2 opcode mov_[],edx                "
  db     "                   0x 0D 0x 89 0x 2 opcode mov_[],ecx                "
  db     "                   0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
+ db     "                   0x 05 0x 01 0x 2 opcode add_[],eax                "
 
  db     "                   0x C8 0x 0F 0x 2 opcode bswap_eax                 "
  db     "                   0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
@@ -58,11 +60,19 @@ macro alignhe20
  db     "                   0x C2 0x 89 0x 2 opcode mov_edx,eax               "
  db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
  db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
+ db     "                   0x D8 0x 01 0x 2 opcode add_eax,ebx               "
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
+ db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
 
 
  db     "             0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
+ db     "             0x 03 0x E0 0x 83 0x 3 opcode and_eax,3                 "
+ db     "             0x C0 0x 95 0x 0F 0x 3 opcode setne_al                  "
+ db     "             0x C3 0x 95 0x 0F 0x 3 opcode setne_bl                  "
+ db     "             0x 02 0x E0 0x C0 0x 3 opcode shl_al,2                  "
+ db     "             0x 02 0x E3 0x C1 0x 3 opcode shl_ebx,2                 "
  db     "             0x 04 0x 40 0x 8B 0x 3 opcode mov_eax,[eax+4]           "
+ db     "             0x 00 0x B6 0x 0F 0x 3 opcode movzx_eax,b[eax]          "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
  db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
@@ -90,6 +100,9 @@ macro alignhe20
  db     "       0x C2 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm2           "
 
  db     "       0x 04 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+4]     "
+ db     "       0x 04 0x 24 0x 44 0x 89 0x 4 opcode mov_[esp+4],eax     "
+ db     "       0x 04 0x 24 0x 44 0x 01 0x 4 opcode add_[esp+4],eax     "
+ db     "       0x 04 0x 40 0x B6 0x 0F 0x 4 opcode movzx_eax,b[eax+4]  "
 
  db     " 0x 04 0x 04 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+4],4      "
  db     " 0x 04 0x F0 0x 73 0x 0F 0x 66 0x 5 opcode psllq_xmm0,4        "
@@ -232,6 +245,38 @@ macro alignhe20
 
  db " ALIGN "
 
+ db " HEADER C@         HERE CELL+ , "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " movzx_eax,b[eax]  "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " ret "
+
+ db " ALIGN "
+
+ db " HEADER ALLOT      HERE CELL+ ,    "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " add_[],eax ' HERE CELL+ , "
+ db " mov_edx,# ' ALIGN @ ,   call_edx  "
+ db " ret "
+
+ db " ALIGN "
+
+ db " HEADER SLIT         HERE CELL+ , "
+ db " mov_eax,[esp+4] "     ; get addresinterpretator point
+ db " mov_ebp,eax     "
+ db " mov_edx,#  ' Push @ ,           call_edx "
+ db " movzx_eax,b[eax+4] "     ; get next cell value (counter)
+ ;db " add_eax,ebp        "     ; new addresinterpretator point
+ db " and_eax,3  "             ; align it
+ db " xor_ebx,ebx              "
+ db " setne_bl   "
+ db " shl_ebx,2    "
+ db " add_eax,ebx "
+ db " mov_[esp+4],eax    "
+; db " add_[],eax ' HERE CELL+ ,        "
+ db " ret "
+
+ db " ALIGN "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
@@ -247,7 +292,7 @@ macro alignhe20
 
  db " 0x 0  CONSTANT 0      "
  db " 0x 29 CONSTANT )      "
- db ' 0x 22 CONSTANT "      '
+ db " 0x 22 CONSTANT QUOTE     "
 
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
@@ -267,7 +312,15 @@ macro alignhe20
 
  db " Word: .(   ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ  ;Word "
 
- db " Word: make_badword     0x, 7773 ' HEX. ,  ;Word  "
+ db ' Word: S"  '
+ db " ', QUOTE  ', WORD  ', HERE ;Word "
+
+ db ' Word: ,"  '
+ db " ', SLIT   ', QUOTE  ', WORD  ', C@ ', ALLOT  ;Word "
+
+ db " Word: make_badword     0x, 7773 ', HEX.    "
+ db '  ," jjjuouiop "  ;Word '
+; db " ', 1+  ', TYPEZ   ;Word  "
 
  db " HEADER VOCABULARY  interpret# , "
  db " ' HEADER ,    ' variable# ,  ' , ,  ' HERE ,    ' 0 , ' , ,  " ;create header, code and reserve place for parameters field
@@ -276,7 +329,7 @@ macro alignhe20
 ; enter xt compile
 ; when executing word put_xt, comple_it.
 ; lit# xt comma
-
+; HERE QUOTE WORD C@ ALLOT
  db " HEADER lll     interpret# , "
  db " ', 0  ', HEX. ', EXIT "
 
