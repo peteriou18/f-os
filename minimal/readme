@@ -45,6 +45,7 @@ LATEST - put to stack latest NFA from CURRENT list.
 CELL+ - add cell size to top of stack element.
 ALIGN - Align HERE to 4. Useful after low-lvel definitions.
 UNLINK - unlink vocabulary. Make it standalone.
+LINK - Concatenate two vocabularies.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
 opcode - define opcode name.
