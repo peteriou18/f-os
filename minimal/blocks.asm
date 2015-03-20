@@ -21,8 +21,8 @@ macro alignhe20
  db     " 0x 4 LOAD    "
 
 
- db     " HERE HEX. make_badword "
- db     " .(  876 kjhjkhjkh) "
+ db     "  make_badword "
+ db     "  "
 
  db     " TIMER@ 2HEX. "
  db     " EXIT "
@@ -272,27 +272,17 @@ macro alignhe20
  db " HEADER SLIT          HERE CELL+ ,  "
  db " mov_eax,[esp+4] "     ; get addresinterpretator point
  db " add_eax,4     "
-; db " movzx_eax,b[eax+4] "
  db " mov_edx,#  ' Push @ ,           call_edx "
  db " mov_eax,[esp+4]     "
  db " movzx_ebx,b[eax+4]  "
  db " inc_ebx  inc_ebx "
  db " add_eax,ebx         "
  db " and_eax,-4          "
-      ; get next cell value (counter)
- ;db " add_eax,ebp        "     ; new addresinterpretator point
-;
  db " and_ebx,3  "             ; align it
-; db " xor_ebx,ebx              "
  db " setne_bl   "
  db " shl_ebx,2    "
  db " add_eax,ebx "
- ;db " add_eax,4   "
-; db " add_eax,4   "
-; db " mov_edx,#  ' Push @ ,           call_edx "
-;  db " add_d[esp+4],4    "
  db " mov_[esp+4],eax    "
-; db " add_[],eax ' HERE CELL+ ,        "
  db " ret "
 
  db " ALIGN "
@@ -341,19 +331,14 @@ macro alignhe20
  db ' Word: S"  '
  db "   ', QUOTE  ', WORD  ', HERE ;Word "
 
- db " Word: exec.  HERE HEX.  ', exec_point ', HEX. ;Word "
+ db " Word: exec.   ', exec_point ', HEX. ;Word "
 
  db ' Word: ,"  '
  db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', ALLOT    ;Word "
 
- db ' Word: "   '
- db "  ', HERE  ', QUOTE  ', WORD  ', C@ ', ALLOT ;Word  "
 
-; db ' 0x AAAA HEX. HERE 1+   HERE HEX.  " hjjhkhk89h" HERE HEX. TYPEZ 0x BBBB HEX. '
-
- db " Word: make_badword     0x, 7773  ', HEX.  ', SLIT     "
- db ' "  asdfer-4"  '
-; db "  ', HEX.    ;Word "
+ db " Word: make_badword     0x, 7773  ', HEX.       "
+ db ' ,"  asdfer-4"  '
  db "  ', 1+  ', TYPEZ   ;Word  "
 
  db " HEADER VOCABULARY  interpret# , "
