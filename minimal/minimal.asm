@@ -41,6 +41,19 @@ db algn dup 0
         mov dword [gs:44], "h   "
 
         jmp $
+        and eax,0fffffffch
+        add     eax,4
+        inc     ebx
+        and     ebx,3
+        movzx   ebx,byte [eax+4]
+        xor ebx,ebx
+        setne   bl
+        shl     ebx,2
+        add     eax,ebx
+        mov     [esp+4],eax
+        movzx   eax,byte [eax+4]
+        add     [esp+4],eax
+        add     [here_value],eax
         movdqu  xmm0,[data_stack_base]
         movdqu  [data_stack_base],xmm0
         mov eax,0xAAAAAAAA
@@ -1087,15 +1100,15 @@ _link:
         align 4
 nfa_last:
 nfa_42:
-        db 4,"WORD",0
+        db 6,"(WORD)",0
         alignhe
         dd nfa_41
         dd _word
 _word:
-        ;call _pop ; to address
-        mov edi,[here_value]
-       ; call _pop ; from address
-        mov esi,[block_value+8]
+        call _pop ; to address
+        mov edi,eax ;[here_value]
+        call _pop ; from address
+        mov esi,eax ;[block_value+8]
         call _pop       ; symbol
         mov  [word_symb],al
         xor edx,edx
