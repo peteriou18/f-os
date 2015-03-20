@@ -326,7 +326,11 @@ macro alignhe20
 
  db " Word: ',      ' ' ,  ' , ,  ;Word       "
 
+ db " Word: WORD       ', BLOCK  ', CELL+  ', CELL+  ', @  ', HERE  ', (WORD)  ;Word  "
+
  db " Word: .(   ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ  ;Word "
+
+ db " Word: PAD         ', HERE  0x, 200 ', + ;Word "
 
  db ' Word: S"  '
  db "   ', QUOTE  ', WORD  ', HERE ;Word "
