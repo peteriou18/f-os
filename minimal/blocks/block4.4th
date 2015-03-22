@@ -33,7 +33,7 @@ Word: .(        ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ                 ;Word
 
 Word: PAD       0x, HERE 0x, 200  ', +                                  ;Word 
 
-Word: Word+     ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)   ;Word  
+Word: Word+     ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)                   ;Word  
 
 Word: S"        ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD  ;Word 
 
