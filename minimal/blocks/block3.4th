@@ -103,22 +103,19 @@ ret
 
 ALIGN 
 
-HEADER +  
-HERE CELL+ ,   
-mov_edx,# ' Pop @ ,   
-call_edx 
+HEADER +          HERE CELL+ ,   
+mov_edx,# ' Pop @ ,   call_edx 
 mov_ebp,eax 
 call_edx 
 add_eax,ebp  
-mov_edx,#  ' Push @ , 
-call_edx 
+mov_edx,#  ' Push @ , call_edx 
 ret 
 
 ALIGN 
 HEADER TIMER@     HERE CELL+ , 
 rdtsc 
 mov_ebp,edx       
-mov_edx,#  ' Push @ ,           call_edx 
+mov_edx,#  ' Push @ , call_edx 
 mov_eax,ebp  
 call_edx     
 ret          
