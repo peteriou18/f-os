@@ -1,25 +1,25 @@
-FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
+FORTH32 CURRENT ! ASSEMBLER CONTEXT !  
 
-HEADER   CELL-  HERE CELL+ ,  "
-mov_edx,#  ' Pop @ , "
-call_edx "
-sub_eax,4 "
-mov_edx,#  ' Push @ , "
-call_edx "
+HEADER   CELL-  HERE CELL+ ,  
+mov_edx,#  ' Pop @ , 
+call_edx 
+sub_eax,4 
+mov_edx,#  ' Push @ , 
+call_edx 
 ret "
 
 
-HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,   "
-HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , , "
-HEADER   efes           variable#  , 0xd 0F0F0F0F0F0F0F0F , , 0xd   0F0F0F0F0F0F0F0F , , "
-HEADER   sevens         variable#  , 0xd 0707070707070707 , , 0xd   0707070707070707 , , "
-HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , , "
-HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,  "
+HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,   
+HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , , 
+HEADER   efes           variable#  , 0xd 0F0F0F0F0F0F0F0F , , 0xd   0F0F0F0F0F0F0F0F , , 
+HEADER   sevens         variable#  , 0xd 0707070707070707 , , 0xd   0707070707070707 , , 
+HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , , 
+HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,  
 
-ASSEMBLER FORTH32 LINK       "
+ASSEMBLER FORTH32 LINK       
 
-HEADER    inverse_hexstr  HERE CELL+ , "
-mov_eax,[] hexstr , "
+HEADER    inverse_hexstr  HERE CELL+ , 
+mov_eax,[] hexstr , 
 mov_ebx,[] hexstr CELL+ , "
 mov_ecx,[] hexstr CELL+ CELL+ , "
 mov_edx,[] hexstr CELL+ CELL+ CELL+ , "
