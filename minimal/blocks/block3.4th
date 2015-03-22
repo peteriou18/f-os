@@ -20,25 +20,25 @@ ASSEMBLER FORTH32 LINK
 
 HEADER    inverse_hexstr  HERE CELL+ , 
 mov_eax,[] hexstr , 
-mov_ebx,[] hexstr CELL+ , "
-mov_ecx,[] hexstr CELL+ CELL+ , "
-mov_edx,[] hexstr CELL+ CELL+ CELL+ , "
-bswap_eax  bswap_ebx    bswap_ecx   bswap_edx "
-mov_[],edx hexstr , "
-mov_[],ecx hexstr CELL+ , "
-mov_[],ebx hexstr CELL+ CELL+ , "
-mov_[],eax hexstr CELL+ CELL+ CELL+ , "
-ret "
+mov_ebx,[] hexstr CELL+ , 
+mov_ecx,[] hexstr CELL+ CELL+ , 
+mov_edx,[] hexstr CELL+ CELL+ CELL+ , 
+bswap_eax  bswap_ebx    bswap_ecx   bswap_edx 
+mov_[],edx hexstr , 
+mov_[],ecx hexstr CELL+ , 
+mov_[],ebx hexstr CELL+ CELL+ , 
+mov_[],eax hexstr CELL+ CELL+ CELL+ , 
+ret 
 
-ALIGN "
+ALIGN 
 
-HEADER (hex_dot) HERE CELL+ , "
+HEADER (hex_dot) HERE CELL+ , 
 
-mov_edx,#  ' Pop @ , "
-call_edx "
-mov_[],eax   hex_dot_value  ,  "
-movdqu_xmm0,[]   hex_dot_value  , "
-pxor_xmm1,xmm1 "
+mov_edx,#  ' Pop @ , 
+call_edx 
+mov_[],eax   hex_dot_value  ,  
+movdqu_xmm0,[]   hex_dot_value  , 
+pxor_xmm1,xmm1 
 punpcklbw_xmm0,xmm1 "
 movdqa_xmm1,xmm0    "
 movdqu_xmm2,[] efes , "
