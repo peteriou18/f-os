@@ -39,62 +39,62 @@ call_edx
 mov_[],eax   hex_dot_value  ,  
 movdqu_xmm0,[]   hex_dot_value  , 
 pxor_xmm1,xmm1 
-punpcklbw_xmm0,xmm1 "
-movdqa_xmm1,xmm0    "
-movdqu_xmm2,[] efes , "
-pand_xmm1,xmm2 "
-psllq_xmm0,4 "
-pand_xmm0,xmm2     "
-por_xmm0,xmm1     "
-movdqa_xmm1,xmm0  "
-movdqu_xmm4,[] sixes , "
-paddb_xmm1,xmm4      "
-psrlq_xmm1,4  "
-pand_xmm1,xmm2     "
-pxor_xmm3,xmm3       "
-psubb_xmm3,xmm1      "
-movdqu_xmm2,[] sevens , "
-pand_xmm3,xmm2      "
-paddb_xmm0,xmm3     "
-movdqu_xmm2,[] zeroes , "
-paddb_xmm0,xmm2       "
-movdqu_[],xmm0 hexstr ,   "
-ret "
+punpcklbw_xmm0,xmm1 
+movdqa_xmm1,xmm0    
+movdqu_xmm2,[] efes , 
+pand_xmm1,xmm2 
+psllq_xmm0,4 
+pand_xmm0,xmm2     
+por_xmm0,xmm1     
+movdqa_xmm1,xmm0  
+movdqu_xmm4,[] sixes , 
+paddb_xmm1,xmm4      
+psrlq_xmm1,4  
+pand_xmm1,xmm2     
+pxor_xmm3,xmm3       
+psubb_xmm3,xmm1      
+movdqu_xmm2,[] sevens , 
+pand_xmm3,xmm2      
+paddb_xmm0,xmm3     
+movdqu_xmm2,[] zeroes , 
+paddb_xmm0,xmm2       
+movdqu_[],xmm0 hexstr ,   
+ret 
 
-ALIGN "
-ASSEMBLER FORTH32 LINK       "
+ALIGN 
+ASSEMBLER FORTH32 LINK       
 
-HEADER 2HEX.   HERE CELL+ , "
-mov_edx,#  ' Pop @ ,            call_edx "
-mov_[],eax   hex_dot_value CELL+ ,  "
-mov_edx,#  ' (hex_dot) @ ,      call_edx "
-mov_edx,#  ' inverse_hexstr @ , call_edx "
+HEADER 2HEX.   HERE CELL+ , 
+mov_edx,#  ' Pop @ ,            call_edx 
+mov_[],eax   hex_dot_value CELL+ ,  
+mov_edx,#  ' (hex_dot) @ ,      call_edx 
+mov_edx,#  ' inverse_hexstr @ , call_edx 
 
-mov_eax,# hexstr , "
-mov_edx,#  ' Push @ ,           call_edx "
-mov_edx,#  ' TYPEZ @ ,          call_edx "
-ret "
+mov_eax,# hexstr , 
+mov_edx,#  ' Push @ ,           call_edx 
+mov_edx,#  ' TYPEZ @ ,          call_edx 
+ret 
 
-ALIGN "
+ALIGN 
 
-HEADER HEX.   HERE CELL+ , "
-pxor_xmm0,xmm0  "
-movdqu_[],xmm0  hex_dot_value  ,   "
-mov_edx,#  ' (hex_dot) @ ,      call_edx "
-mov_edx,#  ' inverse_hexstr @ , call_edx "
-mov_eax,# hexstr , "
-mov_edx,#  ' Push @ ,           call_edx "
-mov_edx,#  ' TYPEZ @ ,          call_edx "
-ret "
+HEADER HEX.   HERE CELL+ , 
+pxor_xmm0,xmm0  
+movdqu_[],xmm0  hex_dot_value  ,   
+mov_edx,#  ' (hex_dot) @ ,      call_edx 
+mov_edx,#  ' inverse_hexstr @ , call_edx 
+mov_eax,# hexstr , 
+mov_edx,#  ' Push @ ,           call_edx 
+mov_edx,#  ' TYPEZ @ ,          call_edx 
+ret 
 
-ALIGN "
-ASSEMBLER FORTH32 LINK       "
+ALIGN 
+ASSEMBLER FORTH32 LINK       
 
-HEADER -  "		      ;name+link fields
-HERE CELL+ ,   "		     ; code field
-mov_edx,# ' Pop @ ,   "	 ;parameters field
-call_edx "
-mov_ebp,eax "
+HEADER -  		      
+HERE CELL+ ,   
+mov_edx,# ' Pop @ ,   
+call_edx 
+mov_ebp,eax 
 call_edx "
 sub_eax,ebp  "
 mov_edx,#  ' Push @ , "
