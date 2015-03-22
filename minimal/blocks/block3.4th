@@ -95,13 +95,13 @@ HERE CELL+ ,
 mov_edx,# ' Pop @ ,   
 call_edx 
 mov_ebp,eax 
-call_edx "
-sub_eax,ebp  "
-mov_edx,#  ' Push @ , "
-call_edx "
-ret "
+call_edx 
+sub_eax,ebp  
+mov_edx,#  ' Push @ , 
+call_edx 
+ret 
 
-ALIGN "
+ALIGN 
 
 HEADER +  
 HERE CELL+ ,   
