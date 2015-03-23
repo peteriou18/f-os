@@ -194,6 +194,13 @@ ret
 
 ALIGN
 
+HEADER DUP        HERE CELL+ , 
+mov_edx,#  ' Pop @ ,            call_edx 
+mov_edx,#  ' Push @ ,  call_edx  call_edx
+ret 
+
+ALIGN 
+
 FORTH32 CONTEXT ! FORTH32 CURRENT ! 
 
 EXIT 
