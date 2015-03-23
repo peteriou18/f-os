@@ -180,6 +180,20 @@ ret
 
 ALIGN 
 
+HEADER strcopy            HERE CELL+ , 
+mov_edx,#  ' Pop @ ,            call_edx 
+mov_edi,eax  
+mov_edx,#  ' Pop @ ,            call_edx  
+mov_esi,eax  
+movzx_ecx,b[esi]  
+shr_ecx,2         
+inc_ecx           
+cld               
+rep_movsd         
+ret    
+
+ALIGN
+
 FORTH32 CONTEXT ! FORTH32 CURRENT ! 
 
 EXIT 
