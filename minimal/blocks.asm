@@ -24,7 +24,7 @@ macro alignhe20
 
  db     "  make_badword "
  db     ' S" holekdhv"  1+ TYPEZ '
-
+ db     " 0x 6666 0x 4444 >R R@ HEX. R> HEX.  HEX. "
 
  db     " TIMER@ 2HEX. "
  db     " EXIT "
@@ -43,6 +43,12 @@ macro alignhe20
  db     "                         0x 40 0x 1 opcode inc_eax                   "
  db     "                         0x 43 0x 1 opcode inc_ebx                   "
  db     "                         0x 41 0x 1 opcode inc_ecx                   "
+ db     "                         0x 58 0x 1 opcode pop_eax                   "
+ db     "                         0x 5B 0x 1 opcode pop_ebx                   "
+ db     "                         0x 59 0x 1 opcode pop_ecx                   "
+ db     "                         0x 50 0x 1 opcode push_eax                  "
+ db     "                         0x 53 0x 1 opcode push_ebx                  "
+ db     "                         0x 51 0x 1 opcode push_ecx                  "
 
  db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
  db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
@@ -130,7 +136,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  "minus"  TIMER@  lit# 1+
+ ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !  "
 
  db " HEADER   CELL-  HERE CELL+ ,  "
@@ -337,6 +343,39 @@ macro alignhe20
 
  db " ALIGN "
 
+ db " HEADER >R         HERE CELL+ , "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " pop_ebx    "
+ db " pop_ecx    "
+ db " push_eax   "
+ db " push_ecx   "
+ db " push_ebx   "
+ db " ret "
+
+ db " ALIGN "
+
+ db " HEADER R>         HERE CELL+ , "
+ db " pop_ebx    "
+ db " pop_ecx    "
+ db " pop_eax    "
+ db " push_ecx   "
+ db " push_ebx   "
+ db " mov_edx,#  ' Push @ ,  call_edx "
+ db " ret "
+
+ db " ALIGN "
+
+ db " HEADER R@         HERE CELL+ , "
+ db " pop_ebx    "
+ db " pop_ecx    "
+ db " pop_eax    "
+ db " push_eax   "
+ db " push_ecx   "
+ db " push_ebx   "
+ db " mov_edx,#  ' Push @ ,  call_edx "
+ db " ret "
+
+ db " ALIGN "
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
  db " EXIT " ,0
@@ -397,7 +436,12 @@ macro alignhe20
  db ' ," EXIT" '
  db "  ', DUP  ', C@ ', ALLOT "
  db "  ', HERE ', strcopy  ', , ', , ', lit#  ', EXIT ', ,  ;Word  "
- db ' S" hjksh slj lkj" 1+ TYPEZ  S"  h o o o r a y 2 " 0x B8040 strcopy '
+
+ db " Word: VOCABULARY "
+ db " ', HEADER  ', variable#  ', HERE  ', 0 ', , " ; header + code + 0 as nfa_last. will be placed by exit nfa
+ db " ', HERE ', make_badword  ', make_exit ;Word "
+
+ ;db ' S" hjksh slj lkj" 1+ TYPEZ  S"  h o o o r a y 2 " 0x B8040 strcopy '
 
 ; db " HEADER VOCABULARY  interpret# , "
 ; db " ' HEADER ,    ' variable# ,  ' , ,  ' HERE ,    ' 0 , ' , ,  " ;create header, code and reserve place for parameters field
