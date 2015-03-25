@@ -54,10 +54,12 @@ BL
 buffer_size
 QUOTE
 ENCLOSE
+.(
 :
 FALSE!
 TRUE!
 )
+3F
 
 
 Как комплировать значение со стека в виде литерала?
