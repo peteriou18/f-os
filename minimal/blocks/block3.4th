@@ -83,7 +83,7 @@ pxor_xmm0,xmm0
 movdqu_[],xmm0  hex_dot_value  ,   														
 mov_edx,#  ' (hex_dot) @ ,      call_edx 													
 mov_edx,#  ' inverse_hexstr @ , call_edx 													
-mov_eax,# hexstr , 																		
+mov_eax,# hexstr CELL+ CELL+ , 																		
 mov_edx,#  ' Push @ ,           call_edx 													
 mov_edx,#  ' TYPEZ @ ,          call_edx 													
 ret 																						
