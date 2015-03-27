@@ -137,7 +137,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@
+ ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER   CELL-  HERE CELL+ ,             "
