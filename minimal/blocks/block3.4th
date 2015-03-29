@@ -1,12 +1,12 @@
 
 FORTH32 CURRENT ! ASSEMBLER CONTEXT !  													
 
-HEADER   CELL-  HERE CELL+ ,  															
-mov_edx,#  ' Pop @ , 																		
-call_edx 																					
+
+HEADER CELL-           HERE CELL+ ,  															
+
+mov_edx,#  ' Pop @ , 	call_edx 																					
 sub_eax,4 																				
-mov_edx,#  ' Push @ , 																	
-call_edx 																					
+mov_edx,#  ' Push @ , call_edx 																					
 ret 																						
 
 
@@ -19,7 +19,9 @@ HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,
 
 ASSEMBLER FORTH32 LINK       																
 
-HEADER    inverse_hexstr  HERE CELL+ , 													
+
+HEADER inverse_hexstr   HERE CELL+ , 													
+
 mov_eax,[] hexstr , 																		
 mov_ebx,[] hexstr CELL+ , 																
 mov_ecx,[] hexstr CELL+ CELL+ , 															
@@ -33,10 +35,9 @@ ret
 
 ALIGN 																					
 
-HEADER (hex_dot) HERE CELL+ , 															
+HEADER (hex_dot)        HERE CELL+ , 															
 
-mov_edx,#  ' Pop @ , 																		
-call_edx 																					
+mov_edx,#  ' Pop @ , 	call_edx 																					
 mov_[],eax   hex_dot_value  ,  															
 movdqu_xmm0,[]   hex_dot_value  , 														
 pxor_xmm1,xmm1 																			
@@ -62,10 +63,13 @@ paddb_xmm0,xmm2
 movdqu_[],xmm0 hexstr ,   																
 ret 																						
 
-ALIGN 																					
+ALIGN 								
+
 ASSEMBLER FORTH32 LINK      																
 
-HEADER 2HEX.   HERE CELL+ , 																
+
+HEADER 2HEX.   HERE CELL+ , 		
+
 mov_edx,#  ' Pop @ ,            call_edx 													
 mov_[],eax   hex_dot_value CELL+ ,  														
 mov_edx,#  ' (hex_dot) @ ,      call_edx 													
@@ -75,6 +79,7 @@ mov_eax,# hexstr ,
 mov_edx,#  ' Push @ ,           call_edx 													
 mov_edx,#  ' TYPEZ @ ,          call_edx 													
 ret 																						
+
 
 ALIGN 																					
 
