@@ -14,16 +14,20 @@ macro alignhe20
 ;block1
  db     " TYPEZ                                                                         "
  db     " 0x 2 LOAD                                                             "
- db     " 0x 3 LOAD                                              "
+ db     " 0x 3 LOAD 0x 5 LOAD                                          "
 
  db     "  TIMER@  2HEX.                                                        "
 
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
- db       " HERE  HEX. VOCABULARY  kkk   "
- db       " kkk HEX. kkk @ HEX. kkk @ 1+ TYPEZ   "
-; db       " 0x 6048 @HEX. @HEX. "
+ db       " Word: hhh   0x, 66  BEGIN  ', Pop ', TIMER@ ', 2HEX.  ', TIMER@   0x, C ', -   UNTIL   ;Word "
+ db       " hhh   "
+ ;db       " kkk CURRENT ! "
+ ;db       " 0x BCDEF CONSTANT bcd "
+ ;db       " kkk FORTH32 LINK "
+ ;db       " kkk CONTEXT ! "
+ ;db       " bcd HEX. FORTH32 CONTEXT ! bcd HEX. "
  db     " TIMER@ 2HEX.            "
  db     " EXIT                                                                          "
  db     0
@@ -80,8 +84,10 @@ macro alignhe20
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
+ db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
 
  db     "             0x 04 0x C0 0x 83 0x 3 opcode add_eax,4                 "
+ db     "             0x 04 0x C1 0x 83 0x 3 opcode add_ecx,4                 "
  db     "             0x 04 0x E8 0x 83 0x 3 opcode sub_eax,4                 "
  db     "             0x 03 0x E0 0x 83 0x 3 opcode and_eax,3                 "
  db     "             0x FC 0x E0 0x 83 0x 3 opcode and_eax,-4                "
@@ -92,8 +98,10 @@ macro alignhe20
  db     "             0x 02 0x E3 0x C1 0x 3 opcode shl_ebx,2                 "
  db     "             0x 02 0x E9 0x C1 0x 3 opcode shr_ecx,2                 "
  db     "             0x 04 0x 40 0x 8B 0x 3 opcode mov_eax,[eax+4]           "
+ db     "             0x 04 0x 69 0x 8B 0x 3 opcode mov_ebp,[ecx+4]           "
  db     "             0x 00 0x B6 0x 0F 0x 3 opcode movzx_eax,b[eax]          "
  db     "             0x 0E 0x B6 0x 0F 0x 3 opcode movzx_ecx,b[esi]          "
+ db     "             0x CD 0x 44 0x 0F 0x 3 opcode cmove_ecx,ebp             "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
  db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
@@ -121,8 +129,10 @@ macro alignhe20
  db     "       0x C2 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm2           "
 
  db     "       0x 04 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+4]               "
+ db     "       0x 04 0x 24 0x 4C 0x 8B 0x 4 opcode mov_ecx,[esp+4]               "
  db     "       0x 0C 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+C]               "
  db     "       0x 04 0x 24 0x 44 0x 89 0x 4 opcode mov_[esp+4],eax               "
+ db     "       0x 04 0x 24 0x 4C 0x 89 0x 4 opcode mov_[esp+4],ecx               "
  db     "       0x 0C 0x 24 0x 44 0x 89 0x 4 opcode mov_[esp+C],eax               "
  db     "       0x 04 0x 24 0x 44 0x 01 0x 4 opcode add_[esp+4],eax               "
  db     "       0x 04 0x 40 0x B6 0x 0F 0x 4 opcode movzx_eax,b[eax+4]            "
@@ -137,7 +147,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
+ ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER   CELL-  HERE CELL+ ,             "
@@ -243,18 +253,16 @@ macro alignhe20
 
  db " ALIGN                                      "
 
- db " HEADER +                                 "                     ;name+link fields
- db " HERE CELL+ ,                             "                    ; code field
- db " mov_edx,# ' Pop @ ,                         "        ;parameters field
- db " call_edx                                    "
+ db " HEADER +        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                                                                                                                                                                  "
  db " add_eax,ebp          "
- db " mov_edx,#  ' Push @ ,                   "
- db " call_edx                          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
 
  db " ALIGN                    "
+
  db " HEADER TIMER@     HERE CELL+ ,       "
  db " rdtsc         "
  db " mov_ebp,edx                  "
@@ -392,7 +400,7 @@ macro alignhe20
  db " EXIT    " ,0
 
  alignhe20
- ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD 
+ ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .(
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
 
@@ -443,12 +451,14 @@ macro alignhe20
  db " Word: make_badword          "
  db ' ," BADWORD"   '
  db "  ', DUP  "
- db "  ', HERE ', strcopy  ', C@ ', CELL+ ', ALLOT  0x, 0 ', , ', lit#  ' BADWORD @ ,  ', , ', lit# ', ABORT ', , ;Word  "
+ db "  ', HERE ', strcopy  ', C@ ', CELL+ ', ALLOT "
+ db " 0x, 0 ', , ', lit#  ' BADWORD @ ,  ', , ', lit# ', ABORT ', , ;Word  "
 
  db " Word: make_exit           "
  db ' ," EXIT" '
  db "  ', DUP  "
- db "  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT   ', ,  ', lit#  ', EXIT ', ,  ;Word  "
+ db "  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT "
+ db " ', ,  ', lit#  ', EXIT ', ,  ;Word  "
 
 
  db " Word: VOCABULARY               "
@@ -457,16 +467,47 @@ macro alignhe20
  db " ', HERE  ', >R  ', make_exit   "
  db " ', R>  ', SWAP!          ;Word "
 
+ db " Word: BEGIN    ', HERE    ;Word       "
+ db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
+ db " Word: UNTIL    ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
+
 
  db " EXIT "
  db  0
+
  alignhe20
  ;block 5
-  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
-  db " HEADER aligned?          HERE   CELL+ , "
-  db " mov_eax,[] ' HERE CELL+ , "
-  db " cmp_b[eax-1],0    "
-  db " setne_al          "
-  db " ret "
-  db " EXIT "
+ db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
+
+ db " HEADER BRANCH          HERE   CELL+ , "
+ db " mov_eax,[esp+4]                        "
+ db " mov_eax,[eax+4]          "
+ db " push_eax                 "
+ db " mov_edx,#  ' Push @ ,           call_edx      "
+ db " mov_edx,#  ' HEX. @ ,           call_edx      "
+ db " pop_eax "
+ db " mov_[esp+4],eax     "
+ db " ret    "
+
+ db " ALIGN "
+
+ db " HEADER ?BRANCH          HERE   CELL+ , "
+ db " mov_ecx,[esp+4]                        " ; addrr interpr point
+ db " mov_ebp,[ecx+4]          "               ; branch value
+ db " add_ecx,4     "                          ; next cell
+ db " mov_edx,#  ' Pop @ ,            call_edx      "
+ db " test_eax,eax "
+ db " cmove_ecx,ebp     " ; if false-> branch
+ db " mov_[esp+4],ecx     "
+ db " ret    "
+
+ db " ALIGN "
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
+
+ db " EXIT "
+
+ db     0
+ alignhe20
+ ;block 6
  db     0
