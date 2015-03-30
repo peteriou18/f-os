@@ -118,7 +118,7 @@ ALIGN
 HEADER TIMER@     HERE CELL+ , 															
 rdtsc 																					
 mov_ebp,edx       																		
-mov_edx,#  ' Push @ ,           call_edx 													
+mov_edx,#  ' Push @ , call_edx 													
 mov_eax,ebp  																				
 call_edx     																				
 ret          																				
@@ -128,7 +128,7 @@ ALIGN
 HEADER lit#       HERE CELL+ , 															
 mov_eax,[esp+4] 																			
 mov_eax,[eax+4] 																			
-mov_edx,#  ' Push @ ,           call_edx 													
+mov_edx,#  ' Push @ , call_edx 													
 add_d[esp+4],4    																		
 ret 																						
 
@@ -234,9 +234,19 @@ push_eax
 push_ecx   																				
 push_ebx   																				
 mov_edx,#  ' Push @ ,  call_edx 															
-ret 																						
+ret
+
+ALIGN   
+
+HEADER SWAP!         HERE CELL+ ,         
+mov_edx,#  ' Pop @ ,   call_edx       
+mov_ebp,eax            
+call_edx            
+mov_[eax],ebp             
+ret   
 
 ALIGN 																					
+
 FORTH32 CONTEXT ! FORTH32 CURRENT ! 														
 
 EXIT 																						
