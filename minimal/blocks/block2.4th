@@ -18,9 +18,12 @@
                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]          
                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]          
                   0x 15 0x 8B 0x 2 opcode mov_edx,[]          
-                  0x 15 0x 89 0x 2 opcode mov_[],edx          
+                  0x 15 0x 89 0x 2 opcode mov_[],edx    
                   0x 0D 0x 89 0x 2 opcode mov_[],ecx          
-                  0x 1D 0x 89 0x 2 opcode mov_[],ebx          
+                  0x 1D 0x 89 0x 2 opcode mov_[],ebx   
+                  0x 05 0x C7 0x 2 opcode mov_d[],#
+                  0x 05 0x C6 0x 2 opcode mov_b[],#
+                  0x 28 0x 89 0x 2 opcode mov_[eax],ebp
                   0x 05 0x 01 0x 2 opcode add_[],eax          
 
                   0x C8 0x 0F 0x 2 opcode bswap_eax           
