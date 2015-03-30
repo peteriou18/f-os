@@ -21,7 +21,8 @@ macro alignhe20
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
- db       " Word: hhh   0x, 66  BEGIN  ', Pop ', TIMER@ ', 2HEX.  ', TIMER@   0x, C ', -   UNTIL   ;Word "
+ db       " Word: hhh   0x, AF  0x, 55   ', AND ', DUP  ', HEX. ', exec. "
+ db       " IF  ', DUP 0x, ABB ', HEX.  ELSE  ', DUP  0x, CEE ', HEX. THEN  ', DUP ;Word "
  db       " hhh   "
  ;db       " kkk CURRENT ! "
  ;db       " 0x BCDEF CONSTANT bcd "
@@ -76,11 +77,13 @@ macro alignhe20
  db     "                   0x C2 0x 89 0x 2 opcode mov_edx,eax               "
  db     "                   0x C6 0x 89 0x 2 opcode mov_esi,eax               "
  db     "                   0x C7 0x 89 0x 2 opcode mov_edi,eax               "
+ db     "                   0x C8 0x 89 0x 2 opcode mov_eax,ecx               "
  db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
  db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
  db     "                   0x A5 0x F3 0x 2 opcode rep_movsd                 "
  db     "                   0x D8 0x 01 0x 2 opcode add_eax,ebx               "
  db     "                   0x E8 0x 01 0x 2 opcode add_eax,ebp               "
+ db     "                   0x E8 0x 21 0x 2 opcode and_eax,ebp               "
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
@@ -400,7 +403,8 @@ macro alignhe20
  db " EXIT    " ,0
 
  alignhe20
- ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .(
+ ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
+ ; ," @HEX. make_badword   make_exit  VOCABULARY  BEGIN AGAIN UNTIL IF THEN ELSE
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
 
@@ -471,12 +475,16 @@ macro alignhe20
  db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
  db " Word: UNTIL    ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
 
+ db " Word: IF       ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
+ db " Word: THEN     ', HERE ', SWAP! ;Word "
+ db " Word: ELSE     ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
+
 
  db " EXIT "
  db  0
 
  alignhe20
- ;block 5
+ ;block 5    BRANCH ?BRANCH AND
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER BRANCH          HERE   CELL+ , "
@@ -498,10 +506,27 @@ macro alignhe20
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " test_eax,eax "
  db " cmove_ecx,ebp     " ; if false-> branch
+ db " mov_eax,ecx       "
+ db " push_eax                 "
+ db " push_ecx                 "
+ db " mov_edx,#  ' Push @ ,           call_edx      "
+ db " mov_edx,#  ' HEX. @ ,           call_edx      "
+ db " pop_ecx    "
+ db " pop_eax "
  db " mov_[esp+4],ecx     "
  db " ret    "
 
  db " ALIGN "
+
+ db " HEADER AND        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " and_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
+
+ db " ALIGN                    "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
