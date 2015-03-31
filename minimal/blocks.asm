@@ -21,14 +21,11 @@ macro alignhe20
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
- db       " Word: hhh   0x, AF  0x, 55   ', AND ', DUP  ', HEX. ', exec. "
- db       " IF  ', DUP 0x, ABB ', HEX.  ELSE  ', DUP  0x, CEE ', HEX. THEN  ', DUP ;Word "
- db       " hhh   "
- ;db       " kkk CURRENT ! "
- ;db       " 0x BCDEF CONSTANT bcd "
- ;db       " kkk FORTH32 LINK "
- ;db       " kkk CONTEXT ! "
- ;db       " bcd HEX. FORTH32 CONTEXT ! bcd HEX. "
+ db     " 0x 32144 0x 32144 = HEX. "
+ ;db       " VOCABULARY IMMEDIATES "
+ ;db       " IMMEDIATES CURRENT !  "
+ ;db       " Word: ;WORD ;Word   "
+; db        " Word: isBadword?  BADWORD-xt =    ;Word ;
  db     " TIMER@ 2HEX.            "
  db     " EXIT                                                                          "
  db     0
@@ -36,11 +33,12 @@ macro alignhe20
 
 ;block 2    opcodes
 
- db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
+ db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                         "
  db     "                         0x C3 0x 1 opcode ret                       "
  db     "                         0x FC 0x 1 opcode cld                       "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
+ db     "                         0x 25 0x 1 opcode and_eax,#                 "
  db     "                         0x A3 0x 1 opcode mov_[],eax                "
  db     "                         0x A1 0x 1 opcode mov_eax,[]                "
  db     "                         0x 40 0x 1 opcode inc_eax                   "
@@ -63,6 +61,7 @@ macro alignhe20
  db     "                   0x 05 0x C6 0x 2 opcode mov_b[],#                 "
  db     "                   0x 28 0x 89 0x 2 opcode mov_[eax],ebp             "
  db     "                   0x 05 0x 01 0x 2 opcode add_[],eax                "
+ db     "                   0x D8 0x F7 0x 2 opcode neg_eax                   "
 
  db     "                   0x C8 0x 0F 0x 2 opcode bswap_eax                 "
  db     "                   0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
@@ -87,6 +86,7 @@ macro alignhe20
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
+ db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
  db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
 
  db     "             0x 04 0x C0 0x 83 0x 3 opcode add_eax,4                 "
@@ -149,8 +149,8 @@ macro alignhe20
  db 0
 
   alignhe20
- ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr
- ;           (hex_dot) 2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
+ ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
+ ;   2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER   CELL-  HERE CELL+ ,             "
@@ -169,37 +169,38 @@ macro alignhe20
  db " HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , ,  "
  db " HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 0 , , 0x 0 ,            "
 
- db " ASSEMBLER FORTH32 LINK                            "
+ db " ASSEMBLER FORTH32 LINK                           "
 
- db " HEADER    inverse_hexstr  HERE CELL+ ,            "
- db " mov_eax,[] hexstr ,                               "
- db " mov_ebx,[] hexstr CELL+ ,                         "
- db " mov_ecx,[] hexstr CELL+ CELL+ ,                   "
- db " mov_edx,[] hexstr CELL+ CELL+ CELL+ ,             "
- db " bswap_eax  bswap_ebx    bswap_ecx   bswap_edx     "
- db " mov_[],edx hexstr ,                               "
- db " mov_[],ecx hexstr CELL+ ,                         "
- db " mov_[],ebx hexstr CELL+ CELL+ ,                   "
- db " mov_[],eax hexstr CELL+ CELL+ CELL+ ,             "
- db " ret                                               "
+ db " HEADER    inverse_hexstr  HERE CELL+ ,           "
+ db " mov_eax,[] hexstr ,                              "
+ db " mov_ebx,[] hexstr CELL+ ,                        "
+ db " mov_ecx,[] hexstr CELL+ CELL+ ,                  "
+ db " mov_edx,[] hexstr CELL+ CELL+ CELL+ ,            "
+ db " bswap_eax  bswap_ebx    bswap_ecx   bswap_edx    "
+ db " mov_[],edx hexstr ,                              "
+ db " mov_[],ecx hexstr CELL+ ,                        "
+ db " mov_[],ebx hexstr CELL+ CELL+ ,                  "
+ db " mov_[],eax hexstr CELL+ CELL+ CELL+ ,            "
+ db " ret                                              "
 
- db " ALIGN                                             "
+ db " ALIGN                                            "
 
- db " HEADER (hex_dot) HERE CELL+ ,                     "
+ db " HEADER (hex_dot) HERE CELL+ ,                    "
 
- db " mov_edx,#  ' Pop @ ,   call_edx                   "
- db " mov_[],eax   hex_dot_value  ,                     "
- db " movdqu_xmm0,[]   hex_dot_value  ,                 "
- db " pxor_xmm1,xmm1                                    "
- db " punpcklbw_xmm0,xmm1                               "
- db " movdqa_xmm1,xmm0                                  "
- db " movdqu_xmm2,[] efes ,                             "
- db " pand_xmm1,xmm2                                    "
- db " psllq_xmm0,4                                      "
- db " pand_xmm0,xmm2                                    "
- db " por_xmm0,xmm1                                     "
- db " movdqa_xmm1,xmm0                                  "
- db " movdqu_xmm4,[] sixes ,                            "
+ db " mov_edx,#  ' Pop @ ,                             "
+ db " call_edx                                                                                                                                                                  "
+ db " mov_[],eax   hex_dot_value  ,                    "
+ db " movdqu_xmm0,[]   hex_dot_value  ,                "
+ db " pxor_xmm1,xmm1                                   "
+ db " punpcklbw_xmm0,xmm1                              "
+ db " movdqa_xmm1,xmm0                                 "
+ db " movdqu_xmm2,[] efes ,                            "
+ db " pand_xmm1,xmm2                                   "
+ db " psllq_xmm0,4                                     "
+ db " pand_xmm0,xmm2                                                  "
+ db " por_xmm0,xmm1                                                                                                                                                     "
+ db " movdqa_xmm1,xmm0                                                 "
+ db " movdqu_xmm4,[] sixes ,                                         "
  db " paddb_xmm1,xmm4                                   "
  db " psrlq_xmm1,4                                      "
  db " pand_xmm1,xmm2                                    "
@@ -208,12 +209,12 @@ macro alignhe20
  db " movdqu_xmm2,[] sevens ,                           "
  db " pand_xmm3,xmm2                                    "
  db " paddb_xmm0,xmm3                                   "
- db " movdqu_xmm2,[] zeroes ,                           "
- db " paddb_xmm0,xmm2                                   "
- db " movdqu_[],xmm0 hexstr ,                           "
+ db " movdqu_xmm2,[] zeroes ,                     "
+ db " paddb_xmm0,xmm2                                       "
+ db " movdqu_[],xmm0 hexstr ,                   "
  db " ret                                               "
 
- db " ALIGN                                             "
+ db " ALIGN                                           "
  db " ASSEMBLER FORTH32 LINK                        "
 
  db " HEADER 2HEX.   HERE CELL+ ,                  "
@@ -483,7 +484,7 @@ macro alignhe20
  db  0
 
  alignhe20
- ;block 5    BRANCH ?BRANCH AND
+ ;block 5    BRANCH ?BRANCH AND  =
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER BRANCH          HERE   CELL+ , "
@@ -522,6 +523,19 @@ macro alignhe20
  db " mov_ebp,eax           "
  db " call_edx                                                                                                                                                                  "
  db " and_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
+
+ db " ALIGN                    "
+
+ db " HEADER =        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " cmp_eax,ebp          "
+ db " setne_al            "
+ db " and_eax,# 0x FF , "
+ db " neg_eax   "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
 
