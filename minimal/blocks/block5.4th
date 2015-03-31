@@ -41,6 +41,19 @@ FORTH32 CURRENT ! ASSEMBLER CONTEXT !
 
  ALIGN                    
 
+ HEADER =        HERE CELL+ ,  
+ mov_edx,# ' Pop @ ,   call_edx              
+ mov_ebp,eax           
+ call_edx                                                                                                                                                                  "
+ cmp_eax,ebp          
+ setne_al            
+ and_eax,# 0x FF , 
+ neg_eax   
+ mov_edx,#  ' Push @ ,   call_edx            
+ ret                                    
+                                                
+ ALIGN                    
+
  FORTH32 CONTEXT ! FORTH32 CURRENT !     
 
  EXIT 
