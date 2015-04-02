@@ -16,7 +16,7 @@ macro alignhe20
  db     " 0x 2 LOAD                                                             "
  db     " 0x 3 LOAD 0x 5 LOAD                                          "
 
- db     "  TIMER@  2HEX.                                                        "
+ db     "  TIMER@  2HEX.              "
 
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
@@ -25,14 +25,14 @@ macro alignhe20
  ;db       " VOCABULARY IMMEDIATES "
  ;db       " IMMEDIATES CURRENT !  "
  ;db       " Word: ;WORD ;Word   "
-; db        "  ' DUP HEX. .( hhh) ' CONTEXT HEX. "
+ db        "  ' HERE HEX. .( hhh) ' HEX. HEX. "
 ; db        " .( here:) ' HERE HEX. .( hex.:) ' HEX. HEX.  ' CELL+ HEX. ' EXIT HEX. "
  db        " Word: isNotBadword? ', CONTEXT ', @ ', BADWORD-xt ', =    ;Word "
- db        " Word: WORD:  BEGIN ', '  ', DUP ', HEX. ', DUP ', , ', isNotBadword?  UNTIL  ;Word "
-;  db        " Word: ccc    BEGIN  ', ' ', DUP ', HEX. ', isNotBadword? UNTIL  ;Word "
+ db        " Word: WORD: ', Word:  BEGIN  ', HERE ', HEX. ', '  ', DUP ', HEX. ', DUP ', ,  ', isNotBadword? UNTIL  ;Word "
+;  db        " Word: WORD: ', Word:  BEGIN  ', ' ', DUP ', HEX. ', EXECUTE AGAIN  ;Word "
 ;  db        " ccc "
- db        "  HERE HEX. .( WORD:) WORD:  HERE HEX. HERE    EXIT xgfsd "
- db     " HERE HEX. TIMER@ 2HEX.            "
+ db        "  HERE HEX. .( WORD:) WORD:  nnb   HERE HEX. CONTEXT HEX. CONTEXT @ @ 1+ TYPEZ   EXIT dfg "
+ db     " HERE HEX. TIMER@ 2HEX.     nnb       "
  db     " EXIT                                                                          "
  db     0
  alignhe20
@@ -411,7 +411,7 @@ macro alignhe20
 
  alignhe20
  ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
- ; ," @HEX. make_badword   make_exit  VOCABULARY  NOOP BEGIN AGAIN UNTIL IF THEN ELSE
+ ; ," @HEX. make_badword   make_exit  VOCABULARY  BEGIN AGAIN UNTIL IF THEN ELSE
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
 
@@ -478,7 +478,7 @@ macro alignhe20
  db " ', HERE  ', >R  ', make_exit   "
  db " ', R>  ', SWAP!          ;Word "
 
- db " Word: NOOP        ;Word   ;  "
+ db " Word: NOOP        ;Word     "
 
  db " Word: BEGIN    ', HERE ', CELL-   ;Word       "
  db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
@@ -493,7 +493,7 @@ macro alignhe20
  db  0
 
  alignhe20
- ;block 5    BRANCH ?BRANCH AND  = <>
+ ;block 5    BRANCH ?BRANCH AND  =  <>
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER BRANCH          HERE   CELL+ , "
@@ -540,7 +540,7 @@ macro alignhe20
  db " HEADER =        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
- db " call_edx                                                                                                                                                                  "
+ db " call_edx                 "
  db " cmp_eax,ebp          "
  db " sete_al            "
  db " and_eax,# 0x FF , "
@@ -554,7 +554,7 @@ macro alignhe20
  db " HEADER <>        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
- db " call_edx                                                                                                                                                                  "
+ db " call_edx                          "
  db " cmp_eax,ebp          "
  db " setne_al            "
  db " and_eax,# 0x FF , "
