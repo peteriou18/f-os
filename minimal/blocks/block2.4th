@@ -2,7 +2,8 @@
                         0x C3 0x 1 opcode ret                 
                         0x FC 0x 1 opcode cld                 
                         0x BA 0x 1 opcode mov_edx,#           
-                        0x B8 0x 1 opcode mov_eax,#           
+                        0x B8 0x 1 opcode mov_eax,#   
+                        0x 25 0x 1 opcode and_eax,# 
                         0x A3 0x 1 opcode mov_[],eax          
                         0x A1 0x 1 opcode mov_eax,[]          
                         0x 40 0x 1 opcode inc_eax             
