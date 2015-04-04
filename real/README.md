@@ -79,6 +79,10 @@ BUFFER_1
 BUFFER_2
 buf_adr
 buf_block
+buf_state
++CELL
+BLOCK
+LOAD
 
 
 Как комплировать значение со стека в виде литерала?
