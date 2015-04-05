@@ -83,6 +83,10 @@ buf_state
 +CELL
 BLOCK
 LOAD
+N>LINK
+?BRANCH
+BRANCH
+
 
 
 Как комплировать значение со стека в виде литерала?
