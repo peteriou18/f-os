@@ -88,8 +88,8 @@ N>LINK
 BRANCH
 WBLOCK
 DROP
-
-
+var_
+CONSTANT
 
 
 Как комплировать значение со стека в виде литерала?
