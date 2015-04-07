@@ -90,6 +90,9 @@ WBLOCK
 DROP
 var_
 CONSTANT
+1
+to_cf
+br_label
 
 
 Как комплировать значение со стека в виде литерала?
