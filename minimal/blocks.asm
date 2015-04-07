@@ -21,18 +21,46 @@ macro alignhe20
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
+ db     " Word: xtype "
+ db     ' ," ;Word_word" '
+ db     " ', 1+ ', TYPEZ ;Word "
 
- ;db       " VOCABULARY IMMEDIATES "
- ;db       " IMMEDIATES CURRENT !  "
- ;db       " Word: ;WORD ;Word   "
- db        "  ' HERE HEX. .( hhh) ' HEX. HEX. "
+; db     " Word: qqq  "
+; db     ' ," qqq_word_as_notfound_will_compile: " '
+; db     " ', 1+ ', TYPEZ ', HERE ', TYPEZ ', HEX. ;Word "
+ db     " Word: qqq  "
+ db     ' ," qqq_word_as_notfound_will_compile: " '
+ db     " ', 1+ ', TYPEZ ', HERE ', TYPEZ ', CONTEXT ', @ ', SFIND ', ,  ;Word "
+
+ db       " VOCABULARY IMMEDIATES "
+ db       " IMMEDIATES CURRENT !  "
+ db       " Word: ;WORD ', FORTH32 ', CONTEXT ', ! ', ;Word ', xtype ;Word   "
+ db       ' Word: abcd  ," abcd_word" '
+ db       "  ', 1+  ', TYPEZ ;Word "
+ db       " Word: 0x, ', 0x, ;Word "
+
+ db       " FORTH32 CURRENT ! "
+ db       " IMMEDIATES FORTH32 LINK "
+; db       " ' BADWORD HEX. "
+
+ db     " IMMEDIATES CONTEXT ! "
+;
+db         "  .( qqq_to_bad) ' qqq  ' BADWORD CELL+ !   "
+ db        " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
+
+;db       " ' jjj ' jkjk CELL+ ! "
+;db       " .( test badword) ghfg .( end of test)    "
+
+ ;db        "  ' HERE HEX. .( hhh) ' HEX. HEX. "
 ; db        " .( here:) ' HERE HEX. .( hex.:) ' HEX. HEX.  ' CELL+ HEX. ' EXIT HEX. "
- db        " Word: isNotBadword? ', CONTEXT ', @ ', BADWORD-xt ', =    ;Word "
- db        " Word: WORD: ', Word:  BEGIN  ', HERE ', HEX. ', '  ', DUP ', HEX. ', DUP ', ,  ', isNotBadword? UNTIL  ;Word "
-;  db        " Word: WORD: ', Word:  BEGIN  ', ' ', DUP ', HEX. ', EXECUTE AGAIN  ;Word "
+ ;db        " Word: isNotBadword? ', CONTEXT ', @ ', BADWORD-xt ', =    ;Word "
+; db        " Word: WORD: ', Word:  BEGIN  ', HERE ', HEX. ', '  ', DUP ', HEX. ', DUP ', ,  ', isNotBadword? UNTIL  ;Word "
+;  db        " Word: WORD: ', Word:  ', IMMEDIATES ', DUP ', UNLINK ', CONTEXT ', !  BEGIN  ', ' ', DUP ', EXECUTE ', Pop  AGAIN  ;Word "
+   db        " Word: WORD: ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND ', EXECUTE  AGAIN ;Word "
 ;  db        " ccc "
- db        "  HERE HEX. .( WORD:) WORD:  nnb   HERE HEX. CONTEXT HEX. CONTEXT @ @ 1+ TYPEZ   EXIT dfg "
- db     " HERE HEX. TIMER@ 2HEX.     nnb       "
+db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
+; CONTEXT HEX. CONTEXT @ @ 1+ TYPEZ   EXIT dfg "
+ db     " HERE HEX. nnb TIMER@ 2HEX.        stop   "
  db     " EXIT                                                                          "
  db     0
  alignhe20
@@ -41,6 +69,7 @@ macro alignhe20
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                         "
  db     "                         0x C3 0x 1 opcode ret                       "
+ db     "                         0x F4 0x 1 opcode hlt                       "
  db     "                         0x FC 0x 1 opcode cld                       "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
@@ -561,7 +590,14 @@ macro alignhe20
  db " neg_eax   "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
+
  db " ALIGN                    "
+
+ db " HEADER stop HERE CELL+ , "
+ db " hlt "
+ db " ret "
+
+  db " ALIGN                    "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
@@ -570,4 +606,26 @@ macro alignhe20
  db     0
  alignhe20
  ;block 6
+ db     " VOCABULARY kkk "
+
+ db       ' Word: jjj ," jjj_word" '
+ db       " ', 1+ ', TYPEZ ;Word "
+
+ db       ' Word: qqq ," qqq_word " '
+ db       " ', 1+ ', TYPEZ ', FORTH32 ', CONTEXT ', ! ;Word "
+
+ db     " ' jjj ' BADWORD   CELL+ DUP .( jjj_to_badword ) HEX. ! "
+
+ db     ' Word: aab     ," aab_old" '
+ db     " ', 1+ ', TYPEZ ;Word "
+
+ db     " kkk CURRENT !  kkk FORTH32 LINK    "
+
+ db     ' Word: aab     ," aab_new" '
+ db     " ', 1+ ', TYPEZ ;Word "
+
+ db     " FORTH32 CURRENT ! kkk CONTEXT ! "
+ db     " ' qqq ' BADWORD CELL+ DUP .( qqq_to_badword ) HEX. ! "
+
+ db     " aab hj  .( FORTH32 CONTEXT ! ) kkk UNLINK  aab hj "
  db     0
