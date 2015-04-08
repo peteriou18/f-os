@@ -93,6 +93,8 @@ CONSTANT
 1
 to_cf
 br_label
+?br_label
+constant_
 
 
 Как комплировать значение со стека в виде литерала?
