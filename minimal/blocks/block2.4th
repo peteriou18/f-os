@@ -1,5 +1,6 @@
       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !              	
-                        0x C3 0x 1 opcode ret                 
+                        0x C3 0x 1 opcode ret 
+                        0x F4 0x 1 opcode hlt     
                         0x FC 0x 1 opcode cld                 
                         0x BA 0x 1 opcode mov_edx,#           
                         0x B8 0x 1 opcode mov_eax,#   
