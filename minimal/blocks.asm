@@ -51,22 +51,11 @@ macro alignhe20
 db         "  .( qqq_to_bad) ' qqq  ' BADWORD CELL+ !   "
  db        " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
 
-;db       " ' jjj ' jkjk CELL+ ! "
-;db       " .( test badword) ghfg .( end of test)    "
 
- ;db        "  ' HERE HEX. .( hhh) ' HEX. HEX. "
-; db        " .( here:) ' HERE HEX. .( hex.:) ' HEX. HEX.  ' CELL+ HEX. ' EXIT HEX. "
- ;db        " Word: isNotBadword? ', CONTEXT ', @ ', BADWORD-xt ', =    ;Word "
-; db        " Word: WORD: ', Word:  BEGIN  ', HERE ', HEX. ', '  ', DUP ', HEX. ', DUP ', ,  ', isNotBadword? UNTIL  ;Word "
-;  db        " Word: WORD: ', Word:  ', IMMEDIATES ', DUP ', UNLINK ', CONTEXT ', !  BEGIN  ', ' ', DUP ', EXECUTE ', Pop  AGAIN  ;Word "
    db        " Word: WORD: ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND HERE HEX. ', EXECUTE   AGAIN  ', ztype  ;Word "
-;  db        " ccc "
+
 db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
-; CONTEXT HEX. CONTEXT @ @ 1+ TYPEZ   EXIT dfg "
- db     " HERE HEX. nnb TIMER@ 2HEX.           "
- db     " EXIT                                                                          "
- db     0
- alignhe20
+
 
 ;block 2    opcodes
 
