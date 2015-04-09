@@ -30,9 +30,9 @@ macro alignhe20
 
 ;block 2    opcodes
 
- db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                         "
+ db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
+ 
  db     "                         0x C3 0x 1 opcode ret                       "
-
  db     "                         0x F4 0x 1 opcode hlt                       "
  db     "                         0x FC 0x 1 opcode cld                       "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
