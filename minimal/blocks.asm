@@ -31,31 +31,14 @@ macro alignhe20
 ; db     " Word: qqq  "
 ; db     ' ," qqq_word_as_notfound_will_compile: " '
 ; db     " ', 1+ ', TYPEZ ', HERE ', TYPEZ ', HEX. ;Word "
- db     "  Word: qqq  "
- db     ' ," qqq_word_will_compile: " '
- db     " ', 1+ ', TYPEZ ', HERE ', TYPEZ ', CONTEXT ', @ ', SFIND ', ,  ;Word "
-
- db       " VOCABULARY IMMEDIATES "
- db       " IMMEDIATES CURRENT !  "
- db       " Word: ;WORD  ', xtype    ', lit#  ' EXIT ,  ', ,  ', 2EXIT ;Word  "
- db       ' Word: abcd  ," abcd_word" '
- db       "  ', 1+  ', TYPEZ ;Word "
- db       " Word: 0x, ', 0x, ;Word "
-
- db       " FORTH32 CURRENT ! "
- db       " IMMEDIATES FORTH32 LINK "
-; db       " ' BADWORD HEX. "
-
- db     " IMMEDIATES CONTEXT ! "
-;
-db         "  .( qqq_to_bad) ' qqq  ' BADWORD CELL+ !   "
- db        " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
 
 
-   db        " Word: WORD: ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND HERE HEX. ', EXECUTE   AGAIN  ', ztype  ;Word "
 
-db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
-
+db        "   .( WORD:) WORD:  nnb    HERE    HEX.  TIMER@ 2HEX.     ;WORD "
+ db     " HERE HEX. nnb TIMER@ 2HEX.           "
+ db     " EXIT                                                                          "
+ db     0
+ alignhe20
 
 ;block 2    opcodes
 
@@ -134,6 +117,7 @@ db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
  db     "             0x 00 0x B6 0x 0F 0x 3 opcode movzx_eax,b[eax]          "
  db     "             0x 0E 0x B6 0x 0F 0x 3 opcode movzx_ecx,b[esi]          "
  db     "             0x CD 0x 44 0x 0F 0x 3 opcode cmove_ecx,ebp             "
+ db     "             0x 24 0x 84 0x 81 0x 3 opcode add_d[esp+],#             "
  db     "             0x C2 0x 10 0x 00 0x 3 opcode retn_10h                  "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
@@ -512,6 +496,23 @@ db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
  db " Word: THEN     ', HERE ', SWAP! ;Word "
  db " Word: ELSE     ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
 
+ db "  Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
+
+ db " VOCABULARY IMMEDIATES "
+ db " IMMEDIATES CURRENT !  "
+
+ db " Word: ;WORD    ', lit#  ' EXIT ,  ', ,  ', break ;Word  "
+
+ db " FORTH32 CURRENT ! "
+ db " IMMEDIATES FORTH32 LINK "
+
+ db " IMMEDIATES CONTEXT ! "
+ db " ' compiler  ' BADWORD CELL+ !   "
+ db " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
+
+ db " Word: WORD: "
+ db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
+
 
  db " EXIT "
  db  0
@@ -594,14 +595,9 @@ db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
 
   db " ALIGN                    "
 
- db " HEADER 2EXIT HERE CELL+ , "
-; db "   pop_eax  pop_eax pop_eax pop_eax pop_eax "
-;  db " mov_edx,#  ' Push @ ,   call_edx            "
-
-;  db " mov_edx,#  ' HEX. @ ,           call_edx "
-;  db " pop_eax    "
- db " add_d[esp+10],8 "
-; db " push_eax hlt "
+ db " HEADER break HERE CELL+ , "
+; db " add_d[esp+10],8 "
+ db  " add_d[esp+],# 0x 10 , 0x 8 , "
  db " ret "
 
  db " ALIGN      "
@@ -613,26 +609,5 @@ db        "   .( WORD:) WORD:  nnb  abcd  HERE    HEX.    abcd    ;WORD "
  db     0
  alignhe20
  ;block 6
- db     " VOCABULARY kkk "
 
- db       ' Word: jjj ," jjj_word" '
- db       " ', 1+ ', TYPEZ ;Word "
-
- db       ' Word: qqq ," qqq_word " '
- db       " ', 1+ ', TYPEZ ', FORTH32 ', CONTEXT ', ! ;Word "
-
- db     " ' jjj ' BADWORD   CELL+ DUP .( jjj_to_badword ) HEX. ! "
-
- db     ' Word: aab     ," aab_old" '
- db     " ', 1+ ', TYPEZ ;Word "
-
- db     " kkk CURRENT !  kkk FORTH32 LINK    "
-
- db     ' Word: aab     ," aab_new" '
- db     " ', 1+ ', TYPEZ ;Word "
-
- db     " FORTH32 CURRENT ! kkk CONTEXT ! "
- db     " ' qqq ' BADWORD CELL+ DUP .( qqq_to_badword ) HEX. ! "
-
- db     " aab hj  .( FORTH32 CONTEXT ! ) kkk UNLINK  aab hj "
  db     0
