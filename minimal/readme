@@ -49,3 +49,14 @@ LINK - Concatenate two vocabularies.
 
 ASSEMBLER - vocabulary for opcodes by default based on FORTH32
 opcode - define opcode name.
+
+Block1
+Loads and tests
+
+Block2
+Opcodes
+
+Block3
+CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
+2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
+
