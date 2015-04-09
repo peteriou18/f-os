@@ -21,20 +21,8 @@ macro alignhe20
  db     " 0x 4 LOAD                                     "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
- db     " Word: xtype "
- db     ' ," ;Word_word" '
- db     " ', 1+ ', TYPEZ ;Word "
 
- db     " Word: ztype "
- db     ' ," After_execute:" '
- db     " ', 1+ ', TYPEZ ;Word "
-; db     " Word: qqq  "
-; db     ' ," qqq_word_as_notfound_will_compile: " '
-; db     " ', 1+ ', TYPEZ ', HERE ', TYPEZ ', HEX. ;Word "
-
-
-
-db        "   .( WORD:) WORD:  nnb    HERE    HEX.  TIMER@ 2HEX.     ;WORD "
+ db     "   .( WORD:) WORD:  nnb    HERE    HEX.  TIMER@ 2HEX.     ;WORD "
  db     " HERE HEX. nnb TIMER@ 2HEX.           "
  db     " EXIT                                                                          "
  db     0
