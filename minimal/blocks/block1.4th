@@ -1,16 +1,13 @@
 TYPEZ   									
 0x 2 LOAD 		 						
-0x 3 LOAD  								
-0x 3366 DUP 2HEX. 						
- TIMER@  2HEX.  							
-
+0x 3 LOAD  	0x 5 LOAD 							
+TIMER@  2HEX.  							
 
 0x 4 LOAD    								
 
+S" Test of type "  1+ TYPEZ
 
- make_badword 							
-S" holekdhv"  1+ TYPEZ 					
-0x 6666 0x 4444 >R R@ HEX. R> HEX.  HEX. 	
-
+.( WORD:) WORD:  nnb    HERE HEX.  0x_as_lit, 333777  HEX.   TIMER@ 2HEX.   ;WORD
+HERE HEX. nnb
 TIMER@ 2HEX. 								
 EXIT 										
