@@ -101,6 +101,9 @@ OR!
 off_data
 <>
 how_many_sectors
+dot_quote_code
+code_top
+pop_code
 
 
 Как комплировать значение со стека в виде литерала?
