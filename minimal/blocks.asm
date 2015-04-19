@@ -503,6 +503,7 @@ macro alignhe20
 
  db " IMMEDIATES CONTEXT ! "
  db " ' compiler  ' BADWORD CELL+ !   "
+ 
  db " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
 
  db " Word: WORD: "
@@ -515,21 +516,10 @@ macro alignhe20
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
-  db " .( tt_define)  WORD: tt   [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,    ;WORD "
-
-
  db ' WORD: ."      ,"  '
  db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
 
-
-
-
- ;db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT  "
- ;db " ', lit# ' 1+ , ', ,  ', lit# ' TYPEZ , ', , ;Word "
-
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
- ;db " LATEST 1+ TYPEZ "
- ; db " .( mm_define ) WORD: mm      TIMER@ [ TIMER@  2HEX. ] 2HEX. ;WORD  "
 
  db " EXIT "
  db  0
