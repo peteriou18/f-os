@@ -33,15 +33,19 @@ Word: .(        ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ                 ;Word
 
 Word: PAD       0x, HERE 0x, 200  ', +                                  ;Word 
 
-Word: Word+     ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)                   ;Word  
+Word: Word+     ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)                               ;Word  
 
-Word: S"        ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD  ;Word 
+Word: S"        ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD              ;Word 
 
-Word: exec.     ', exec_point ', HEX.                                                   ;Word 
+Word: exec.     ', exec_point ', HEX.                                                               ;Word 
 
-Word: ,"        ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', ALLOT     ;Word 
+Word: ,"        ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT     ;Word 
 
-Word: make_badword     0x, 7773  ', HEX.  ,"  asdfer-4"  ', 1+  ', TYPEZ                ;Word  
+Word: @HEX.     ', DUP ', @ ',  HEX. ',  CELL+  ;Word
 
-S" hjksh slj lkj" TYPEZ 
+Word: make_badword     
+                ," BADWORD"  ', DUP  ', HERE  ', strcopy   ', C@  ', CELL+  ', ALLOT  
+                0x, 0  ', ,  ', lit#  ' BADWORD @ ,  ', ,  ', lit#  ', ABORT     ', ,               ;Word  
+
+
 
