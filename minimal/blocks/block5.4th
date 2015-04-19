@@ -67,6 +67,18 @@ FORTH32 CURRENT ! ASSEMBLER CONTEXT !
  
  ALIGN                  
  
+ HEADER stop      HERE CELL+ ,
+ hlt
+ ret
+ 
+ ALIGN
+ 
+ HEADER break     HERE CELL+ ,
+ add_d[esp+],# 0x 10 , 0x 8 ,
+ ret
+ 
+ ALIGN
+ 
  FORTH32 CONTEXT ! FORTH32 CURRENT !     
 
  EXIT 
