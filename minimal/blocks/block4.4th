@@ -47,5 +47,9 @@ Word: make_badword
                 ," BADWORD"  ', DUP  ', HERE  ', strcopy   ', C@  ', CELL+  ', ALLOT  
                 0x, 0  ', ,  ', lit#  ' BADWORD @ ,  ', ,  ', lit#  ', ABORT     ', ,               ;Word  
 
+Word: make_exit
+                 ," EXIT"  ', DUP  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT  ', ,  ', lit#  ', EXIT ', ,  ;Word
+                 
 
+                
 
