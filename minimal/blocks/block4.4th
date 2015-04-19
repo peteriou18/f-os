@@ -58,4 +58,41 @@ Word: NOOP        ;Word
 
 Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word
                 
+Word: BEGIN    ', HERE ', CELL-                  ;Word
+Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word 
+Word: UNTIL    ', lit#    ' ?BRANCH ,  ', , ', , ;Word
 
+Word: IF       ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word 
+Word: THEN     ', HERE ', SWAP! ;Word
+Word: ELSE     ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word 
+
+VOCABULARY IMMEDIATES
+IMMEDIATES CURRENT !  
+
+Word: ;WORD    ', lit#  ' EXIT ,  ', ,  ', break ;Word
+
+FORTH32 CURRENT !
+IMMEDIATES FORTH32 LINK
+
+IMMEDIATES CONTEXT !
+
+' compiler  ' BADWORD CELL+ !
+
+FORTH32 CONTEXT !   IMMEDIATES UNLINK
+
+Word: WORD:
+                ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word 
+                
+IMMEDIATES CURRENT !
+
+WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD
+WORD: ]   IMMEDIATES UNLINK     ;WORD
+
+WORD: 0x_as_lit,    0x, ;WORD
+
+
+WORD: ."      ,"  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD 
+
+FORTH32 CURRENT !    IMMEDIATES UNLINK
+ 
+ EXIT
