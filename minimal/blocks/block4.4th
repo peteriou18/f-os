@@ -50,6 +50,10 @@ Word: make_badword
 Word: make_exit
                  ," EXIT"  ', DUP  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT  ', ,  ', lit#  ', EXIT ', ,  ;Word
                  
+ Word: VOCABULARY
+                ', VARIABLE   ', HERE ', CELL  ', HERE ', make_badword  
+                ', HERE  ', >R  ', make_exit ', R>  ', SWAP!                                     ;Word
+                 
 
                 
 
