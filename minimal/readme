@@ -63,7 +63,7 @@ CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
 Block4 (under construction)
 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
 ; ," @HEX. make_badword   make_exit  VOCABULARY NOOP compiler 
-BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  0x_as_lit,
+BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  [ ] 0x_as_lit, ." 
 
 Block5 (under construction)
 BRANCH ?BRANCH AND  =  <> stop break
