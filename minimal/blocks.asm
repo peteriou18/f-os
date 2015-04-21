@@ -18,14 +18,14 @@ macro alignhe20
 
 ; db     "  TIMER@  2HEX.              "
 
- db     " 0x 4 LOAD                                  "
+ db     " 0x 4 LOAD      0x 6 LOAD                            "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
   db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
  db        "   .( WORD:) WORD:  nnb    HERE    HEX. 0x_as_lit, 333777 HEX.   "
  db        ' ." Test print in nnb word "    ;WORD '
-; db        " .( tt_test) HERE  WORD: dde tt ;WORD @HEX. @HEX. @HEX. @HEX. @HEX. .( tt_aftre) "
- db     "  nnb TIMER@ 2HEX.           "
+ db        ' .( tt_test) HERE  WORD: dde  ." in dde word  " TIMER@ 2HEX. ;WORD @HEX. @HEX. @HEX. @HEX. @HEX. .( tt_aftre) '
+ db     "  nnb TIMER@ 2HEX.     dde      "
   db     "  "
  db     " EXIT                                                                          "
  db     0
@@ -36,6 +36,7 @@ macro alignhe20
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
 
  db     "                         0x C3 0x 1 opcode ret                       "
+ db     "                         0x CF 0x 1 opcode iretd                     "
  db     "                         0x F4 0x 1 opcode hlt                       "
  db     "                         0x FC 0x 1 opcode cld                       "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
@@ -52,6 +53,8 @@ macro alignhe20
  db     "                         0x 50 0x 1 opcode push_eax                  "
  db     "                         0x 53 0x 1 opcode push_ebx                  "
  db     "                         0x 51 0x 1 opcode push_ecx                  "
+ db     "                         0x 60 0x 1 opcode pushad                    "
+ db     "                         0x 61 0x 1 opcode popad                     "
 
  db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
  db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
@@ -86,10 +89,13 @@ macro alignhe20
  db     "                   0x E8 0x 01 0x 2 opcode add_eax,ebp               "
  db     "                   0x E8 0x 21 0x 2 opcode and_eax,ebp               "
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
+ db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
  db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
  db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
+
+ db     "                   0x 60 0x E4 0x 2 opcode in_al,60h                 "
 
  db     "             0x 04 0x C0 0x 83 0x 3 opcode add_eax,4                 "
  db     "             0x 04 0x C1 0x 83 0x 3 opcode add_ecx,4                 "
@@ -145,6 +151,8 @@ macro alignhe20
  db     "       0x 04 0x 24 0x 44 0x 01 0x 4 opcode add_[esp+4],eax               "
  db     "       0x 04 0x 40 0x B6 0x 0F 0x 4 opcode movzx_eax,b[eax+4]            "
  db     "       0x 04 0x 58 0x B6 0x 0F 0x 4 opcode movzx_ebx,b[eax+4]            "
+
+ db     "       0x 20 0x E6 0x 20 0x B0 0x 4 opcode eoi                           "
 
  db     " 0x 04 0x 04 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+4],4                "
  db     " 0x 08 0x 10 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+10],8                "
@@ -411,7 +419,7 @@ macro alignhe20
  alignhe20
  ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
  ; ," @HEX. make_badword   make_exit  VOCABULARY NOOP compiler
- ; BEGIN AGAIN UNTIL IF THEN ELSE IMMEDIATES ;WORD   WORD:  0x_as_lit,
+ ; BEGIN AGAIN UNTIL IF THEN ELSE IMMEDIATES ;WORD   WORD: [ ] 0x_as_lit, ."
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
 
@@ -502,8 +510,9 @@ macro alignhe20
 
 
  db " IMMEDIATES CONTEXT ! "
+
  db " ' compiler  ' BADWORD CELL+ !   "
- 
+
  db " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
 
  db " Word: WORD: "
@@ -516,8 +525,11 @@ macro alignhe20
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
+
  db ' WORD: ."      ,"  '
  db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
+
+
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
@@ -605,5 +617,24 @@ macro alignhe20
  db     0
  alignhe20
  ;block 6
+ db " FORTH32 CURRENT ! "
+ db " VARIABLE key "
+ db " VOCABULARY interrupts  interrupts CURRENT ! "
+ db " ASSEMBLER CONTEXT ! "
 
+
+ db " HEADER key_int    HERE CELL+ , "
+ db " pushad "
+ db " xor_eax,eax "
+ db " in_al,60h "
+ db " mov_[],eax ' key CELL+ , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db     0
+
+db     0
+ alignhe20
+ ;block 7
