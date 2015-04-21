@@ -54,7 +54,7 @@ Block1 (under construction)
 Loads and tests
 
 Block2 (under construction)
-Opcodes
+Opcodes 2, 3, 4, 5 bytes opcodes.
 
 Block3
 CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
@@ -67,4 +67,10 @@ BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  [ ] 0x_as_lit, ."
 
 Block5 (under construction)
 BRANCH ?BRANCH AND  =  <> stop break
+
+Block 6 (under construction)
+interrupts
+
+Block 7 (under construction)
+Opcodes one byte.
 
