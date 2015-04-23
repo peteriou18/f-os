@@ -18,7 +18,13 @@ macro alignhe20
 
 ; db     "  TIMER@  2HEX.              "
 
- db     " 0x 4 LOAD      0x 6 LOAD                            "
+ db     " 0x 4 LOAD      0x 6 LOAD       .( key int setup:)  interrupts FORTH32 LINK              "
+ db     " interrupts CONTEXT !   "
+ db     " ' key_int @   DUP HEX.  0x 21  make_interrupt_gate  "
+  db     " ' key_int @   DUP HEX.  0x 0  make_interrupt_gate  "
+  db " 0x 500 @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. "
+ ; db     " overflow  key_int "
+ db     " idtr 0x 2 + @  HEX. "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
   db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
@@ -62,6 +68,7 @@ macro alignhe20
  db     "                   0x C2 0x 89 0x 2 opcode mov_edx,eax               "
  db     "                   0x C6 0x 89 0x 2 opcode mov_esi,eax               "
  db     "                   0x C7 0x 89 0x 2 opcode mov_edi,eax               "
+ db     "                   0x F8 0x 89 0x 2 opcode mov_eax,edi               "
  db     "                   0x C8 0x 89 0x 2 opcode mov_eax,ecx               "
  db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
  db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
@@ -101,6 +108,7 @@ macro alignhe20
  db     "             0x CD 0x 44 0x 0F 0x 3 opcode cmove_ecx,ebp             "
  db     "             0x 24 0x 84 0x 81 0x 3 opcode add_d[esp+],#             "
  db     "             0x C2 0x 10 0x 00 0x 3 opcode retn_10h                  "
+ db     "             0x 0D 0x 01 0x 0F 0x 3 opcode sidt_[]                   "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
  db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
@@ -604,22 +612,28 @@ macro alignhe20
  ;block 6
  db " FORTH32 CURRENT !  "
 
- db " VARIABLE key     VOCABULARY interrupts "
+ db " VARIABLE key     "
+ db " VARIABLE idtr 0 , "
+ db " VOCABULARY interrupts "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
 
  db " HEADER make_interrupt_gate        HERE CELL+ ,   "
  db " mov_edx,# ' Pop @ ,   call_edx              " ;Interrupt No
  db " mov_ecx,eax "
- db " mov_edi,[] 0x 46A2 ,   "
+ db " sidt_[]  idtr  , "
+ db " mov_edi,[]  idtr  0x 2 +  ,   "
  db " shl_ecx,3         "
  db " add_edi,ecx       "
- db " call_edx          "
+ ;db " mov_eax,edi       "
+ ;db " mov_edx,# ' Push @ ,   call_edx              "
+ db " call_edx          "      ; link to handler
  db " push_eax          "
  db " stosw             "
  db " mov_eax,# 0x 8 ,          "
  db " stosw             "
- db " mov_eax,# 0x 8E00 "
+ db " mov_eax,# 0x 8E00 , "
+ db " stosw     "
  db " pop_eax   "
  db " shr_eax,16        "
  db " stosw             "
@@ -633,14 +647,23 @@ macro alignhe20
  db " "
 
 
- db " HEADER key_int    HERE CELL+ , "
+ db " HEADER key_int    HERE  CELL+  DUP HEX. , "
  db " pushad "
+ db "  "
  db " xor_eax,eax "
  db " in_al,60h "
  db " mov_[],eax ' key CELL+ , "
+ db " add_[],eax 0x B8000 , "
+; db " add_d[],# 0x B8000 , 0x 40424043 ,  "
  db " eoi "
  db " popad "
  db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER overflow HERE CELL+ , "
+ db " into   "
+ db " ret"
 
  db " ALIGN      "
 
@@ -655,6 +678,7 @@ macro alignhe20
  db     "                         0x CF 0x 1 opcode iretd                     "
  db     "                         0x F4 0x 1 opcode hlt                       "
  db     "                         0x FC 0x 1 opcode cld                       "
+ db     "                         0x CE 0x 1 opcode into                      "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
  db     "                         0x 25 0x 1 opcode and_eax,#                 "
