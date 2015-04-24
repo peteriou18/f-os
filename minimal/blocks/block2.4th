@@ -1,22 +1,5 @@
       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !              	
-                        0x C3 0x 1 opcode ret 
-                        0x F4 0x 1 opcode hlt     
-                        0x FC 0x 1 opcode cld                 
-                        0x BA 0x 1 opcode mov_edx,#           
-                        0x B8 0x 1 opcode mov_eax,#   
-                        0x 25 0x 1 opcode and_eax,# 
-                        0x A3 0x 1 opcode mov_[],eax          
-                        0x A1 0x 1 opcode mov_eax,[]          
-                        0x 40 0x 1 opcode inc_eax             
-                        0x 43 0x 1 opcode inc_ebx             
-                        0x 41 0x 1 opcode inc_ecx             
-                        0x 58 0x 1 opcode pop_eax             
-                        0x 5B 0x 1 opcode pop_ebx             
-                        0x 59 0x 1 opcode pop_ecx             
-                        0x 50 0x 1 opcode push_eax            
-                        0x 53 0x 1 opcode push_ebx            
-                        0x 51 0x 1 opcode push_ecx            
-
+                        
                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]          
                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]          
                   0x 15 0x 8B 0x 2 opcode mov_edx,[]          
