@@ -21,9 +21,9 @@ macro alignhe20
  db     " 0x 4 LOAD      0x 6 LOAD       .( key int setup:)  interrupts FORTH32 LINK              "
  db     " interrupts CONTEXT !   "
  db     " ' key_int @   DUP HEX.  0x 21  make_interrupt_gate  "
-  db     " ' key_int @   DUP HEX.  0x 0  make_interrupt_gate  "
+  db     " ' overflow @   DUP HEX.  0x 0  make_interrupt_gate  "
   db " 0x 500 @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. "
- ; db     " overflow  key_int "
+  db     " .( Overflow test) overf "
  db     " idtr 0x 2 + @  HEX. "
  db     ' S" Test of type "  1+ TYPEZ                                       '
 
@@ -614,6 +614,7 @@ macro alignhe20
 
  db " VARIABLE key     "
  db " VARIABLE idtr 0 , "
+  db ' WORD: overfl  ." Divide by zero:"  ;WORD '
  db " VOCABULARY interrupts "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
@@ -647,23 +648,32 @@ macro alignhe20
  db " "
 
 
- db " HEADER key_int    HERE  CELL+  DUP HEX. , "
+
+ db " HEADER overflow HERE CELL+ , "
+ db " mov_edx,# ' overfl @ , call_edx   "
+ db " hlt iretd "
+
+ db " ALIGN      "
+
+ db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
  db "  "
  db " xor_eax,eax "
  db " in_al,60h "
  db " mov_[],eax ' key CELL+ , "
- db " add_[],eax 0x B8000 , "
-; db " add_d[],# 0x B8000 , 0x 40424043 ,  "
+ db " add_[],eax 0x B8000 ,  "
+ db " mov_eax,# '  overfl , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
 
  db " ALIGN      "
 
- db " HEADER overflow HERE CELL+ , "
+  db " HEADER overf HERE CELL+ , "
  db " into   "
- db " ret"
+ db " ret "
 
  db " ALIGN      "
 
