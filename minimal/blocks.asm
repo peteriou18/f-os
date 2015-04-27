@@ -13,28 +13,12 @@ macro alignhe20
 
 ;block1
  db	" TYPEZ                                                                         "
- db	" 0x 7 LOAD 0x 2 LOAD                                                             "
- db	" 0x 3 LOAD 0x 5 LOAD                                          "
+ db	" 0x 7 LOAD        0x 2 LOAD      "
+ db	" 0x 3 LOAD        0x 5 LOAD      "
+ db	" 0x 4 LOAD        0x 6 LOAD      "
 
-; db	 "  TIMER@  2HEX.	       "
-
- db	" 0x 4 LOAD      0x 6 LOAD       .( key int setup:)  interrupts FORTH32 LINK              "
- db	" interrupts CONTEXT !   "
- db	" ' key_int @   DUP HEX.  0x 21  make_interrupt_gate  "
-  db	 " ' overflow @   DUP HEX.  0x 0  make_interrupt_gate  "
-   db	  " ' break_int @   DUP HEX.  0x 3  make_interrupt_gate  "
-   \
-  db " 0x 500 @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. @HEX. "
-  db	 " .( Overflow test) overf "
- db	" idtr 0x 2 + @  HEX. "
- db	' S" Test of type "  1+ TYPEZ    breakpoint                              '
-
-  db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
- db	   "   .( WORD:) WORD:  nnb    HERE    HEX. 0x_as_lit, 333777 HEX.   "
- db	   ' ." Test print in nnb word "    ;WORD '
- db	   ' .( tt_test) HERE  WORD: dde  ." in dde word  " TIMER@ 2HEX. ;WORD @HEX. @HEX. @HEX. @HEX. @HEX. .( tt_aftre) '
- db	"  nnb TIMER@ 2HEX.     dde      "
-  db	 "  "
+ db	' S" Test of type "  1+ TYPEZ                 '
+ db	" TIMER@ 2HEX. "
  db	" EXIT                                                                          "
  db	0
  alignhe20
@@ -616,8 +600,11 @@ macro alignhe20
 
  db " VARIABLE key     "
  db " VARIABLE idtr 0 , "
-  db ' WORD: overfl  ." Divide by zero:"  ;WORD '
-  db ' WORD: break  ." BREAKPOINT"  ;WORD '
+
+  db ' WORD: by_0_msg      ." Divide by zero:"  ;WORD '
+  db ' WORD: debug_msg     ." Debug:"  ;WORD '
+  db ' WORD: break_msg     ." BREAKPOINT"       ;WORD '
+  db ' WORD: overflow_msg  ." Divide by zero:"  ;WORD '
 
  db " VOCABULARY interrupts "
 
@@ -652,9 +639,16 @@ macro alignhe20
  db " "
 
 
+ db " HEADER div_by_zero      HERE CELL+ , "
+ db " mov_eax,# '  by_0_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
 
- db " HEADER overflow HERE CELL+ , "
- db " mov_eax,# '  overfl , "
+ db " ALIGN      "
+
+ db " HEADER debug_int   HERE CELL+ , "
+ db " mov_eax,# '  debug_msg , "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
@@ -662,12 +656,21 @@ macro alignhe20
  db " ALIGN      "
 
  db " HEADER break_int HERE CELL+ , "
- db " mov_eax,# '  break , "
+ db " mov_eax,# '  break_msg , "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
  db " ALIGN      "
+
+ db " HEADER overflow HERE CELL+ , "
+ db " mov_eax,# '  overflow_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
 
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
@@ -682,20 +685,20 @@ macro alignhe20
 
  db " ALIGN      "
 
-  db " HEADER overf HERE CELL+ , "
- db " into   "
- db " ret "
 
- db " ALIGN      "
-
- db " HEADER breakpoint HERE CELL+ , "
- db " int3   "
- db " ret "
-
- db " ALIGN      "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
- db	0
+ db "  .( Interrupts setup ) "
+
+ db " interrupts FORTH32 LINK              "
+ db " interrupts CONTEXT !   "
+
+
+ db	" ' break_int @   DUP HEX.  0x 3   make_interrupt_gate  "
+ db	" ' overflow @    DUP HEX.  0x 4   make_interrupt_gate  "
+ db	" ' key_int @     DUP HEX.  0x 21  make_interrupt_gate  "
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
  db	0
  alignhe20
