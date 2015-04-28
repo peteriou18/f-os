@@ -653,7 +653,8 @@ macro alignhe20
 
   db ' WORD: mf_msg        ." Floating point error"       ;WORD '
   db ' WORD: ac_msg        ." Alignment check"            ;WORD '
-  db ' WORD: mc_msg        ." Machine check"               ;WORD '
+  db ' WORD: mc_msg        ." Machine check"              ;WORD '
+  db ' WORD: xm_msg        ." SIMD FP exception"          ;WORD '
 
  db " HEADER div_by_zero      HERE CELL+ , "
  db " mov_eax,# '  by_0_msg , "
@@ -711,6 +712,46 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db " HEADER nomath_int HERE CELL+ , "
+ db " mov_eax,# ' nomath_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER df_int HERE CELL+ , "
+ db " mov_eax,# ' df_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER mf_int HERE CELL+ , "
+ db " mov_eax,# ' mf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER tss_int HERE CELL+ , "
+ db " mov_eax,# ' tss_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER np_int HERE CELL+ , "
+ db " mov_eax,# ' np_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
  db "  "
@@ -739,6 +780,12 @@ macro alignhe20
  db     " ' overflow    @     0x 4   make_interrupt_gate  "
  db     " ' bound_int   @     0x 5   make_interrupt_gate  "
  db     " ' ud_int      @     0x 6   make_interrupt_gate  "
+ db     " ' nomath_int  @     0x 7   make_interrupt_gate  "
+ db     " ' df_int      @     0x 8   make_interrupt_gate  "
+ db     " ' mf_int      @     0x 9   make_interrupt_gate  "
+ db     " ' tss_int     @     0x A   make_interrupt_gate  "
+ db     " ' np_int      @     0x B   make_interrupt_gate  "
+
  db     " ' key_int     @     0x 21  make_interrupt_gate  "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
