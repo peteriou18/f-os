@@ -752,6 +752,67 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db " HEADER ss_int HERE CELL+ , "
+ db " mov_eax,# ' ss_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER gp_int HERE CELL+ , "
+ db " mov_eax,# ' gp_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+
+ db " HEADER pf_int HERE CELL+ , "
+ db " mov_eax,# ' pf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+
+
+
+ db " HEADER mf_int HERE CELL+ , "
+ db " mov_eax,# ' mf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER ac_int HERE CELL+ , "
+ db " mov_eax,# ' ac_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER mc_int HERE CELL+ , "
+ db " mov_eax,# ' mc_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER xm_int HERE CELL+ , "
+ db " mov_eax,# ' xm_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
  db "  "
@@ -785,6 +846,15 @@ macro alignhe20
  db     " ' mf_int      @     0x 9   make_interrupt_gate  "
  db     " ' tss_int     @     0x A   make_interrupt_gate  "
  db     " ' np_int      @     0x B   make_interrupt_gate  "
+ db     " ' ss_int      @     0x C   make_interrupt_gate  "
+ db     " ' gp_int      @     0x D   make_interrupt_gate  "
+ db     " ' pf_int      @     0x E   make_interrupt_gate  "
+
+ db     " ' mf_int      @     0x 10  make_interrupt_gate  "
+ db     " ' ac_int      @     0x 11  make_interrupt_gate  "
+ db     " ' mc_int      @     0x 12  make_interrupt_gate  "
+ db     " ' xm_int      @     0x 13  make_interrupt_gate  "
+; db     " ' xm_int      @     0x 14  make_interrupt_gate  "
 
  db     " ' key_int     @     0x 21  make_interrupt_gate  "
 
