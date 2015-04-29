@@ -18,7 +18,7 @@ macro alignhe20
  db     " 0x 4 LOAD        0x 6 LOAD      "
 
  db     " .( End of loads) "
- db     " HERE HEX. TIMER@ 2HEX. "
+ db     " HERE HEX. KEY HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
  alignhe20
@@ -69,9 +69,12 @@ macro alignhe20
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
  db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
+ db     "                   0x 3D 0x 81 0x 2 opcode cmp_d[],#                 "
  db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
 
  db     "                   0x 60 0x E4 0x 2 opcode in_al,60h                 "
+
+ db     "                   0x 84 0x 0F 0x 2 opcode je                        "
 
  db     "             0x 04 0x C0 0x 83 0x 3 opcode add_eax,4                 "
  db     "             0x 04 0x C1 0x 83 0x 3 opcode add_ecx,4                 "
@@ -589,6 +592,7 @@ macro alignhe20
 
  db " ALIGN      "
 
+
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
  db " EXIT "
@@ -818,7 +822,7 @@ macro alignhe20
  db "  "
  db " xor_eax,eax "
  db " in_al,60h "
- db " mov_[],eax ' key CELL+ , "
+ db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
@@ -826,7 +830,19 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db " FORTH32 CURRENT ! "
 
+ db " HEADER KEY        HERE CELL+ , "
+ db " mov_d[],#  key  , 0x 0 ,    "
+ db " HERE DUP HEX. "
+ db " hlt       "
+ db " cmp_d[],#  key , 0x 0 , "
+ db " je HERE DUP HEX. - DUP HEX. , "
+ db " mov_eax,[]  key  , "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db "  .( Interrupts setup ) "
@@ -857,6 +873,8 @@ macro alignhe20
 ; db     " ' xm_int      @     0x 14  make_interrupt_gate  "
 
  db     " ' key_int     @     0x 21  make_interrupt_gate  "
+
+
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
