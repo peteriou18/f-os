@@ -73,8 +73,11 @@ macro alignhe20
  db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
 
  db     "                   0x 60 0x E4 0x 2 opcode in_al,60h                 "
+ db     "                   0x 64 0x E4 0x 2 opcode in_al,64h                 "
+ db     "                   0x 64 0x E6 0x 2 opcode out_64h,al                "
 
  db     "                   0x 84 0x 0F 0x 2 opcode je                        "
+ db     "                   0x 85 0x 0F 0x 2 opcode jne                        "
 
  db     "             0x 04 0x C0 0x 83 0x 3 opcode add_eax,4                 "
  db     "             0x 04 0x C1 0x 83 0x 3 opcode add_ecx,4                 "
@@ -239,19 +242,29 @@ macro alignhe20
  db " ALIGN        "
  db " ASSEMBLER FORTH32 LINK                        "
 
- db " HEADER -                                     "                     ;name+link fields
- db " HERE CELL+ ,                              "                    ; code field
- db " mov_edx,# ' Pop @ ,                          "        ;parameters field
- db " call_edx                                    "
+ db " HEADER -      HERE CELL+ ,      "
+ db " mov_edx,# ' Pop @ ,     "
+ db " call_edx           "
  db " mov_ebp,eax                                 "
- db " call_edx                                    "
- db " sub_eax,ebp                                  "
+ db " call_edx          "
+ db " sub_eax,ebp       "
  db " mov_edx,#  ' Push @ ,                       "
+ db " call_edx    "
+ db " ret         "
+
+ db " ALIGN          "
+
+ db " HEADER SWAP-           HERE CELL+ ,     "
+ db " mov_edx,# ' Pop @ ,      "
+ db " call_edx      "
+ db " mov_ebp,eax         "
+ db " call_edx            "
+ db " sub_eax,ebp  neg_eax     "
+ db " mov_edx,#  ' Push @ ,      "
  db " call_edx                                  "
- db " ret                                        "
+ db " ret           "
 
- db " ALIGN                                      "
-
+ db " ALIGN           "
  db " HEADER +        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
@@ -712,7 +725,7 @@ macro alignhe20
  db " mov_eax,# ' ud_msg , "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
+ db " hlt iretd "
 
  db " ALIGN      "
 
@@ -822,10 +835,23 @@ macro alignhe20
  db "  "
  db " xor_eax,eax "
  db " in_al,60h "
+ db " cmp_eax,# 0x 58 , "
+ db " je  HERE  DUP    0x 0 , "
  db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
+ db " iretd "
+
+ db " HERE CELL+  SWAP-   SWAP! "
+ db " HERE DUP "
+ db " in_al,64h "
+ db " mov_d[],# 0x B8004 , 0x 40202040 ,  "
+ db " test_eax,# 0x 2 , "
+ db " jne HERE CELL+ - , "
+ db " mov_eax,# 0x FE , "
+ db " out_64h,al "
+ db " jmp HERE CELL+ - ,  "
  db " iretd "
 
  db " ALIGN      "
@@ -834,10 +860,10 @@ macro alignhe20
 
  db " HEADER KEY        HERE CELL+ , "
  db " mov_d[],#  key  , 0x 0 ,    "
- db " HERE DUP HEX. "
+ db " HERE "
  db " hlt       "
  db " cmp_d[],#  key , 0x 0 , "
- db " je HERE DUP HEX. - DUP HEX. , "
+ db " je HERE - , "
  db " mov_eax,[]  key  , "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret "
@@ -891,6 +917,8 @@ macro alignhe20
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
  db     "                         0x 25 0x 1 opcode and_eax,#                 "
+ db     "                         0x 3D 0x 1 opcode cmp_eax,#                 "
+ db     "                         0x A9 0x 1 opcode test_eax,#                "
  db     "                         0x A3 0x 1 opcode mov_[],eax                "
  db     "                         0x A1 0x 1 opcode mov_eax,[]                "
  db     "                         0x 40 0x 1 opcode inc_eax                   "
@@ -904,6 +932,7 @@ macro alignhe20
  db     "                         0x 51 0x 1 opcode push_ecx                  "
  db     "                         0x 60 0x 1 opcode pushad                    "
  db     "                         0x 61 0x 1 opcode popad                     "
+ db     "                         0x E9 0x 1 opcode jmp                       "
  db     " EXIT                                                                "
  db 0
 
