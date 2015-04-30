@@ -2,7 +2,8 @@
                         
                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]          
                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]          
-                  0x 15 0x 8B 0x 2 opcode mov_edx,[]          
+                  0x 15 0x 8B 0x 2 opcode mov_edx,[] 
+                  0x 3D 0x 8B 0x 2 opcode mov_edi,[]
                   0x 15 0x 89 0x 2 opcode mov_[],edx    
                   0x 0D 0x 89 0x 2 opcode mov_[],ecx          
                   0x 1D 0x 89 0x 2 opcode mov_[],ebx   
@@ -36,10 +37,12 @@
                   0x E8 0x 01 0x 2 opcode add_eax,ebp
                   0x CF 0x 01 0x 2 opcode add_edi,ecx
                   0x E8 0x 21 0x 2 opcode and_eax,ebp
-                  0x C5 0x 2B 0x 2 opcode sub_eax,ebp         
+                  0x C5 0x 2B 0x 2 opcode sub_eax,ebp
+                  0x C0 0x 31 0x 2 opcode xor_eax,eax
                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx         
                   0x 25 0x 83 0x 2 opcode and_d[],#   
                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp
+                  0x 3D 0x 81 0x 2 opcode cmp_d[],#
                   0x C0 0x 85 0x 2 opcode test_eax,eax
                   
                    0x 60 0x E4 0x 2 opcode in_al,60h
