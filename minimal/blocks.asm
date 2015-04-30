@@ -846,13 +846,12 @@ macro alignhe20
  db " HERE CELL+  SWAP-   SWAP! "
  db " HERE DUP "
  db " in_al,64h "
- db " mov_d[],# 0x B8004 , 0x 40202040 ,  "
  db " test_eax,# 0x 2 , "
  db " jne HERE CELL+ - , "
  db " mov_eax,# 0x FE , "
  db " out_64h,al "
  db " jmp HERE CELL+ - ,  "
- db " iretd "
+
 
  db " ALIGN      "
 
