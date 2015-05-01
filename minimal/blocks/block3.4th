@@ -1,9 +1,7 @@
 
 FORTH32 CURRENT ! ASSEMBLER CONTEXT !  													
 
-
 HEADER CELL-           HERE CELL+ ,  															
-
 mov_edx,#  ' Pop @ , 	call_edx 																					
 sub_eax,4 																				
 mov_edx,#  ' Push @ , call_edx 																					
@@ -21,7 +19,6 @@ ASSEMBLER FORTH32 LINK
 
 
 HEADER inverse_hexstr   HERE CELL+ , 													
-
 mov_eax,[] hexstr , 																		
 mov_ebx,[] hexstr CELL+ , 																
 mov_ecx,[] hexstr CELL+ CELL+ , 															
@@ -36,7 +33,6 @@ ret
 ALIGN 																					
 
 HEADER (hex_dot)        HERE CELL+ , 															
-
 mov_edx,#  ' Pop @ , 	call_edx 																					
 mov_[],eax   hex_dot_value  ,  															
 movdqu_xmm0,[]   hex_dot_value  , 														
@@ -69,12 +65,10 @@ ASSEMBLER FORTH32 LINK
 
 
 HEADER 2HEX.   HERE CELL+ , 		
-
 mov_edx,#  ' Pop @ ,            call_edx 													
 mov_[],eax   hex_dot_value CELL+ ,  														
 mov_edx,#  ' (hex_dot) @ ,      call_edx 													
 mov_edx,#  ' inverse_hexstr @ , call_edx 													
-
 mov_eax,# hexstr , 																		
 mov_edx,#  ' Push @ ,           call_edx 													
 mov_edx,#  ' TYPEZ @ ,          call_edx 													
