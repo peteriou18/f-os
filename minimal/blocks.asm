@@ -16,8 +16,13 @@ macro alignhe20
  db     " 0x 7 LOAD        0x 2 LOAD      "
  db     " 0x 3 LOAD        0x 5 LOAD      "
  db     " 0x 4 LOAD        0x 6 LOAD      "
+ db     " 0x 8 LOAD        "
 
  db     " .( End of loads) "
+ db     " HERE HEX. HERE CHAR 123 HEX. CHAR a HEX. CHAR Typ HEX. "
+; db     " here3- "
+ db     " HERE  CHAR E B,  CHAR F B, CHAR @ B,  CHAR z B,     @  HEX. "
+
  db     " HERE HEX. KEY HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
@@ -37,6 +42,7 @@ macro alignhe20
  db     "                   0x 05 0x C7 0x 2 opcode mov_d[],#                 "
  db     "                   0x 05 0x C6 0x 2 opcode mov_b[],#                 "
  db     "                   0x 28 0x 89 0x 2 opcode mov_[eax],ebp             "
+ db     "                   0x 06 0x 88 0x 2 opcode mov_[esi],al              "
  db     "                   0x 05 0x 01 0x 2 opcode add_[],eax                "
  db     "                   0x D8 0x F7 0x 2 opcode neg_eax                   "
 
@@ -93,6 +99,7 @@ macro alignhe20
  db     "             0x 03 0x E1 0x C1 0x 3 opcode shl_ecx,3                 "
  db     "             0x 10 0x E8 0x C1 0x 3 opcode shr_eax,16                "
  db     "             0x 02 0x E9 0x C1 0x 3 opcode shr_ecx,2                 "
+ db     "             0x 24 0x 0C 0x 8B 0x 3 opcode mov_eax,[esp]             "
  db     "             0x 04 0x 40 0x 8B 0x 3 opcode mov_eax,[eax+4]           "
  db     "             0x 04 0x 69 0x 8B 0x 3 opcode mov_ebp,[ecx+4]           "
  db     "             0x 00 0x B6 0x 0F 0x 3 opcode movzx_eax,b[eax]          "
@@ -127,6 +134,7 @@ macro alignhe20
  db     "       0x 05 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,[]             "
  db     "       0x C2 0x FC 0x 0F 0x 66 0x 4 opcode paddb_xmm0,xmm2           "
 
+
  db     "       0x 04 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+4]               "
  db     "       0x 04 0x 24 0x 4C 0x 8B 0x 4 opcode mov_ecx,[esp+4]               "
  db     "       0x 0C 0x 24 0x 44 0x 8B 0x 4 opcode mov_eax,[esp+C]               "
@@ -152,12 +160,10 @@ macro alignhe20
  ;   2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
- db " HEADER   CELL-  HERE CELL+ ,             "
- db " mov_edx,#  ' Pop @ ,                     "
- db " call_edx                                 "
+ db " HEADER  CELL-     HERE CELL+ ,             "
+ db " mov_edx,#  ' Pop @ , call_edx            "
  db " sub_eax,4                                "
- db " mov_edx,#  ' Push @ ,                    "
- db " call_edx                                 "
+ db " mov_edx,#  ' Push @ ,   call_edx         "
  db " ret                                      "
 
 
@@ -306,6 +312,15 @@ macro alignhe20
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " movzx_eax,b[eax]         "
  db " mov_edx,#  ' Push @ ,           call_edx       "
+ db " ret        "
+
+ db " ALIGN        "
+
+ db " HEADER C!         HERE CELL+ ,   "
+ db " mov_edx,#  ' Pop @ ,            call_edx      "
+ db " mov_esi,eax  "
+ db " call_edx         "
+ db " mov_[esi],al      "
  db " ret        "
 
  db " ALIGN        "
@@ -658,7 +673,7 @@ macro alignhe20
   db ' WORD: break_msg     ." BREAKPOINT"                 ;WORD '
   db ' WORD: overflow_msg  ." Overflow"                   ;WORD '
   db ' WORD: bound_msg     ." Bound exception"            ;WORD '
-  db ' WORD: ud_msg        ." Invalid opcode"             ;WORD '
+  db ' WORD: ud_msg        HEX. ." Invalid opcode"             ;WORD '
   db ' WORD: nomath_msg    ." No Math exception"          ;WORD '
   db ' WORD: df_msg        ." Double fault"               ;WORD '
   db ' WORD: mf_msg        ." Coprocessor segment fault"  ;WORD '
@@ -722,9 +737,12 @@ macro alignhe20
  db " ALIGN      "
 
  db " HEADER ud_int HERE CELL+ , "
+ db " mov_eax,[esp] "
+ db " mov_edx,# ' Push @ ,   call_edx "
  db " mov_eax,# ' ud_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
+ db " call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
+
  db " hlt iretd "
 
  db " ALIGN      "
@@ -836,14 +854,14 @@ macro alignhe20
  db " xor_eax,eax "
  db " in_al,60h "
  db " cmp_eax,# 0x 58 , "
- db " je  HERE  DUP    0x 0 , "
+ db " je  HERE     0x 0 , HERE "
  db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
  db " iretd "
 
- db " HERE CELL+  SWAP-   SWAP! "
+ db " HERE  SWAP-  SWAP! "
  db " HERE DUP "
  db " in_al,64h "
  db " test_eax,# 0x 2 , "
@@ -852,24 +870,10 @@ macro alignhe20
  db " out_64h,al "
  db " jmp HERE CELL+ - ,  "
 
-
  db " ALIGN      "
 
- db " FORTH32 CURRENT ! "
 
- db " HEADER KEY        HERE CELL+ , "
- db " mov_d[],#  key  , 0x 0 ,    "
- db " HERE "
- db " hlt       "
- db " cmp_d[],#  key , 0x 0 , "
- db " je HERE - , "
- db " mov_eax,[]  key  , "
- db " mov_edx,#  ' Push @ ,   call_edx            "
- db " ret "
 
- db " ALIGN      "
-
- db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db "  .( Interrupts setup ) "
 
  db " interrupts FORTH32 LINK              "
@@ -938,3 +942,34 @@ macro alignhe20
 db     0
  alignhe20
  ;block 8
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+
+ db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
+ db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+ db  " WORD: here3-  [ ' HERE CELL+ LIT, ] @ 1- 1- 1-  [ ' HERE CELL+ LIT, ] ! HERE HEX. ;WORD "
+ db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
+ db " FORTH32 CURRENT !  "
+
+
+
+; db " WORD: windows-1251      "
+; db "  0x 0 , CHAR 1 , CHAR 2 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , "
+
+ db " HEADER KEY        HERE CELL+ , "
+ db " mov_d[],#  key  , 0x 0 ,    "
+ db " HERE "
+ db " hlt       "
+ db " cmp_d[],#  key , 0x 0 , "
+ db " je HERE - , "
+ db " mov_eax,[]  key  , "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+ db " EXIT "
+
+db     0
+ alignhe20
+ ;block 9
