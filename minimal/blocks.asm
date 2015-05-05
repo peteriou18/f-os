@@ -22,7 +22,8 @@ macro alignhe20
  db     " HERE HEX. HERE CHAR 123 HEX. CHAR a HEX. CHAR Typ HEX. "
 ; db     " here3- "
  db     " HERE  CHAR E B,  CHAR F B, CHAR @ B,  CHAR z B,     @  HEX. "
-
+ db     " .( chas  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX. ) "
+ db     " HERE  0x 5 CHARs,  Z X C V B  HEX. DUP @ HEX. TYPEZ  "
  db     " HERE HEX. KEY HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
@@ -308,6 +309,14 @@ macro alignhe20
 
  db " ALIGN    "
 
+ db " HEADER 1-         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " dec_eax            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
  db " HEADER C@         HERE CELL+ ,   "
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " movzx_eax,b[eax]         "
@@ -351,12 +360,7 @@ macro alignhe20
 
  db " ALIGN                   "
 
- db " HEADER exec_point          HERE CELL+ ,                   "
- db " mov_eax,[esp+C]              "
- db " mov_edx,#  ' Push @ ,           call_edx        "
- db " ret                   "
 
- db " ALIGN  "
 
  db " HEADER strcopy            HERE CELL+ ,                      "
  db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
@@ -501,7 +505,6 @@ macro alignhe20
  db "  Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
 
 
-
  db " Word: BEGIN    ', HERE ', CELL-   ;Word       "
  db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
  db " Word: UNTIL    ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
@@ -509,6 +512,7 @@ macro alignhe20
  db " Word: IF       ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
  db " Word: THEN     ', HERE ', SWAP! ;Word "
  db " Word: ELSE     ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
+
 
  db " VOCABULARY IMMEDIATES "
  db " IMMEDIATES CURRENT !  "
@@ -533,12 +537,14 @@ macro alignhe20
  db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
  db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
 
+ db " Word: Begin       ', HERE ', CELL-  ;Word "
+ db " Word: Until       ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
+
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
 
  db ' WORD: ."      ,"  '
  db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
-
 
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
@@ -620,6 +626,12 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db " HEADER exec_point          HERE CELL+ ,                   "
+ db " mov_eax,[esp+C]              "
+ db " mov_edx,#  ' Push @ ,           call_edx        "
+ db " ret                   "
+
+ db " ALIGN  "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
@@ -927,6 +939,7 @@ macro alignhe20
  db     "                         0x 40 0x 1 opcode inc_eax                   "
  db     "                         0x 43 0x 1 opcode inc_ebx                   "
  db     "                         0x 41 0x 1 opcode inc_ecx                   "
+ db     "                         0x 48 0x 1 opcode dec_eax                   "
  db     "                         0x 58 0x 1 opcode pop_eax                   "
  db     "                         0x 5B 0x 1 opcode pop_ebx                   "
  db     "                         0x 59 0x 1 opcode pop_ecx                   "
@@ -946,7 +959,13 @@ db     0
 
  db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
  db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
- db  " WORD: here3-  [ ' HERE CELL+ LIT, ] @ 1- 1- 1-  [ ' HERE CELL+ LIT, ] ! HERE HEX. ;WORD "
+ db " WORD: b,        1+ DUP C@ DUP HEX.  B, ;WORD  "
+
+ db " WORD: CHAR,     CHAR B, ;WORD "
+
+ ;db " WORD: CHARs,    Begin    DUP  HEX.   1-  DUP  0x_as_lit 0   =  Until       ;WORD "
+ db " Word: CHARs,    BEGIN    ', DUP  ', HEX. ', CHAR ', B,  ', 1-  ', DUP  0x, 0   ', =  UNTIL       ;Word "
+
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
 
