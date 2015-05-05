@@ -22,8 +22,9 @@ macro alignhe20
  db     " HERE HEX. HERE CHAR 123 HEX. CHAR a HEX. CHAR Typ HEX. "
 ; db     " here3- "
  db     " HERE  CHAR E B,  CHAR F B, CHAR @ B,  CHAR z B,     @  HEX. "
- db     " .( chas  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX. ) "
- db     " HERE  0x 5 CHARs,  Z X C V B  HEX. DUP @ HEX. TYPEZ  "
+ db     " .( chas)  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX.  "
+ db     "  HERE  0x 5 CHARs,  Z X C V B  HEX. DUP @ HEX. TYPEZ  "
+ db     "  FORTH32 CONTEXT !  0x 7 CHArs,        "
  db     " HERE HEX. KEY HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
@@ -961,18 +962,27 @@ db     0
  db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
  db " WORD: b,        1+ DUP C@ DUP HEX.  B, ;WORD  "
 
- db " WORD: CHAR,     CHAR B, ;WORD "
+ db " WORD: CHAR,     CHAR B, ;WORD 0x A "
 
- ;db " WORD: CHARs,    Begin    DUP  HEX.   1-  DUP  0x_as_lit 0   =  Until       ;WORD "
- db " Word: CHARs,    BEGIN    ', DUP  ', HEX. ', CHAR ', B,  ', 1-  ', DUP  0x, 0   ', =  UNTIL       ;Word "
+ db " WORD: CHArs,  NOOP  Begin DUP  HEX.   1-  DUP     "
+ db ' ." cyckel " '
+ db " 0x_as_lit, 0  =   Until Pop      ;WORD "
+
+ db " Word: CHARs,    BEGIN    ', CHAR ', B,  ', 1-  ', DUP  0x, 0   ', =  UNTIL   ', Pop     ;Word "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
 
 
 
-; db " WORD: windows-1251      "
-; db "  0x 0 , CHAR 1 , CHAR 2 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , 0x 0 , "
+ db " VARIABLE windows-1251      "
+ db "  0x 0 B,   0x D  CHARs, 1 2 3 4 5 6 7 8 9 0 - = \  0x 0 B, " ; 0 - Esc, E - Backspase
+ db "  0x 0 B,   0x C  CHARs, q w e r t y u i o p [ ]    0x 0 B, " ; F - tab, 1C - Enter
+ db "  0x 0 B,   0x C  CHARs, a s d f g h j k l ; ' `            " ; 1D - Ctl,
+ db "  0x 0 B, 0x 0 B, 0x C CHARs, z x c v b n m , . /   0x 0 B, " ; 2A - Lshift, 2B - ?, 36 - Rshift
+ db "  0x 0 B,                                  "                   ; 37 - ?,
+
+ db " ALIGN     "
 
  db " HEADER KEY        HERE CELL+ , "
  db " mov_d[],#  key  , 0x 0 ,    "
