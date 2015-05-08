@@ -606,6 +606,26 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db " HEADER rWITHIN     HERE CELL+ , "      ;  low high x
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " mov_edi,eax "
+ db " call_edx    "
+ db " xor_ebx,ebx "
+ db " xor_ecx,ecx "
+ db " mov_eax,ebp "
+ db " cmp_eax,edi "
+ db " setnc_bl    "
+ db " cmp_eax,esi "
+ db " setc_cl    "
+ db " xor_eax,eax "
+ db " and_ebx,ecx "
+ db " sub_eax,ebx "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
  db " EXIT "
