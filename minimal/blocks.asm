@@ -24,8 +24,8 @@ macro alignhe20
  db     " HERE  CHAR E B,  CHAR F B, CHAR @ B,  CHAR z B,     @  HEX. "
  db     " .( chas)  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX.  "
  db     "  HERE  0x 5 CHARs,  Z X C V B   TYPEZ  "
- db     " 0x E 0x 7 0x C WITHIN HEX. "
- db     " HERE HEX. KEY DUP HEX. 0x 3 +  windows-1251 DUP @ HEX. + DUP @ HEX. C@ HEX. TIMER@ 2HEX. "
+ db     " KEY DUP 0x 2 0x D WITHIN HEX.  DUP 0x 10 0x 1B WITHIN HEX. DUP 0x 1E 0x 29 WITHIN HEX. DUP 0x 2B 0x 35 WITHIN HEX. "
+ ;db     " HERE HEX. KEY DUP HEX. 0x 3 +  windows-1251 DUP @ HEX. + DUP @ HEX. C@ HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
  alignhe20
@@ -612,6 +612,7 @@ macro alignhe20
  db " call_edx    "
  db " mov_edi,eax "
  db " call_edx    "
+ db " mov_esi,eax "
  db " xor_ebx,ebx "
  db " xor_ecx,ecx "
  db " mov_eax,ebp "
@@ -852,6 +853,10 @@ macro alignhe20
 
  db " ALIGN      "
 
+ db ' WORD: msg_caps ." CAPS " ;WORD '
+
+ db " ALIGN      "
+
 
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
@@ -860,11 +865,22 @@ macro alignhe20
  db " in_al,60h "
  db " cmp_eax,# 0x 58 , "
  db " je  HERE     0x 0 , HERE "
+ db " cmp_eax,# 0x 3A , "
+ db " je HERE 0x 0 ,  HERE "
  db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
  db " iretd "
+
+ db "  HERE  SWAP-  SWAP! "
+ db " mov_eax,# ' msg_caps ,     "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
 
  db " HERE  SWAP-  SWAP! "
  db " HERE DUP "
@@ -876,7 +892,6 @@ macro alignhe20
  db " jmp HERE CELL+ - ,  "
 
  db " ALIGN      "
-
 
 
  db "  .( Interrupts setup ) "
