@@ -8,12 +8,15 @@ ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !
                           0x CC 0x 1 opcode int3
                           0x BA 0x 1 opcode mov_edx,#                 
                           0x B8 0x 1 opcode mov_eax,#                 
-                          0x 25 0x 1 opcode and_eax,#                 
+                          0x 25 0x 1 opcode and_eax,# 
+                          0x 3D 0x 1 opcode cmp_eax,# 
+                          0x A9 0x 1 opcode test_eax,#
                           0x A3 0x 1 opcode mov_[],eax                
                           0x A1 0x 1 opcode mov_eax,[]                
                           0x 40 0x 1 opcode inc_eax                   
                           0x 43 0x 1 opcode inc_ebx                   
-                          0x 41 0x 1 opcode inc_ecx                   
+                          0x 41 0x 1 opcode inc_ecx  
+                          0x 48 0x 1 opcode dec_eax
                           0x 58 0x 1 opcode pop_eax                   
                           0x 5B 0x 1 opcode pop_ebx                   
                           0x 59 0x 1 opcode pop_ecx                   
