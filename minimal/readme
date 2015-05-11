@@ -71,6 +71,16 @@ BRANCH ?BRANCH AND  =  <> stop break
 Block 6 (under construction)
 interrupts
 
+forward> - place for jump from 
+>forward - place for jump to
+*Note: How to use - forward> forward> ... forward> ... >forward ... >forward >forward is equvalent to 
+       jmp(cc) label1 jmp(cc) label2 ... jmp(cc) labeln ... labeln: ... label2: label1. I.e. stack of 
+       labels and jumps to it.
+
+backward<
+<backward
+
+
 Block 7 (under construction)
 Opcodes one byte.
 
