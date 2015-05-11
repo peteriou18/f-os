@@ -48,7 +48,19 @@ ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !
                     
                     0x 31 0x 0F 0x 2 opcode rdtsc
                      
-                     
+                    0x D2 0x FF 0x 2 opcode call_edx
+                    0x C5 0x 89 0x 2 opcode mov_ebp,eax
+                    0x C1 0x 89 0x 2 opcode mov_ecx,eax
+                    0x E8 0x 89 0x 2 opcode mov_eax,ebp
+                    0x C2 0x 89 0x 2 opcode mov_edx,eax
+                    0x C6 0x 89 0x 2 opcode mov_esi,eax
+                    0x C7 0x 89 0x 2 opcode mov_edi,eax
+                    0x F8 0x 89 0x 2 opcode mov_eax,edi
+                    0x C8 0x 89 0x 2 opcode mov_eax,ecx
+                    0x D0 0x 89 0x 2 opcode mov_eax,edx
+                    0x D5 0x 89 0x 2 opcode mov_ebp,edx
+                    0x A5 0x F3 0x 2 opcode rep_movsd
+                    0x AB 0x 66 0x 2 opcode stosw
   
   FORTH32 CONTEXT ! FORTH32 CURRENT !
   EXIT                                                
