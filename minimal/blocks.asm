@@ -25,7 +25,7 @@ macro alignhe20
  db     " .( chas)  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX.  "
  db     "  HERE  0x 5 CHARs,  Z X C V B   TYPEZ  "
  db     " KEY DUP 0x 2 0x D WITHIN HEX.  DUP 0x 10 0x 1B WITHIN HEX. DUP 0x 1E 0x 29 WITHIN HEX. DUP 0x 2B 0x 35 WITHIN HEX. "
- ;db     " HERE HEX. KEY DUP HEX. 0x 3 +  windows-1251 DUP @ HEX. + DUP @ HEX. C@ HEX. TIMER@ 2HEX. "
+ db     " HERE HEX. KEY DUP HEX. 0x 3 +  windows-1251 DUP @ HEX. + DUP @ HEX. C@ HEX. TIMER@ 2HEX. "
  db     " EXIT                                                                          "
  db     0
  alignhe20
@@ -500,6 +500,8 @@ macro alignhe20
  db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
 
 
+
+
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
  db " EXIT "
@@ -637,6 +639,7 @@ macro alignhe20
  db " FORTH32 CURRENT !  "
 
  db " VARIABLE key     "
+ db " VARIABLE key_flags "
  db " VARIABLE idtr 0 , "
  db " VOCABULARY interrupts "
 
@@ -645,6 +648,13 @@ macro alignhe20
 
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
+
+ db " WORD: forward>   HERE  0 ,   HERE        ;WORD "
+ db " WORD: >forward   HERE  SWAP- SWAP!       ;WORD "
+ db " WORD: backward<  HERE                    ;WORD "
+ db " WORD: <backward  HERE CELL+ -  ,         ;WORD "
+
+ db " ASSEMBLER  FORTH32 LINK  "
 
  db " HEADER make_interrupt_gate        HERE CELL+ ,   "
  db " mov_edx,# ' Pop @ ,   call_edx              " ;Interrupt No
@@ -858,38 +868,46 @@ macro alignhe20
  db " ALIGN      "
 
 
+
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
- db "  "
  db " xor_eax,eax "
  db " in_al,60h "
  db " cmp_eax,# 0x 58 , "
- db " je  HERE     0x 0 , HERE "
+ db " je  forward> "
  db " cmp_eax,# 0x 3A , "
- db " je HERE 0x 0 ,  HERE "
+ db " je forward> "
  db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
  db " iretd "
 
- db "  HERE  SWAP-  SWAP! "
+ db "  >forward "
+ db " xor_d[],# key_flags , 0x 1 , "
  db " mov_eax,# ' msg_caps ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " mov_eax,# key_flags ,      "
+ db " mov_eax,[eax]       "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,# ' HEX.  ,    "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+
  db " eoi "
  db " popad "
  db " iretd "
 
 
- db " HERE  SWAP-  SWAP! "
- db " HERE DUP "
+ db "  >forward "
+ db " backward< DUP "
  db " in_al,64h "
  db " test_eax,# 0x 2 , "
- db " jne HERE CELL+ - , "
+ db " jne <backward "
  db " mov_eax,# 0x FE , "
  db " out_64h,al "
- db " jmp HERE CELL+ - ,  "
+ db " jmp <backward  "
 
  db " ALIGN      "
 
@@ -958,7 +976,7 @@ macro alignhe20
  db     "                         0x 61 0x 1 opcode popad                     "
  db     "                         0x E9 0x 1 opcode jmp                       "
 
-  db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
+ db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
  db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
  db     "                   0x 15 0x 8B 0x 2 opcode mov_edx,[]                "
  db     "                   0x 3D 0x 8B 0x 2 opcode mov_edi,[]                "
@@ -967,6 +985,7 @@ macro alignhe20
  db     "                   0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
  db     "                   0x 05 0x C7 0x 2 opcode mov_d[],#                 "
  db     "                   0x 05 0x C6 0x 2 opcode mov_b[],#                 "
+ db     "                   0x 00 0x 8B 0x 2 opcode mov_eax,[eax]             "
  db     "                   0x 28 0x 89 0x 2 opcode mov_[eax],ebp             "
  db     "                   0x 06 0x 88 0x 2 opcode mov_[esi],al              "
  db     "                   0x 05 0x 01 0x 2 opcode add_[],eax                "
@@ -1002,6 +1021,7 @@ macro alignhe20
  db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "
+ db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
  db     "                   0x 25 0x 83 0x 2 opcode and_d[],#                 "
  db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
  db     "                   0x F8 0x 39 0x 2 opcode cmp_eax,edi               "
