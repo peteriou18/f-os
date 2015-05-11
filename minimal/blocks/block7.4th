@@ -46,7 +46,9 @@ ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !
                     0x C9 0x 0F 0x 2 opcode bswap_ecx
                     0x CA 0x 0F 0x 2 opcode bswap_edx
                     
-                    
+                    0x 31 0x 0F 0x 2 opcode rdtsc
+                     
+                     
   
   FORTH32 CONTEXT ! FORTH32 CURRENT !
   EXIT                                                
