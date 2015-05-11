@@ -54,7 +54,7 @@ Block1 (under construction)
 Loads and tests
 
 Block2 (under construction)
-Opcodes 2, 3, 4, 5 bytes opcodes.
+Opcodes 3, 4, 5 bytes opcodes.
 
 Block3
 CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
@@ -82,5 +82,5 @@ backward<
 
 
 Block 7 (under construction)
-Opcodes one byte.
+Opcodes one and two bytes.
 
