@@ -41,6 +41,11 @@ ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !
                     0x 05 0x 01 0x 2 opcode add_[],eax   
                     0x D8 0x F7 0x 2 opcode neg_eax  
                     
+                    0x C8 0x 0F 0x 2 opcode bswap_eax
+                    0x CB 0x 0F 0x 2 opcode bswap_ebx
+                    0x C9 0x 0F 0x 2 opcode bswap_ecx
+                    0x CA 0x 0F 0x 2 opcode bswap_edx
+                    
                     
   
   FORTH32 CONTEXT ! FORTH32 CURRENT !
