@@ -197,12 +197,6 @@ ret
 
 ALIGN 																					
 
-HEADER exec_point          HERE CELL+ , 													
-mov_eax,[esp+C] 																			
-mov_edx,#  ' Push @ ,           call_edx 													
-ret 																						
-
-ALIGN 																					
 
 HEADER strcopy            HERE CELL+ , 													
 mov_edx,#  ' Pop @ ,            call_edx 													
