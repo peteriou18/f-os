@@ -146,6 +146,14 @@ ret
 
 ALIGN 																					
 
+HEADER 1-         HERE CELL+ ,       
+mov_edx,#  ' Pop @ ,            call_edx       
+dec_eax            
+mov_edx,#  ' Push @ ,           call_edx       
+ret        
+
+ALIGN       
+
 HEADER C@         HERE CELL+ , 															
 mov_edx,#  ' Pop @ ,            call_edx 													
 movzx_eax,b[eax]  																		
