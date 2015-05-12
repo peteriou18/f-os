@@ -58,7 +58,7 @@ Opcodes 3, 4, 5 bytes opcodes.
 
 Block3
 CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
-2HEX.  - SWAP- +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
+2HEX.  - SWAP- +  TIMER@  lit# 1+ 1- C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
 
 Block4 (under construction)
 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
