@@ -80,6 +80,13 @@ ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !
                     0x 3D 0x 81 0x 2 opcode cmp_d[],#
                     0x C0 0x 85 0x 2 opcode test_eax,eax
                     
+                    0x 60 0x E4 0x 2 opcode in_al,60h
+                    0x 64 0x E4 0x 2 opcode in_al,64h
+                    0x 64 0x E6 0x 2 opcode out_64h,al
+                    
+                    0x 84 0x 0F 0x 2 opcode je 
+                    0x 85 0x 0F 0x 2 opcode jne
+                    
                     
   
   FORTH32 CONTEXT ! FORTH32 CURRENT !
