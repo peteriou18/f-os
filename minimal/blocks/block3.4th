@@ -160,7 +160,16 @@ movzx_eax,b[eax]
 mov_edx,#  ' Push @ ,           call_edx 													
 ret 																						
 
-ALIGN 																					
+ALIGN 
+
+HEADER C!         HERE CELL+ ,   
+mov_edx,#  ' Pop @ ,            call_edx      
+mov_esi,eax  
+call_edx         
+mov_[esi],al      
+ret        
+
+ALIGN     
 
 HEADER ALLOT      HERE CELL+ ,    														
 mov_edx,#  ' Pop @ ,            call_edx 													
