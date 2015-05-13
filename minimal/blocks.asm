@@ -19,14 +19,10 @@ macro alignhe20
  db     " 0x 8 LOAD        "
 
  db     " .( End of loads) "
- db     " HERE HEX. HERE CHAR 123 HEX. CHAR a HEX. CHAR Typ HEX. "
-; db     " here3- "
- db     " HERE  CHAR E B,  CHAR F B, CHAR @ B,  CHAR z B,     @  HEX. "
- db     " .( chas)  HERE DUP DUP HEX.   CHAR, A  CHAR, B  CHAR, C  CHAR, D   @ HEX.  "
- db     "  HERE  0x 5 CHARs,  Z X C V B   TYPEZ  "
- db     " KEY DUP 0x 2 0x D WITHIN HEX.  DUP 0x 10 0x 1B WITHIN HEX. DUP 0x 1E 0x 29 WITHIN HEX. DUP 0x 2B 0x 35 WITHIN HEX. "
- db     " HERE HEX. KEY DUP HEX. 0x 3 +  windows-1251 DUP @ HEX. + DUP @ HEX. C@ HEX. TIMER@ 2HEX. "
- db     " EXIT                                                                          "
+ db     " WORD: key  KEY  DUP  0x_as_lit, 10  0x_as_lit, 19  WITHIN  DUP HEX. If HEX.  Then NOOP ;WORD "
+ db     " key "
+
+ db     " HERE HEX. TIMER@ 2HEX. EXIT    "
  db     0
  alignhe20
 
@@ -111,7 +107,7 @@ macro alignhe20
 
   alignhe20
  ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
- ;   2HEX.  - +  TIMER@  lit# 1+ C@ ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
+ ;   2HEX.  - SWAP- +  TIMER@  lit# 1+ 1- C@ C! ALLOT SLIT exec_point strcopy DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER  CELL-     HERE CELL+ ,             "
@@ -492,6 +488,8 @@ macro alignhe20
 
  db " Word: Begin       ', HERE ', CELL-  ;Word "
  db " Word: Until       ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
+ db " Word: If          ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word "
+ db " Word: Then        ', HERE ', SWAP! ;Word "
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
@@ -895,7 +893,7 @@ macro alignhe20
  db " iretd "
 
  db " >forward "
- db " and_d[],# key_flags ,  0x FFFFFFFB  , "
+ db " and_d[],# key_flags ,  0x FFFFFFF3  , "
  db " mov_eax,# ' msg_Rshift_release ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -910,7 +908,7 @@ macro alignhe20
  db " iretd "
 
  db " >forward "
- db " or_d[],# key_flags , 0x 4 , "
+ db " or_d[],# key_flags , 0x C , "
  db " mov_eax,# ' msg_Rshift_pressed ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -926,7 +924,7 @@ macro alignhe20
 
 
  db " >forward "
- db " and_d[],# key_flags ,  0x FFFFFFFD  , "
+ db " and_d[],# key_flags ,  0x FFFFFFF5  , "
  db " mov_eax,# ' msg_Lshift_release ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -942,7 +940,7 @@ macro alignhe20
 
 
  db " >forward "
- db " or_d[],# key_flags , 0x 2 , "
+ db " or_d[],# key_flags , 0x A , "
  db " mov_eax,# ' msg_Lshift_pressed ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -1138,8 +1136,13 @@ db     0
 
 
  db " VARIABLE windows-1251      "
- db "  0x 0 B,   0x C  CHARs, 1 2 3 4 5 6 7 8 9 0 - =   0x 0 B, " ; 0 - Esc, E - Backspase
- db "  0x 0 B,   0x C  CHARs, q w e r t y u i o p [ ]    0x 0 B, " ; F - tab, 1C - Enter
+ db "  0x C  CHARs, 1 2 3 4 5 6 7 8 9 0 - =   0x 0 B, " ; 0 - Esc, E - Backspase
+
+ db " VARIABLE qwerty_lowcase  0x 10 , 0x 19 , "
+ db "  0x A  CHARs, q w e r t y u i o p  " ; F - tab, 1C - Enter
+ db " VARIABLE qwerty_upcase  0x 10 , 0x 19 , "
+ db "  0x A  CHARs, Q W E R T Y U I O P "
+
  db "  0x 0 B,   0x C  CHARs, a s d f g h j k l ; ' `            " ; 1D - Ctl,
  db "  0x 0 B,   0x B  CHARs, \ z x c v b n m , . /    0x 0 B, " ; 2A - Lshift, 36 - Rshift
  db "  0x 0 B,   CHAR *  0x 0 B, 0x 20 B,  0x 0 B,                        "                   ;
