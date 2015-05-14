@@ -19,7 +19,7 @@ macro alignhe20
  db     " 0x 8 LOAD        "
 
  db     " .( End of loads) "
- db     " WORD: key  KEY  DUP  0x_as_lit, 10  0x_as_lit, 19  WITHIN  DUP HEX. If HEX.  Then NOOP ;WORD "
+ db     " WORD: key  KEY  DUP  0x_as_lit, 10  0x_as_lit, 1A  WITHIN  DUP HEX. If 0x_as_lit, 10 -  qwerty_lowcase CELL+ + C@ HEX.  Then  ;WORD "
  db     " key "
 
  db     " HERE HEX. TIMER@ 2HEX. EXIT    "
@@ -489,7 +489,7 @@ macro alignhe20
  db " Word: Begin       ', HERE ', CELL-  ;Word "
  db " Word: Until       ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
  db " Word: If          ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word "
- db " Word: Then        ', HERE ', SWAP! ;Word "
+ db " Word: Then        ', HERE ', CELL- ', SWAP! ;Word "
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
@@ -1138,8 +1138,8 @@ db     0
  db " VARIABLE windows-1251      "
  db "  0x C  CHARs, 1 2 3 4 5 6 7 8 9 0 - =   0x 0 B, " ; 0 - Esc, E - Backspase
 
- db " VARIABLE qwerty_lowcase  0x 10 , 0x 19 , "
- db "  0x A  CHARs, q w e r t y u i o p  " ; F - tab, 1C - Enter
+ db " VARIABLE qwerty_lowcase  "
+ db "  0x A CHARs, q w e r t y u i o p  " ; F - tab, 1C - Enter
  db " VARIABLE qwerty_upcase  0x 10 , 0x 19 , "
  db "  0x A  CHARs, Q W E R T Y U I O P "
 
