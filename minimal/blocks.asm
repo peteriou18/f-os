@@ -649,7 +649,7 @@ macro alignhe20
 
  db " WORD: forward>   HERE  0 ,   HERE        ;WORD "
  db " WORD: >forward   HERE  SWAP- SWAP!       ;WORD "
- db " WORD: backward<  HERE                    ;WORD "
+ db " WORD: backward<  HERE    ;WORD "
  db " WORD: <backward  HERE CELL+ -  ,         ;WORD "
 
  db " ASSEMBLER  FORTH32 LINK  "
@@ -724,7 +724,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER break_int HERE CELL+ , "
  db " mov_eax,# '  break_msg , "
@@ -759,7 +759,7 @@ macro alignhe20
 
  db " hlt iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER nomath_int HERE CELL+ , "
  db " mov_eax,# ' nomath_msg , "
@@ -775,7 +775,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER mf_int HERE CELL+ , "
  db " mov_eax,# ' mf_msg , "
@@ -791,7 +791,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER np_int HERE CELL+ , "
  db " mov_eax,# ' np_msg , "
@@ -799,7 +799,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER ss_int HERE CELL+ , "
  db " mov_eax,# ' ss_msg , "
@@ -807,7 +807,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN  "
 
  db " HEADER gp_int HERE CELL+ , "
  db " mov_eax,# ' gp_msg , "
@@ -815,7 +815,7 @@ macro alignhe20
  db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " iretd "
 
- db " ALIGN      "
+ db " ALIGN   "
 
 
  db " HEADER pf_int HERE CELL+ , "
@@ -893,7 +893,7 @@ macro alignhe20
  db " iretd "
 
  db " >forward "
- db " and_d[],# key_flags ,  0x FFFFFFF3  , "
+ db " and_d[],# key_flags ,  0x FFFC00FF  , "
  db " mov_eax,# ' msg_Rshift_release ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -908,7 +908,7 @@ macro alignhe20
  db " iretd "
 
  db " >forward "
- db " or_d[],# key_flags , 0x C , "
+ db " or_d[],# key_flags , 0x 1FF00 , "
  db " mov_eax,# ' msg_Rshift_pressed ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -924,7 +924,7 @@ macro alignhe20
 
 
  db " >forward "
- db " and_d[],# key_flags ,  0x FFFFFFF5  , "
+ db " and_d[],# key_flags ,  0x FFFC00FF  , "
  db " mov_eax,# ' msg_Lshift_release ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -940,7 +940,7 @@ macro alignhe20
 
 
  db " >forward "
- db " or_d[],# key_flags , 0x A , "
+ db " or_d[],# key_flags , 0x 2FF00 , "
  db " mov_eax,# ' msg_Lshift_pressed ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -956,7 +956,7 @@ macro alignhe20
 
 
  db " >forward "
- db " xor_d[],# key_flags , 0x 1 , "
+ db " xor_d[],# key_flags , 0x FF , "
  db " mov_eax,# ' msg_caps ,     "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_edx,# ' EXECUTE @ , call_edx   "
@@ -986,7 +986,7 @@ macro alignhe20
 
  db "  .( Interrupts setup ) "
 
- db " interrupts FORTH32 LINK              "
+ db " interrupts FORTH32 LINK   "
  db " interrupts CONTEXT !   "
 
  db     " ' div_by_zero @     0x 0   make_interrupt_gate  "
@@ -1161,6 +1161,7 @@ db     0
 
  db " ALIGN      "
 
+ db " "
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
 
