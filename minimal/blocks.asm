@@ -24,9 +24,12 @@ macro alignhe20
  db     " KEY  DUP  "
  db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
  db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
- db     " DUP DUP HEX. "
+ db     " DUP  "
  db     " 0x_as_lit, 1E  0x_as_lit, 26  WITHIN  "
  db     " If 0x_as_lit, 1E -  asdfgh CELL+ + upper_shift_caps   0x_as_lit, 9  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 2C  0x_as_lit, 32  WITHIN  "
+ db     " If 0x_as_lit, 2C -  zxcvbn CELL+ + upper_shift_caps   0x_as_lit, 7  AND + C@ SP@  TYPEZ  Then "
  db     " ;WORD "
  db     " key "
 
@@ -1169,6 +1172,8 @@ db     0
  db "  0x 14 CHARs, q w e r t y u i o p  Q W E R T Y U I O P " ; F - tab, 1C - Enter
  db " VARIABLE asdfgh  "
  db "  0x 12 CHARs, a s d f g h j k l    A S D F G H J K L "
+ db " VARIABLE zxcvbn  "
+ db "  0x  E CHARs, z x c v b n m        Z X C V B N M  "
 
  db "  0x 0 B,   0x C  CHARs, a s d f g h j k l ; ' `            " ; 1D - Ctl,
  db "  0x 0 B,   0x B  CHARs, \ z x c v b n m , . /    0x 0 B, " ; 2A - Lshift, 36 - Rshift
