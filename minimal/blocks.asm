@@ -18,9 +18,17 @@ macro alignhe20
  db     " 0x 4 LOAD        0x 6 LOAD      "
  db     " 0x 8 LOAD        "
 
- db     " .( End of loads) "
- db     " WORD: key  KEY  DUP  0x_as_lit, 10  0x_as_lit, 1A  WITHIN  If 0x_as_lit, 10 -  qwerty_lowcase CELL+ + upper_shift_only DUP HEX.  0x_as_lit, A  AND + C@ HEX.  Then  ;WORD "
- db     " .( case&) upper_shift_only HEX. key "
+ db     " .( End of loads) SP@ DUP HEX. TYPEZ 0x 417 @ HEX. 0 0x 417 ! "
+
+ db     " WORD: key "
+ db     " KEY  DUP  "
+ db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
+ db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP DUP HEX. "
+ db     " 0x_as_lit, 1E  0x_as_lit, 26  WITHIN  "
+ db     " If 0x_as_lit, 1E -  asdfgh CELL+ + upper_shift_caps   0x_as_lit, 9  AND + C@ SP@  TYPEZ  Then "
+ db     " ;WORD "
+ db     " key "
 
  db     " HERE HEX. TIMER@ 2HEX. EXIT    "
  db     0
@@ -44,6 +52,7 @@ macro alignhe20
  db     "             0x C3 0x 95 0x 0F 0x 3 opcode setne_bl                  "
  db     "             0x C3 0x 93 0x 0F 0x 3 opcode setnc_bl                  "
  db     "             0x C1 0x 92 0x 0F 0x 3 opcode setc_cl                   "
+ db     "             0x C1 0x 96 0x 0F 0x 3 opcode setbe_cl                  "
  db     "             0x 02 0x E0 0x C0 0x 3 opcode shl_al,2                  "
  db     "             0x 02 0x E3 0x C1 0x 3 opcode shl_ebx,2                 "
  db     "             0x 03 0x E1 0x C1 0x 3 opcode shl_ecx,3                 "
@@ -601,7 +610,7 @@ macro alignhe20
  db " cmp_eax,edi "
  db " setnc_bl    "
  db " cmp_eax,esi "
- db " setc_cl    "
+ db " setbe_cl    "
  db " xor_eax,eax "
  db " and_ebx,ecx "
  db " sub_eax,ebx "
@@ -999,7 +1008,6 @@ macro alignhe20
  db " ALIGN      "
 
 
-
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
  db     0
@@ -1014,6 +1022,7 @@ macro alignhe20
  db     "                         0x CC 0x 1 opcode int3                      "
  db     "                         0x BA 0x 1 opcode mov_edx,#                 "
  db     "                         0x B8 0x 1 opcode mov_eax,#                 "
+ db     "                         0x 05 0x 1 opcode add_eax,#                 "
  db     "                         0x 25 0x 1 opcode and_eax,#                 "
  db     "                         0x 3D 0x 1 opcode cmp_eax,#                 "
  db     "                         0x A9 0x 1 opcode test_eax,#                "
@@ -1064,6 +1073,7 @@ macro alignhe20
  db     "                   0x C7 0x 89 0x 2 opcode mov_edi,eax               "
  db     "                   0x F8 0x 89 0x 2 opcode mov_eax,edi               "
  db     "                   0x C8 0x 89 0x 2 opcode mov_eax,ecx               "
+ db     "                   0x D8 0x 89 0x 2 opcode mov_eax,ebx               "
  db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
  db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
  db     "                   0x A5 0x F3 0x 2 opcode rep_movsd                 "
@@ -1155,10 +1165,10 @@ db     0
  db " VARIABLE windows-1251      "
  db "  0x C  CHARs, 1 2 3 4 5 6 7 8 9 0 - =   0x 0 B, " ; 0 - Esc, E - Backspase
 
- db " VARIABLE qwerty_lowcase  "
+ db " VARIABLE qwerty  "
  db "  0x 14 CHARs, q w e r t y u i o p  Q W E R T Y U I O P " ; F - tab, 1C - Enter
- db " VARIABLE qwerty_upcase  0x 10 , 0x 19 , "
- db "  0x A  CHARs, Q W E R T Y U I O P "
+ db " VARIABLE asdfgh  "
+ db "  0x 12 CHARs, a s d f g h j k l    A S D F G H J K L "
 
  db "  0x 0 B,   0x C  CHARs, a s d f g h j k l ; ' `            " ; 1D - Ctl,
  db "  0x 0 B,   0x B  CHARs, \ z x c v b n m , . /    0x 0 B, " ; 2A - Lshift, 36 - Rshift
@@ -1198,6 +1208,16 @@ db     0
 
  db " ALIGN      "
 
+
+ db " HEADER SP@ HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebx "
+ db " add_eax,# 0x 8000 , "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
