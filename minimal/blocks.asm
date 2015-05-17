@@ -18,10 +18,10 @@ macro alignhe20
  db     " 0x 4 LOAD        0x 6 LOAD      "
  db     " 0x 8 LOAD        "
 
- db     " .( End of loads) SP@ DUP HEX. TYPEZ 0x 417 @ HEX. 0 0x 417 ! "
+ db     " .( End of loads)  "
 
  db     " WORD: key "
- db     " KEY  DUP DUP HEX. "
+ db     " KEY  DUP  "
  db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
  db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
@@ -34,24 +34,28 @@ macro alignhe20
  db     " 0x_as_lit, 2   0x_as_lit,  D  WITHIN  "
  db     " If 0x_as_lit,  2 -  numkys CELL+ + upper_shift_only   0x_as_lit, C  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
+
  db     " 0x_as_lit, 1A  0x_as_lit, 1B  WITHIN  "
  db     " If 0x_as_lit, 1A -  numky1 CELL+ + upper_shift_only   0x_as_lit, 2  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
  db     " 0x_as_lit, 27  0x_as_lit, 29  WITHIN  "
  db     " If 0x_as_lit, 27 -  numky2 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
- db     " 0x_as_lit, 2B  0x_as_lit, 2B  WITHIN  "
- db     " If 0x_as_lit, 2B -  numky3 CELL+ + upper_shift_only   0x_as_lit, 1  AND + C@ SP@  TYPEZ  Then "
+
+ db     " 0x_as_lit, 2B  =    "
+ db     " If 0x_as_lit, 2B -  numky3 CELL+ + upper_shift_only   0x_as_lit, 1  AND + C@ SP@  TYPEZ  Then  "
+
  db     " DUP  "
  db     " 0x_as_lit, 33  0x_as_lit, 35  WITHIN  "
  db     " If 0x_as_lit, 33 -  numky4 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
- db     " 0x_as_lit, 39  0x_as_lit, 39  WITHIN  "
- db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then "
- db     " ;WORD "
+
+ db     " 0x_as_lit, 39  =   "
+ db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then  "
+ db     " Pop ;WORD "
  db     " key "
 
- db     " HERE HEX. TIMER@ 2HEX. EXIT    "
+ db     " .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
  alignhe20
 
