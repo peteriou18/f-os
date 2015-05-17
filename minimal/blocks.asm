@@ -21,7 +21,7 @@ macro alignhe20
  db     " .( End of loads) SP@ DUP HEX. TYPEZ 0x 417 @ HEX. 0 0x 417 ! "
 
  db     " WORD: key "
- db     " KEY  DUP  "
+ db     " KEY  DUP DUP HEX. "
  db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
  db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
  db     " DUP  "
@@ -30,6 +30,24 @@ macro alignhe20
  db     " DUP  "
  db     " 0x_as_lit, 2C  0x_as_lit, 32  WITHIN  "
  db     " If 0x_as_lit, 2C -  zxcvbn CELL+ + upper_shift_caps   0x_as_lit, 7  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 2   0x_as_lit,  D  WITHIN  "
+ db     " If 0x_as_lit,  2 -  numkys CELL+ + upper_shift_only   0x_as_lit, C  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 1A  0x_as_lit, 1B  WITHIN  "
+ db     " If 0x_as_lit, 1A -  numky1 CELL+ + upper_shift_only   0x_as_lit, 2  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 27  0x_as_lit, 29  WITHIN  "
+ db     " If 0x_as_lit, 27 -  numky2 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 2B  0x_as_lit, 2B  WITHIN  "
+ db     " If 0x_as_lit, 2B -  numky3 CELL+ + upper_shift_only   0x_as_lit, 1  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 33  0x_as_lit, 35  WITHIN  "
+ db     " If 0x_as_lit, 33 -  numky4 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
+ db     " DUP  "
+ db     " 0x_as_lit, 39  0x_as_lit, 39  WITHIN  "
+ db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then "
  db     " ;WORD "
  db     " key "
 
@@ -1154,20 +1172,26 @@ db     0
 
  db " WORD: CHAR,     CHAR B, ;WORD 0x A "
 
- db " WORD: CHArs,  NOOP  Begin DUP  HEX.   1-  DUP     "
- db ' ." cyckel " '
- db " 0x_as_lit, 0  =   Until Pop      ;WORD "
 
-; db " Word: CHARs,    BEGIN    ', CHAR ', B,  ', 1-  ', DUP  0x, 0   ', =  UNTIL   ', Pop     ;Word "
  db " WORD: CHARs,    Begin   CHAR  B,   1-   DUP  0x_as_lit, 0   =  Until    Pop     ;WORD "
+
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
 
 
 
- db " VARIABLE windows-1251      "
- db "  0x C  CHARs, 1 2 3 4 5 6 7 8 9 0 - =   0x 0 B, " ; 0 - Esc, E - Backspase
-
+ db " VARIABLE numkys "
+ db "  0x 18 CHARs, 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ +  "
+ db " VARIABLE numky1 "
+ db "  0x  4 CHARs, [ ] { } "
+ db " VARIABLE numky2 "
+ db "  0x  4 CHARs, ; ' `   : QUOTE B, CHAR, ~  "
+ db " VARIABLE numky3 "
+ db "  0x  2 CHARs, \ | "
+ db " VARIABLE numky4 "
+ db "  0x  6 CHARs, , . / < > ? "
+ db " VARIABLE space_ "
+ db "  0x 20  B, "
  db " VARIABLE qwerty  "
  db "  0x 14 CHARs, q w e r t y u i o p  Q W E R T Y U I O P " ; F - tab, 1C - Enter
  db " VARIABLE asdfgh  "
@@ -1175,9 +1199,7 @@ db     0
  db " VARIABLE zxcvbn  "
  db "  0x  E CHARs, z x c v b n m        Z X C V B N M  "
 
- db "  0x 0 B,   0x C  CHARs, a s d f g h j k l ; ' `            " ; 1D - Ctl,
- db "  0x 0 B,   0x B  CHARs, \ z x c v b n m , . /    0x 0 B, " ; 2A - Lshift, 36 - Rshift
- db "  0x 0 B,   CHAR *  0x 0 B, 0x 20 B,  0x 0 B,                        "                   ;
+                    ;
 
  db " ALIGN     "
 
