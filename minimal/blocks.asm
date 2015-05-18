@@ -20,6 +20,9 @@ macro alignhe20
 
  db     " .( End of loads)  "
 
+ ; db ' WORD: ifelse  If   ." Else part " Else ." Then part "  Then   ;WORD '
+
+
  db     " WORD: key "
  db     " KEY  DUP  "
  db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
@@ -53,8 +56,16 @@ macro alignhe20
  db     " 0x_as_lit, 39  =   "
  db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then  "
  db     " Pop ;WORD "
- db     " key "
+ db     " .( ----------) "
 
+ db     " WORD: key2 "
+ db     ' KEY  ." on second key " stop '
+ db     ' Case ." on case " stop '
+ db     ' DUP  0x_as_lit, 1 <> ." on esc " HERE HEX.  Of HERE CELL- CELL- @ HEX. HERE  CELL- @ HEX. HERE @ HEX. stop ." Escape " EndOf '
+ db     ' DUP  0x_as_lit, 2 <> Of ." One " EndOf    '
+ db     ' ." Another " stop EndCase ." end case " ;WORD '
+
+ db     " key key2 "
  db     " .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
  alignhe20
@@ -93,6 +104,7 @@ macro alignhe20
  db     "             0x 1D 0x BE 0x 0F 0x 3 opcode movsx_ebx,b[]             "
  db     "             0x 18 0x BE 0x 0F 0x 3 opcode movsx_ebx,b[eax]          "
  db     "             0x CD 0x 44 0x 0F 0x 3 opcode cmove_ecx,ebp             "
+ db     "             0x CD 0x 45 0x 0F 0x 3 opcode cmovne_ecx,ebp            "
  db     "             0x 24 0x 84 0x 81 0x 3 opcode add_d[esp+],#             "
  db     "             0x C2 0x 10 0x 00 0x 3 opcode retn_10h                  "
  db     "             0x 0D 0x 01 0x 0F 0x 3 opcode sidt_[]                   "
@@ -496,9 +508,13 @@ macro alignhe20
  db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
  db " Word: UNTIL    ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
 
- db " Word: IF       ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
- db " Word: THEN     ', HERE ', SWAP! ;Word "
- db " Word: ELSE     ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
+ db " Word: IF       ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', , ;Word   "
+ db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
+ db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
+
+;  db " Word: ifelse2  0x, AAAA ', HEX.   IF    0x, 2222 ', HEX.  ELSE   0x, 3333 ', HEX.   THEN    0x, BBBB ', HEX.  ;Word "
+;  db " Word: ifthen   0x, CCCC ', HEX.   IF    0x, 4444 ', HEX.  THEN    0x, DDDD ', HEX.  ;Word "
+ ; db "   .( True ) 0x FFFFFFFF ifthen  0x 0 .( False1 )   ifthen   0x FFFFFFFF ifelse2 .( hhh )   0x 0 .( False2 )  ifelse2 .( alldone) stop  "
 
 
  db " VOCABULARY IMMEDIATES "
@@ -524,16 +540,31 @@ macro alignhe20
  db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
  db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
 
+ db ' WORD: ."      ,"  '
+ db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
+
  db " Word: Begin       ', HERE ', CELL-  ;Word "
  db " Word: Until       ', lit#    ' ?BRANCH ,  ', , ', , ;Word "
- db " Word: If          ', lit#    ' ?BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word "
+ db " Word: If          ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', ,  ;Word "
  db " Word: Then        ', HERE ', CELL- ', SWAP! ;Word "
+ ;db " Word: Else        ', HERE ', CELL+ ', CELL+  ', SWAP!  ', lit#    ' BRANCH ,  ', , ', HERE 0x, 0 ', , ;Word   "
+ db " Word: Else        ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R> ;Word   "
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
+ db ' WORD: Case  0x_as_lit,  0 ." Case " ;WORD '
+ db " WORD: Of    [ ' ?OF DUP LIT,   HEX. ] , "
+ db ' ." Of " HERE  0x_as_lit,  0 ,  ;WORD   '
 
- db ' WORD: ."      ,"  '
- db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
+ db ' WORD: EndOf  ." EndOf " DUP  HERE  DUP HEX. SWAP! @ HEX. '
+ db "  [ ' BRANCH LIT, ] , HERE 0x_as_lit,  0 , ;WORD "
+
+; db " IMMEDIATES FORTH32 LINK "
+
+
+
+ db ' WORD: EndCase ." EndCase "  Begin DUP DUP HEX. stop 0x_as_lit, 0 = DUP HEX. stop If  ." null " 0x_as_lit, 0 Else ." compile " HERE CELL- SWAP!  0x_as_lit, 1 Then Until Pop stop ;WORD '
+
 
 
 
@@ -562,6 +593,19 @@ macro alignhe20
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " test_eax,eax "
  db " cmove_ecx,ebp     " ; if false-> branch
+ db " mov_eax,ecx       "
+ db " mov_[esp+4],ecx     "
+ db " ret    "
+
+ db " ALIGN "
+
+ db " HEADER ?OF         HERE   CELL+ , "
+ db " mov_ecx,[esp+4]         " ; addrr interpr point
+ db " mov_ebp,[ecx+4]          "               ; branch value
+ db " add_ecx,4     "                          ; next cell
+ db " mov_edx,#  ' Pop @ ,   call_edx      "
+ db " test_eax,eax "
+ db " cmovne_ecx,ebp     " ; if true-> branch
  db " mov_eax,ecx       "
  db " mov_[esp+4],ecx     "
  db " ret    "
