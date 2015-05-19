@@ -59,13 +59,13 @@ macro alignhe20
  db     " .( ----------) "
 
  db     " WORD: key2 "
- db     ' KEY  ." on second key " stop '
- db     ' Case ." on case " stop '
- db     ' DUP  0x_as_lit, 1 <> ." on esc " HERE HEX.  Of HERE CELL- CELL- @ HEX. HERE  CELL- @ HEX. HERE @ HEX. stop ." Escape " EndOf '
- db     ' DUP  0x_as_lit, 2 <> Of ." One " EndOf    '
- db     ' ." Another " stop EndCase ." end case " ;WORD '
+ db     ' KEY  ." on second key " DUP HEX. stop '
+ db     ' Case ." on case "  stop '
+ db     ' DUP  0x_as_lit, 1 = ." on esc " DUP HEX. stop Of  ." Escape " EndOf NOOP '
+ db     ' DUP  0x_as_lit, 2 = ." on one " DUP HEX. stop Of ." One " EndOf NOOP   '
+ db     ' ." Another "  stop EndCase NOOP ." end case " stop ;WORD '
 
- db     " key key2 "
+ db     "  .( KEY:) key2 key "
  db     " .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
  alignhe20
@@ -553,17 +553,13 @@ macro alignhe20
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
  db ' WORD: Case  0x_as_lit,  0 ." Case " ;WORD '
- db " WORD: Of    [ ' ?OF DUP LIT,   HEX. ] , "
+ db " WORD: Of    [ ' ?OF DUP LIT,   HEX.  ] , "
  db ' ." Of " HERE  0x_as_lit,  0 ,  ;WORD   '
 
- db ' WORD: EndOf  ." EndOf " DUP  HERE  DUP HEX. SWAP! @ HEX. '
+ db ' WORD: EndOf  ." EndOf "   HERE  CELL-  SWAP!  '
  db "  [ ' BRANCH LIT, ] , HERE 0x_as_lit,  0 , ;WORD "
 
-; db " IMMEDIATES FORTH32 LINK "
-
-
-
- db ' WORD: EndCase ." EndCase "  Begin DUP DUP HEX. stop 0x_as_lit, 0 = DUP HEX. stop If  ." null " 0x_as_lit, 0 Else ." compile " HERE CELL- SWAP!  0x_as_lit, 1 Then Until Pop stop ;WORD '
+ db ' WORD: EndCase ." EndCase "  Begin DUP DUP HEX.  0x_as_lit, 0 = DUP HEX.  If  ." null " 0x_as_lit, 1 Else ." compile " HERE CELL- SWAP!  0x_as_lit, 0 Then Until Pop stop ;WORD '
 
 
 
@@ -743,8 +739,6 @@ macro alignhe20
  db " mov_edi,[]  idtr  0x 2 +  ,   "
  db " shl_ecx,3         "
  db " add_edi,ecx       "
- ;db " mov_eax,edi       "
- ;db " mov_edx,# ' Push @ ,   call_edx              "
  db " call_edx          "      ; link to handler
  db " push_eax          "
  db " stosw             "
@@ -943,14 +937,6 @@ macro alignhe20
 
  db " ALIGN      "
 
- db ' WORD: msg_caps ." CAPS " ;WORD '
- db ' WORD: msg_Lshift_pressed  ." Lshift pressed " ;WORD '
- db ' WORD: msg_Lshift_release  ." Lshift released " ;WORD '
- db ' WORD: msg_Rshift_pressed  ." Rshift pressed " ;WORD '
- db ' WORD: msg_Rshift_release  ." Rshift released " ;WORD '
- db " ALIGN      "
-
-
 
  db " HEADER key_int    HERE  CELL+  , "
  db " pushad "
@@ -972,10 +958,6 @@ macro alignhe20
  db " je forward> "
  db " mov_[],eax  key , "
  db " add_[],eax 0x B8000 ,  "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
@@ -987,30 +969,12 @@ macro alignhe20
 
  db " >forward "
  db " and_d[],# key_flags ,  0x FFFC00FF  , "
-; db " mov_eax,# ' msg_Rshift_release ,     "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-; db " mov_eax,# key_flags ,      "
-; db " mov_eax,[eax]       "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
 
  db " >forward "
  db " or_d[],# key_flags , 0x 1FF00 , "
-; db " mov_eax,# ' msg_Rshift_pressed ,     "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-; db " mov_eax,# key_flags ,      "
-; db " mov_eax,[eax]       "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
@@ -1018,15 +982,6 @@ macro alignhe20
 
  db " >forward "
  db " and_d[],# key_flags ,  0x FFFC00FF  , "
-; db " mov_eax,# ' msg_Lshift_release ,     "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-; db " mov_eax,# key_flags ,      "
-; db " mov_eax,[eax]       "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
@@ -1034,15 +989,6 @@ macro alignhe20
 
  db " >forward "
  db " or_d[],# key_flags , 0x 2FF00 , "
-; db " mov_eax,# ' msg_Lshift_pressed ,     "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-; db " mov_eax,# key_flags ,      "
-; db " mov_eax,[eax]       "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
  db " eoi "
  db " popad "
  db " iretd "
@@ -1050,16 +996,6 @@ macro alignhe20
 
  db " >forward "
  db " xor_d[],# key_flags , 0x FF , "
-; db " mov_eax,# ' msg_caps ,     "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-; db " mov_eax,# key_flags ,      "
-; db " mov_eax,[eax]       "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_eax,# ' HEX.  ,    "
-; db " mov_edx,# ' Push @ , call_edx   "
-; db " mov_edx,# ' EXECUTE @ , call_edx   "
-
  db " eoi "
  db " popad "
  db " iretd "
