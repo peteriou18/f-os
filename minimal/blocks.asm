@@ -24,45 +24,45 @@ macro alignhe20
 
 
  db     " WORD: key "
- db     " KEY  DUP  "
- db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
- db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
- db     " 0x_as_lit, 1E  0x_as_lit, 26  WITHIN  "
- db     " If 0x_as_lit, 1E -  asdfgh CELL+ + upper_shift_caps   0x_as_lit, 9  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
- db     " 0x_as_lit, 2C  0x_as_lit, 32  WITHIN  "
- db     " If 0x_as_lit, 2C -  zxcvbn CELL+ + upper_shift_caps   0x_as_lit, 7  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
- db     " 0x_as_lit, 2   0x_as_lit,  D  WITHIN  "
- db     " If 0x_as_lit,  2 -  numkys CELL+ + upper_shift_only   0x_as_lit, C  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
+; db     " KEY  DUP  "
+; db     " 0x_as_lit, 10  0x_as_lit, 19  WITHIN  "
+; db     " If 0x_as_lit, 10 -  qwerty CELL+ + upper_shift_caps   0x_as_lit, A  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
+; db     " 0x_as_lit, 1E  0x_as_lit, 26  WITHIN  "
+; db     " If 0x_as_lit, 1E -  asdfgh CELL+ + upper_shift_caps   0x_as_lit, 9  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
+; db     " 0x_as_lit, 2C  0x_as_lit, 32  WITHIN  "
+; db     " If 0x_as_lit, 2C -  zxcvbn CELL+ + upper_shift_caps   0x_as_lit, 7  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
+; db     " 0x_as_lit, 2   0x_as_lit,  D  WITHIN  "
+; db     " If 0x_as_lit,  2 -  numkys CELL+ + upper_shift_only   0x_as_lit, C  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
 
- db     " 0x_as_lit, 1A  0x_as_lit, 1B  WITHIN  "
- db     " If 0x_as_lit, 1A -  numky1 CELL+ + upper_shift_only   0x_as_lit, 2  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
- db     " 0x_as_lit, 27  0x_as_lit, 29  WITHIN  "
- db     " If 0x_as_lit, 27 -  numky2 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
+; db     " 0x_as_lit, 1A  0x_as_lit, 1B  WITHIN  "
+; db     " If 0x_as_lit, 1A -  numky1 CELL+ + upper_shift_only   0x_as_lit, 2  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
+; db     " 0x_as_lit, 27  0x_as_lit, 29  WITHIN  "
+; db     " If 0x_as_lit, 27 -  numky2 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
 
- db     " 0x_as_lit, 2B  =    "
- db     " If 0x_as_lit, 2B -  numky3 CELL+ + upper_shift_only   0x_as_lit, 1  AND + C@ SP@  TYPEZ  Then  "
+; db     " 0x_as_lit, 2B  =    "
+; db     " If 0x_as_lit, 2B -  numky3 CELL+ + upper_shift_only   0x_as_lit, 1  AND + C@ SP@  TYPEZ  Then  "
 
- db     " DUP  "
- db     " 0x_as_lit, 33  0x_as_lit, 35  WITHIN  "
- db     " If 0x_as_lit, 33 -  numky4 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
- db     " DUP  "
+; db     " DUP  "
+; db     " 0x_as_lit, 33  0x_as_lit, 35  WITHIN  "
+; db     " If 0x_as_lit, 33 -  numky4 CELL+ + upper_shift_only   0x_as_lit, 3  AND + C@ SP@  TYPEZ  Then "
+; db     " DUP  "
 
- db     " 0x_as_lit, 39  =   "
- db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then  "
+; db     " 0x_as_lit, 39  =   "
+; db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then  "
  db     " Pop ;WORD "
  db     " .( ----------) "
 
  db     " WORD: key2 "
- db     ' KEY  ." on second key " DUP HEX. stop '
+ db     ' KEY  ." on second key " DUP HEX.  '
  db     ' Case ." on case "  stop '
- db     ' DUP  0x_as_lit, 1 = ." on esc " DUP HEX. stop Of  ." Escape " EndOf NOOP '
- db     ' DUP  0x_as_lit, 2 = ." on one " DUP HEX. stop Of ." One " EndOf NOOP   '
+ db     ' DUP  0x_as_lit, 1 = ." on esc " DUP HEX. stop If [ DUP HEX. ] NOOP ." Escape " Else NOOP '
+ db     ' DUP  0x_as_lit, 2 = ." on one " DUP HEX. stop If NOOP ." One " Else NOOP   '
  db     ' ." Another "  stop EndCase NOOP ." end case " stop ;WORD '
 
  db     "  .( KEY:) key2 key "
@@ -553,7 +553,7 @@ macro alignhe20
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
  db ' WORD: Case  0x_as_lit,  0 ." Case " ;WORD '
- db " WORD: Of    [ ' ?OF DUP LIT,   HEX.  ] , "
+ db " WORD: Of    [ .( of immediae ) ' ?BRANCH DUP LIT,   HEX.  ] , "
  db ' ." Of " HERE  0x_as_lit,  0 ,  ;WORD   '
 
  db ' WORD: EndOf  ." EndOf "   HERE  CELL-  SWAP!  '
@@ -956,7 +956,10 @@ macro alignhe20
  db " je forward> "
  db " cmp_eax,# 0x BA  , "
  db " je forward> "
+ db " test_eax,# 0x 80 , "
+ db " jne forward> "
  db " mov_[],eax  key , "
+ db " >forward "
  db " add_[],eax 0x B8000 ,  "
  db " eoi "
  db " popad "
