@@ -30,6 +30,19 @@ FORTH32 CURRENT ! ASSEMBLER CONTEXT !
  ret    
 
  ALIGN 
+ 
+ HEADER ?OF         HERE   CELL+ , 
+ mov_ecx,[esp+4]        
+ mov_ebp,[ecx+4]          
+ add_ecx,4     
+ mov_edx,#  ' Pop @ ,   call_edx      
+ test_eax,eax 
+ cmovne_ecx,ebp   
+ mov_eax,ecx      
+ mov_[esp+4],ecx     
+ ret   
+
+ ALIGN 
 
  HEADER AND        HERE CELL+ ,                
  mov_edx,# ' Pop @ ,   call_edx              
