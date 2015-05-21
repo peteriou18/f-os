@@ -80,8 +80,7 @@ IMMEDIATES CONTEXT !
 
 FORTH32 CONTEXT !   IMMEDIATES UNLINK
 
-Word: WORD:
-                ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word 
+Word: WORD:        ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word 
                 
 IMMEDIATES CURRENT !
 
