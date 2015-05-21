@@ -66,7 +66,7 @@ CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
 BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  [ ] 0x_as_lit, ." 
 
 Block5 (under construction)
-BRANCH ?BRANCH AND  =  <> stop break
+BRANCH ?BRANCH ?OF AND  =  <> stop break WITHIN rWITHIN SP@ 
 
 Block 6 (under construction)
 interrupts
