@@ -92,6 +92,25 @@ FORTH32 CURRENT ! ASSEMBLER CONTEXT !
  
  ALIGN
  
+ HEADER WITHIN     HERE CELL+ , 	    .( x low high )
+ mov_edx,# ' Pop @ ,   call_edx              
+ mov_esi,eax 
+ call_edx    
+ mov_edi,eax 
+ call_edx    
+ xor_ebx,ebx 
+ xor_ecx,ecx 
+ cmp_eax,edi 
+ setnc_bl    
+ cmp_eax,esi 
+ setbe_cl    
+ xor_eax,eax 
+ and_ebx,ecx 
+ sub_eax,ebx 
+ mov_edx,#  ' Push @ ,   call_edx            
+ ret 
+
+ db " ALIGN      "
  FORTH32 CONTEXT ! FORTH32 CURRENT !     
 
  EXIT 
