@@ -110,7 +110,38 @@ FORTH32 CURRENT ! ASSEMBLER CONTEXT !
  mov_edx,#  ' Push @ ,   call_edx            
  ret 
 
- db " ALIGN      "
+ ALIGN     
+ 
+ HEADER rWITHIN     HERE CELL+ ,       .(	low high x )
+ mov_edx,# ' Pop @ ,   call_edx            
+ mov_ebp,eax 
+ call_edx    
+ mov_edi,eax 
+ call_edx    
+ mov_esi,eax 
+ xor_ebx,ebx 
+ xor_ecx,ecx 
+ mov_eax,ebp 
+ cmp_eax,edi 
+ setnc_bl    
+ cmp_eax,esi 
+ setc_cl    
+ xor_eax,eax 
+ and_ebx,ecx 
+ sub_eax,ebx 
+ mov_edx,#  ' Push @ ,   call_edx          
+ ret 
+
+ ALIGN     
+
+ HEADER SP@ HERE CELL+ , 
+ mov_edx,# ' Pop @ , call_edx   
+ mov_edx,# ' Push @ , call_edx  
+ mov_eax,ebx 
+ add_eax,# 0x 8000 , 
+ call_edx 
+ ret 
+
  FORTH32 CONTEXT ! FORTH32 CURRENT !     
 
  EXIT 
