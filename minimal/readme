@@ -68,8 +68,10 @@ BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  [ ] 0x_as_lit, ."
 Block5 (under construction)
 BRANCH ?BRANCH ?OF AND  =  <> stop break WITHIN rWITHIN SP@ 
 
-Block 6 (under construction)
-interrupts
+Block 6 (under construction) 
+key key_flags idtr  interrupts forward> >forward  backward< <backward make_interrupt_gate
+by_0_msg debug_msg nmi_msg break_msg overflow_msg bound_msg  ud_msg nomath_msg df_msg mf_msg
+
 
 forward> - place for jump from 
 >forward - place for jump to
