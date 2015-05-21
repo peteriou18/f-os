@@ -74,7 +74,6 @@ mov_edx,#  ' Push @ ,           call_edx
 mov_edx,#  ' TYPEZ @ ,          call_edx 													
 ret 																						
 
-
 ALIGN 																					
 
 HEADER HEX.   HERE CELL+ , 																
@@ -87,7 +86,8 @@ mov_edx,#  ' Push @ ,           call_edx
 mov_edx,#  ' TYPEZ @ ,          call_edx 													
 ret 																						
 
-ALIGN 																					
+ALIGN 	
+
 ASSEMBLER FORTH32 LINK       																
 
 HEADER -  	HERE CELL+ ,   																			
@@ -118,7 +118,8 @@ add_eax,ebp
 mov_edx,#  ' Push @ , call_edx 																					
 ret 																						
 
-ALIGN 																					
+ALIGN 
+
 HEADER TIMER@     HERE CELL+ , 															
 rdtsc 																					
 mov_ebp,edx       																		
@@ -196,7 +197,6 @@ mov_[esp+4],eax
 ret 																						
 
 ALIGN 																					
-
 
 HEADER strcopy            HERE CELL+ , 													
 mov_edx,#  ' Pop @ ,            call_edx 													
