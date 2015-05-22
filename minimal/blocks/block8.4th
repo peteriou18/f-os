@@ -38,6 +38,7 @@ WORD: CHAR,     CHAR B, ;WORD
 
 
 WORD: CHARs,    Begin   CHAR  B,   1-   DUP  0x_as_lit, 0   =  Until    Pop     ;WORD 
+WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD
 
 ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  
 FORTH32 CURRENT !  
