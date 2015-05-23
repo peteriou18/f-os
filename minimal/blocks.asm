@@ -19,7 +19,8 @@ macro alignhe20
  db     " 0x 8 LOAD        "
 
  db     " .( End of loads)  "
-
+ db " WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD "
+ db "  "
  ; db ' WORD: ifelse  If   ." Else part " Else ." Then part "  Then   ;WORD '
 
 
@@ -56,17 +57,17 @@ macro alignhe20
 ; db     " 0x_as_lit, 39  =   "
 ; db     " If 0x_as_lit, 39 -  space_ CELL+ +  C@ SP@  TYPEZ  Then  "
  db     " Pop ;WORD "
- db     " .( ----------) "
+ db     " CR .( ----------) CR "
 
  db     " WORD: key2 "
- db     ' KEY  ." on second key " DUP HEX.  '
- db     ' Case ." on case "  stop '
- db     ' DUP  0x_as_lit, 1 = ." on esc " DUP HEX. stop If [ DUP HEX. ] NOOP ." Escape " Else NOOP '
- db     ' DUP  0x_as_lit, 2 = ." on one " DUP HEX. stop If NOOP ." One " Else NOOP   '
- db     ' ." Another "  stop EndCase NOOP ." end case " stop ;WORD '
+ db     ' KEY    '
+ db     ' Case    '
+ db     ' DUP  0x_as_lit, 1 =   Of  ." Escape " EndOf   '
+ db     ' DUP  0x_as_lit, 2 =   Of  ." One " EndOf    '
+ db     ' ." Another "   EndCase    ;WORD '
 
  db     "  .( KEY:) key2 key "
- db     " .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
+ db     " CR .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
  alignhe20
 
@@ -435,7 +436,6 @@ macro alignhe20
  ; BEGIN AGAIN UNTIL IF THEN ELSE IMMEDIATES ;WORD   WORD: [ ] 0x_as_lit, ."
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
-
  db " HEADER CONSTANT   interpret# ,           "
  db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
@@ -474,7 +474,6 @@ macro alignhe20
 
  db " Word: exec.   ', exec_point ', HEX. ;Word "
 
-
  db ' Word: ,"  '
  db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT    ;Word "
 
@@ -512,10 +511,6 @@ macro alignhe20
  db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
  db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
 
-;  db " Word: ifelse2  0x, AAAA ', HEX.   IF    0x, 2222 ', HEX.  ELSE   0x, 3333 ', HEX.   THEN    0x, BBBB ', HEX.  ;Word "
-;  db " Word: ifthen   0x, CCCC ', HEX.   IF    0x, 4444 ', HEX.  THEN    0x, DDDD ', HEX.  ;Word "
- ; db "   .( True ) 0x FFFFFFFF ifthen  0x 0 .( False1 )   ifthen   0x FFFFFFFF ifelse2 .( hhh )   0x 0 .( False2 )  ifelse2 .( alldone) stop  "
-
 
  db " VOCABULARY IMMEDIATES "
  db " IMMEDIATES CURRENT !  "
@@ -552,14 +547,13 @@ macro alignhe20
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
- db ' WORD: Case  0x_as_lit,  0 ." Case " ;WORD '
- db " WORD: Of    [ .( of immediae ) ' ?BRANCH DUP LIT,   HEX.  ] , "
- db ' ." Of " HERE  0x_as_lit,  0 ,  ;WORD   '
+ db ' WORD: Case  0x_as_lit,  0  ;WORD '
+ db " WORD: Of    [  ' ?BRANCH  LIT,    ] , "
+ db '  HERE  0x_as_lit,  0 ,  ;WORD   '
 
- db ' WORD: EndOf  ." EndOf "   HERE  CELL-  SWAP!  '
- db "  [ ' BRANCH LIT, ] , HERE 0x_as_lit,  0 , ;WORD "
+ db " WORD: EndOf    [ ' BRANCH LIT, ] , HERE >R 0x_as_lit,  0 ,  HERE  CELL-  SWAP! R>   ;WORD "
 
- db ' WORD: EndCase ." EndCase "  Begin DUP DUP HEX.  0x_as_lit, 0 = DUP HEX.  If  ." null " 0x_as_lit, 1 Else ." compile " HERE CELL- SWAP!  0x_as_lit, 0 Then Until Pop stop ;WORD '
+ db ' WORD: EndCase   Begin DUP  0x_as_lit, 0 =   If   0x_as_lit, 1 Else  HERE CELL- SWAP!  0x_as_lit, 0 Then Until Pop  ;WORD '
 
 
 
@@ -571,7 +565,7 @@ macro alignhe20
  db  0
 
  alignhe20
- ;block 5    BRANCH ?BRANCH AND  =  <> stop break
+ ;block 5    BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER BRANCH          HERE   CELL+ , "
@@ -705,6 +699,15 @@ macro alignhe20
  db " ret "
 
  db " ALIGN      "
+
+ db " HEADER SP@ HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebx "
+ db " add_eax,# 0x 8000 , "
+ db " call_edx "
+ db " ret "
+
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
  db " EXIT "
@@ -718,8 +721,6 @@ macro alignhe20
  db " VARIABLE key_flags "
  db " VARIABLE idtr 0 , "
  db " VOCABULARY interrupts "
-
-
 
 
 
@@ -901,8 +902,6 @@ macro alignhe20
  db " iretd "
 
  db " ALIGN      "
-
-
 
 
  db " HEADER mf_int HERE CELL+ , "
@@ -1153,11 +1152,13 @@ db     0
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
+
+
  db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
  db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
  db " WORD: b,        1+ DUP C@ DUP HEX.  B, ;WORD  "
 
- db " WORD: CHAR,     CHAR B, ;WORD 0x A "
+ db " WORD: CHAR,     CHAR B, ;WORD "
 
 
  db " WORD: CHARs,    Begin   CHAR  B,   1-   DUP  0x_as_lit, 0   =  Until    Pop     ;WORD "
@@ -1223,15 +1224,6 @@ db     0
  db " ALIGN      "
 
 
- db " HEADER SP@ HERE CELL+ , "
- db " mov_edx,# ' Pop @ , call_edx   "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_eax,ebx "
- db " add_eax,# 0x 8000 , "
- db " call_edx "
- db " ret "
-
- db " ALIGN      "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
