@@ -15,6 +15,8 @@
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
+ db " VARIABLE IJK 0 , "
+
  db " HEADER LIT,  interpret# , "
  db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
 
@@ -107,6 +109,7 @@
  db ' WORD: ."      ,"  '
  db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
 
+
  db " Word: Begin       ', HERE ', CELL-  ;Word "
  db " Word: Until       ', lit#    ' ?OF ,  ', , ', , ;Word "
  db " Word: If          ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', ,  ;Word "
@@ -122,10 +125,13 @@
  db "                                              0x_as_lit, FFFFFFFF Else  HERE CELL- SWAP!  0x_as_lit, 0 Then   "
  db "                 Until Pop  ;WORD "
 
- db " WORD: DO       [ ' >R LIT, ] , HERE CELL- [ ' >R LIT, ] ,   ;WORD "
- db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
- db "       [ ' < LIT, ] , [ ' ?OF LIT, ] , ,  [ ' R> LIT, ] , ;WORD "
+ ;db " WORD: DO        HERE CELL-  [ ' >R LIT, ] , [ ' >R LIT, ] ,  ;WORD "
+ ;db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
+ ;db "       [ ' < LIT, ] ,  [ ' R> LIT, ] ,  [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , ;WORD "               ;
 
+ db " WORD: DO          [ ' IJK LIT, ] , [ ' CELL+ LIT, ] , [ ' ! LIT, ] ,  HERE CELL- [ ' IJK LIT, ] , [ ' ! LIT, ] , ;WORD "
+; db " WORD: LOOP       [ ' IJK LIT, ] ,   [ ' @ LIT, ] , [ ' 1+ LIT, ] , [ ' DUP LIT, ] , [ ' IJK LIT, ] , [ ' CELL+ LIT, ] , [ ' @ LIT, ] , "
+; db "                  [ ' < LIT, ] , [ ' ?OF LIT, ] , , ;WORD "
 
   ;low high >R >R
 
