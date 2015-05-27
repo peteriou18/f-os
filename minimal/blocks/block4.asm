@@ -15,7 +15,7 @@
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
- db " VARIABLE IJK 0 , "
+ db " VARIABLE IJK 0x 0 , "
 
  db " HEADER LIT,  interpret# , "
  db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
@@ -82,6 +82,10 @@
  db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
  db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
 
+ db " Word: (do1)  ', IJK ', CELL+  ', ! ;Word "
+ db " Word: (do2)  ', IJK ', ! ;Word      "
+ db " Word: (loop) ',  ;Word  "
+
 
  db " VOCABULARY IMMEDIATES "
  db " IMMEDIATES CURRENT !  "
@@ -122,23 +126,13 @@
  db " WORD: Of    [  ' ?OF  LIT,    ] ,   HERE  0x_as_lit,  0 ,  ;WORD   "
  db " WORD: EndOf    [ ' BRANCH LIT, ] , HERE >R 0x_as_lit,  0 ,  HERE  CELL-  SWAP! R>   ;WORD "
  db " WORD: EndCase   Begin DUP  0x_as_lit, 0 <>   If        "
- db "                                              0x_as_lit, FFFFFFFF Else  HERE CELL- SWAP!  0x_as_lit, 0 Then   "
+ db "                                              0x_as_lit, 1 Else  HERE CELL- SWAP!  0x_as_lit, 0 Then   "
  db "                 Until Pop  ;WORD "
+             ;
+  db " WORD: DO         HERE CELL-  [ ' >R LIT, ] , [ ' >R LIT, ] ,  ;WORD "
+  db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
+  db "       [ ' < LIT, ] ,  [ ' R> LIT, ] , [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , ;WORD      "
 
- ;db " WORD: DO        HERE CELL-  [ ' >R LIT, ] , [ ' >R LIT, ] ,  ;WORD "
- ;db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
- ;db "       [ ' < LIT, ] ,  [ ' R> LIT, ] ,  [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , ;WORD "               ;
-
- db " WORD: DO          [ ' IJK LIT, ] , [ ' CELL+ LIT, ] , [ ' ! LIT, ] ,  HERE CELL- [ ' IJK LIT, ] , [ ' ! LIT, ] , ;WORD "
-; db " WORD: LOOP       [ ' IJK LIT, ] ,   [ ' @ LIT, ] , [ ' 1+ LIT, ] , [ ' DUP LIT, ] , [ ' IJK LIT, ] , [ ' CELL+ LIT, ] , [ ' @ LIT, ] , "
-; db "                  [ ' < LIT, ] , [ ' ?OF LIT, ] , , ;WORD "
-
-  ;low high >R >R
-
-  ;R> low
-  ;1+ DUP low+ low+
-  ;R@ low+ low+ high
-  ;= low+ flag
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
