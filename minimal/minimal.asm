@@ -11,7 +11,7 @@
 ;90000-GDT
 ;
 cell_size = 4 ; 32bit
-data_stack_base = 8000h
+data_stack_base = 080000h
 
 macro alignhe
 { virtual
@@ -25,7 +25,28 @@ db algn dup 0
 ;entry point
 ;----------------------------
         USE32
+        cli
+ep1:
+        in      al,64h
+        test    al,2
+        jne     ep1
 
+        mov     al,0xed
+        out     60h,al
+ ep2:
+        in      al,60h
+        in      al,64h
+        test    al,2
+        jne     ep2
+
+        xor     al,al
+        out     60h,al
+ ep3:
+        in      al,60h
+        in      al,64h
+        test    al,2
+        jne     ep3
+        sti
         mov dword [gs:20], "  S "
         mov dword [gs:24], "t a "
         mov dword [gs:28], "r t "
@@ -41,6 +62,95 @@ db algn dup 0
         mov dword [gs:44], "h   "
 
         jmp $
+        xchg    eax,ebp
+        seta    al
+        setnc   al
+        cmovne  ecx,ebp
+        setbe   cl
+        add eax,0x1234
+        mov eax,ebx
+        mov eax,[1234h]
+        movsx   eax,byte [eax]
+        movsx   ebx,byte [eax]
+        xor eax,ebx
+        movsx   ebx,byte [0x1234]
+        movsx   eax,byte [0x1234]
+        and dword [0x1234],0x5678
+        mov eax,[eax]
+        XOR dword [0x1234],0x5678
+        and ebx,ecx
+        sub eax,ebx
+        setc    cl
+        cmp eax,edi
+        cmp eax,esi
+        setnc   bl
+        setc    al
+        xor ecx,ecx
+        dec eax
+        mov [esi],al
+        mov ecx,[esp]
+        je ll2
+        mov     [1234h],eax
+        add     [0xb8000],eax
+        mov     al,20h
+        out     20h,al
+        popad
+        iretd
+
+ll2:
+
+        jmp 0x12345678
+        test    eax,12345678h
+        cmp eax, 1234567h
+        out 64h,al
+        ll1:
+
+        hlt
+        cmp dword [34h],03456h
+        je  ll1
+
+        into
+        mov eax,edi
+        sidt    [idtr]
+        mov edi,[idtr+2]
+        shr eax,16
+        stosw
+        stosw
+        add     eax,ebx
+        shl ecx,3
+        add edi,ecx
+        mov edi,[idtr+2]
+        mov ecx,eax
+        add dword [esp+123345h],67890h
+        ret 16
+        hlt
+        sete    al
+        neg eax
+        and eax,0xFFFFFF00
+        cmp eax,ebp
+        mov eax,ecx
+        and eax,ebp
+
+        mov ebp,[ecx+4]
+        add ecx,4
+        test eax,eax
+        cmove ecx,ebp
+        mov   [esp+4],ecx
+        mov byte [12345678h],0xAB
+        mov [eax],ebp
+        pop eax
+        pop ebx
+        pop ecx
+        push eax
+        push ebx
+        push ecx
+        mov esi,eax
+        movzx   ecx,byte [esi]
+        shr     ecx,2
+        inc     ecx
+        cld
+        rep     movsd
+        add eax,ebp
         and eax,0fffffffch
         add     eax,4
         inc     ebx
@@ -127,7 +237,9 @@ abort_:
 _abort:
         mov esi,msgbad
         call os_output
-        mov esi,[here_value]
+                mov eax,[here_value]
+         ;       call    _align2
+                mov     esi,eax
         inc esi
         call os_output
         mov esi,msgabort
@@ -199,6 +311,7 @@ _parse:
         mov eax,[block_value+8] ;input buffer
         call _push
         mov eax,[here_value] ;here
+  ;          call _align2
         call _push
         call _enclose
         ret
@@ -293,7 +406,11 @@ _find2:
         mov edx,ebx
         inc bl
         and bl,07ch ;mask immediate in counter
-        mov edi,[here_value]
+        mov eax,[here_value]
+  ;         push    ebx
+  ;         call    _align2
+           mov     edi,eax
+  ;         pop     ebx
         movzx ecx,byte [edi] ; word on here
         shr ecx,2
         inc ecx
@@ -333,7 +450,7 @@ nfa_14:
         alignhe
         dd nfa_13
         dd _execute_code
-        _execute_code:
+_execute_code:
         call _pop
 _execute:
         call dword [eax]
@@ -485,6 +602,10 @@ nfa_21:
 _typez:
         call    _pop
         mov     esi,eax
+        mov     edx,eax
+        shr     edx,4
+        and     edx,0f000h
+        mov     [seg2],dx
 os_output:
         pushad
         mov eax,prtstr1
@@ -499,11 +620,14 @@ prtstr2:
 symbols dd 0
 
         USE16
+seg2    dw      0
 prtstr1:
         call prtstr4
         jmp switch_to_pm
 prtstr4:
-        mov al,[si]
+        mov     ax,[seg2]
+        mov     fs,ax
+        mov al,[fs:si]
         inc si
         cmp al,0
         je prtstr3
@@ -830,16 +954,11 @@ _comma:
         align 4
 
 nfa_26:
-        db      6,"HEADER",0
+        db      8,"(HEADER)",0
         alignhe
         dd nfa_25
-        dd _header
-_header:
-        call    _parse
-        mov     esi,[here_value]
-        call    nlink2          ;esi - address of lf
-        call    latest_code2    ;eax - latest
-
+        dd _hheader
+_hheader:
         mov     [esi],eax       ;fill link field
         mov     ebx,[here_value]
         mov     eax,[current_value]
@@ -964,6 +1083,17 @@ _align:
         shl    al,2
         add    [here_value],eax
         ret
+;----------------------------
+
+_align2:
+        xor     ebx,ebx
+        and    eax,3
+        setne  bl
+        and    eax,0fffffffch
+        shl    bl,2
+        add    eax,ebx
+        ret
+
 ;----------------------------
         align 4
 
@@ -1098,7 +1228,7 @@ _link:
         ret
 ;----------------------------
         align 4
-nfa_last:
+
 nfa_42:
         db 6,"(WORD)",0
         alignhe
@@ -1151,6 +1281,22 @@ _word42:
 word_symb       db      20h
 ;--------------------------------
         align 4
+nfa_last:
+nfa_43:
+        db      6,"HEADER",0
+        alignhe
+        dd nfa_42
+        dd _header
+_header:
+       ; call    _align
+        call    _parse
+        mov     esi,[here_value]
+        call    nlink2          ;esi - address of lf
+        call    latest_code2    ;eax - latest
+        call    _hheader
+        ret
+
+
 
 _here:
         align   4096
