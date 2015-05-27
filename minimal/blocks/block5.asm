@@ -151,9 +151,24 @@
  db " mov_edx,# ' Pop @ , call_edx   "
  db " mov_edx,# ' Push @ , call_edx   "
  db " mov_eax,ebx "
- db " add_eax,# 0x 8000 , "
+ db " add_eax,# 0x 80000 , "
  db " call_edx "
  db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER SWAP HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " xchg_eax,ebp "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebp "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
+
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
