@@ -7,10 +7,12 @@
 
  db     " .( End of loads)  "
  db " WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD "
- db "  "
- db " WORD: dotest 0x_as_lit, 1 0x_as_lit, 12   DO  CR TIMER@ 2HEX.  LOOP   NOOP ;WORD "
-
-
+; db " SWAP "
+ db " WORD: dotest 0x_as_lit, 13 0x_as_lit, 17   DO   CR R@ HEX. TIMER@ 2HEX.  LOOP    ;WORD "
+; db  " WORD: testr   0x_as_lit, 1   0x_as_lit, 3 (do1) IJK @ HEX. ;WORD "
+ ;db " testr "
+ ;db " WORD: test 0x_as_lit, 13 0x_as_lit, 17  0x_as_lit, 0 If   CR CR  Then CR    ;WORD "
+ ;db " test "
 
  db     " WORD: key "
  db     " KEY    "
