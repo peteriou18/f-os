@@ -113,7 +113,7 @@
  db " ret           "
 
  db " ALIGN           "
- db " HEADER +        HERE CELL+ ,                "		       ; code field
+ db " HEADER +        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                                                                                                                                                                  "
@@ -192,7 +192,7 @@
  db " inc_ebx  inc_ebx       "
  db " add_eax,ebx          "
  db " and_eax,-4     "
- db " and_ebx,3                  "	       ; align it
+ db " and_ebx,3                  "             ; align it
  db " setne_bl               "
  db " shl_ebx,2              "
  db " add_eax,ebx             "
@@ -204,11 +204,11 @@
 
 
  db " HEADER strcopy            HERE CELL+ ,                      "
- db " mov_edx,#  ' Pop @ ,            call_edx      "	; copy to
+ db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
  db " mov_edi,eax        "
  db " mov_edx,#  ' Pop @ ,            call_edx         "   ; copy from
  db " mov_esi,eax                "
- db " movzx_ecx,b[esi]            "	;counter
+ db " movzx_ecx,b[esi]            "     ;counter
  db " shr_ecx,2                "
  db " inc_ecx           "
  db " cld               "
