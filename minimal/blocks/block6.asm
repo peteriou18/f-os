@@ -302,5 +302,5 @@
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
- db	0
+ db     0
  alignhe20
