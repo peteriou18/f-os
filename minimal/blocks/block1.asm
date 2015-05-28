@@ -3,16 +3,11 @@
  db     " 0x 7 LOAD        0x 2 LOAD      "
  db     " 0x 3 LOAD        0x 5 LOAD      "
  db     " 0x 4 LOAD        0x 6 LOAD      "
- db     " 0x 8 LOAD        "
+ db     " 0x 8 LOAD        0x 9 LOAD      "
 
  db     " .( End of loads)  "
  db " WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD "
-; db " SWAP "
- db " WORD: dotest 0x_as_lit, 13 0x_as_lit, 17   DO   CR R@ HEX. TIMER@ 2HEX.  LOOP    ;WORD "
-; db  " WORD: testr   0x_as_lit, 1   0x_as_lit, 3 (do1) IJK @ HEX. ;WORD "
- ;db " testr "
- ;db " WORD: test 0x_as_lit, 13 0x_as_lit, 17  0x_as_lit, 0 If   CR CR  Then CR    ;WORD "
- ;db " test "
+
 
  db     " WORD: key "
  db     " KEY    "
@@ -50,15 +45,9 @@
  db     ' EndCase Pop  ;WORD '
  db     " CR .( ----------) CR "
 
-; db     " WORD: key2 "
-; db     ' KEY    '
-; db     ' Case    '
-; db     ' DUP  0x_as_lit, 1 =   Of  ." Escape " EndOf   '
-; db     ' DUP  0x_as_lit, 2 =   Of  ." One " EndOf    '
-; db     ' ." Another "   EndCase    ;WORD '
 
  db     "  .( KEY:) key "
-  db " dotest "
+
  db     " CR .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
 ;
