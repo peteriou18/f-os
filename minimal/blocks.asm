@@ -19,6 +19,6 @@ include "blocks\block5.asm"
 include "blocks\block6.asm"
 include "blocks\block7.asm"
 include "blocks\block8.asm"
-
+include "blocks\block9.asm"
 
  ;block 9
