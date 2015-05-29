@@ -1,21 +1,25 @@
 ; block 9
+db " 0x 10 0x 19 OVER OVER SWAP-  + HEX. HEX. "
 db " VOCABULARY span's "
 db " span's CURRENT ! "
 
 db " QUOTE CONSTANT QUOTE "
 db " BL CONSTANT BL  "
 db " WORD:    0x    0x       ;WORD    "
-db " WORD: BADWORD  CHAR, ;WORD "
 
 db " FORTH32 CURRENT ! "
 
-db " WORD: span        DO  R@ HEX. stop BL WORD SFIND EXECUTE  LOOP   ;WORD "
+db " WORD: span         OVER OVER SWAP-  + 1+  DO  R@ HEX. stop BL WORD  span's SFIND EXECUTE  LOOP   ;WORD "
 
+db " span's FORTH32 LINK    span's CONTEXT ! "
+db " ' CHAR, ' BADWORD CELL+ ! "
+db " FORTH32 CONTEXT ! "
+db " span's UNLINK "
 
 
 ;db " layout: eng                      "
 ;db "           upper_shift_caps "
-db "                0x 10 0x 19 span  q w e r t y u i o p  Q W E R T Y U I O P    "
+db "          HERE      0x 10 0x 19 span  q w e r t y u i o p  Q W E R T Y U I O P   TYPEZ "
 ;db "                0x 1E 0x 26 span  a s d f g h j k l    A S D F G H J K L "
 ;db "                0x 2C 0x 32 span  z x c v b n m        Z X C V B N M "
 
@@ -25,7 +29,7 @@ db "                0x 10 0x 19 span  q w e r t y u i o p  Q W E R T Y U I O P  
 ;db "                0x 27 0x 29 span ; ' `   : QUOTE  ~ "
 ;db "                0x 2B 0x 2B span  \ | "
 ;db "                0x 33 0x 35 span , . / < > ? "
-;db "                0x 39 0x 39 span BL BL "
+db "                0x 39 0x 39 span BL BL "
 
 ;db " layout: rus_win1251 "
 ;db "         upper_shift_caps "
