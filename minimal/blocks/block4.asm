@@ -131,7 +131,7 @@
              ;
   db " WORD: DO         HERE CELL-  [ ' >R LIT, ] , [ ' >R LIT, ] ,  ;WORD "
   db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
-  db "       [ ' < LIT, ] ,  [ ' R> LIT, ] , [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , ;WORD      "
+  db "       [ ' < LIT, ] ,  [ ' R> LIT, ] , [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , [ ' Pop LIT, ] ,  [ ' Pop LIT, ] , ;WORD      "
 
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
