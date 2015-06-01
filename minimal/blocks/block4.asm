@@ -7,10 +7,11 @@
  db " HEADER CONSTANT   interpret# ,           "
  db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
- db " 0x 0  CONSTANT 0      "
- db " 0x 20 CONSTANT BL     "
- db " 0x 29 CONSTANT )      "
- db " 0x 22 CONSTANT QUOTE     "
+ db " 0x 0        CONSTANT 0      "
+ db " 0x FFFFFFFF CONSTANT -1 "
+ db " 0x 20       CONSTANT BL     "
+ db " 0x 29       CONSTANT )      "
+ db " 0x 22       CONSTANT QUOTE     "
 
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
@@ -82,9 +83,6 @@
  db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
  db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
 
- db " Word: (do1)  ', IJK ', CELL+  ', ! ;Word "
- db " Word: (do2)  ', IJK ', ! ;Word      "
- db " Word: (loop) ',  ;Word  "
 
 
  db " VOCABULARY IMMEDIATES "
@@ -104,38 +102,34 @@
 
  db " Word: WORD: "
  db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
-
+; db " WORD: (loop)    >R 1+ DUP R@ < >R SWAP  ;WORD "
 
  db " IMMEDIATES CURRENT ! "
 
  db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
  db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
 
-; db ' WORD: ."      ,"  '
-; db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
  db ' WORD: ."      ," '
  db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
 
 
- db " Word: Begin       ', HERE ', CELL-  ;Word "
- db " Word: Until       ', lit#    ' ?OF ,  ', , ', , ;Word "
- db " Word: If          ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', ,  ;Word "
- db " Word: Then        ', HERE ', CELL- ', SWAP! ;Word "
- db " Word: Else        ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R> ;Word   "
+ db " WORD: Begin       BEGIN  ;WORD "
+ db " WORD: Until       UNTIL  ;WORD "
+ db " WORD: If          IF     ;WORD "
+ db " WORD: Then        THEN   ;WORD "
+ db " WORD: Else        ELSE   ;WORD "
 
  db " WORD: 0x_as_lit,    0x, ;WORD "
 
- db " WORD: Case  0x_as_lit,  0  ;WORD "
- db " WORD: Of    [  ' ?OF  LIT,    ] ,   HERE  0x_as_lit,  0 ,  ;WORD   "
- db " WORD: EndOf    [ ' BRANCH LIT, ] , HERE >R 0x_as_lit,  0 ,  HERE  CELL-  SWAP! R>   ;WORD "
- db " WORD: EndCase   Begin DUP  0x_as_lit, 0 <>   If        "
- db "                                              0x_as_lit, 1 Else  HERE CELL- SWAP!  0x_as_lit, 0 Then   "
- db "                 Until Pop  ;WORD "
+ db " WORD: Case       0x_as_lit,  0  ;WORD "
+ db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
+ db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>   ;WORD "
+ db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
              ;
-  db " WORD: DO         HERE CELL-  [ ' >R LIT, ] , [ ' >R LIT, ] ,  ;WORD "
+  db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
   db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
   db "       [ ' < LIT, ] ,  [ ' R> LIT, ] , [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , [ ' Pop LIT, ] ,  [ ' Pop LIT, ] , ;WORD      "
-
+;  db " WORD: LOOP      COMPILE (loop) COMPILE ?OF ,   COMPILE Pop   COMPILE Pop ;WORD      "
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
