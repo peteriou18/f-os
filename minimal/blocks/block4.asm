@@ -102,7 +102,7 @@
 
  db " Word: WORD: "
  db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
-; db " WORD: (loop)    >R 1+ DUP R@ < >R SWAP  ;WORD "
+
 
  db " IMMEDIATES CURRENT ! "
 
@@ -126,10 +126,9 @@
  db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>   ;WORD "
  db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
              ;
-  db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
-  db " WORD: LOOP     [ ' R> LIT, ] ,  [ ' 1+ LIT, ] , [ ' DUP LIT, ] ,  [ ' R@ LIT, ] , "
-  db "       [ ' < LIT, ] ,  [ ' R> LIT, ] , [ ' SWAP LIT, ] , [ ' ?OF LIT, ] , , [ ' Pop LIT, ] ,  [ ' Pop LIT, ] , ;WORD      "
-;  db " WORD: LOOP      COMPILE (loop) COMPILE ?OF ,   COMPILE Pop   COMPILE Pop ;WORD      "
+ db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
+ db " WORD: LOOP      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
+ db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
