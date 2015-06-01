@@ -105,13 +105,16 @@
  db " Word: WORD: "
  db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
 
+
  db " IMMEDIATES CURRENT ! "
 
  db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
  db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
 
- db ' WORD: ."      ,"  '
- db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
+; db ' WORD: ."      ,"  '
+; db "  [ ' 1+ LIT, ]  , [ ' TYPEZ LIT, ] ,  ;WORD  "
+ db ' WORD: ."      ," '
+ db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
 
 
  db " Word: Begin       ', HERE ', CELL-  ;Word "
