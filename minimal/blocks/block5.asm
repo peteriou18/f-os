@@ -1,7 +1,17 @@
 
- ;block 5    BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@
+ ;block 5    COMPILE BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
+
+ db " HEADER COMPILE       HERE CELL+ ,        "
+ db " mov_eax,[esp+4]                        "
+ db " mov_eax,[eax+4]          "
+ db " mov_edx,#  ' Push @ ,           call_edx      "
+ db " add_d[esp+4],4      "
+ db " mov_edx,# ' , @ ,  call_edx "
+ db " ret    "
+
+ db " ALIGN    "
  db " HEADER BRANCH          HERE   CELL+ , "
  db " mov_eax,[esp+4]                        "
  db " mov_eax,[eax+4]          "
@@ -169,6 +179,21 @@
 
  db " ALIGN      "
 
+ db " HEADER OVER HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " mov_ecx,eax "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebp "
+ db " call_edx "
+ db " mov_eax,ecx "
+ db " call_edx "
+ db " mov_eax,ebp "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
