@@ -66,7 +66,7 @@ CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
 BEGIN AGAIN UNTIL IF THEN ELSE   IMMEDIATES ;WORD   WORD:  [ ] 0x_as_lit, ." 
 
 Block5 (under construction)
-BRANCH ?BRANCH ?OF AND  =  <> stop break WITHIN rWITHIN SP@ 
+BRANCH ?BRANCH ?OF AND  =  <> stop break WITHIN rWITHIN SP@ SWAP OVER
 
 Block 6 (under construction) 
 key key_flags idtr  interrupts forward> >forward  backward< <backward make_interrupt_gate
