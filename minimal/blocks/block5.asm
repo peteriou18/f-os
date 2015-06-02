@@ -1,5 +1,5 @@
 
- ;block 5    COMPILE BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@
+ ;block 5    BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@ SWAP OVER
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
 
@@ -188,8 +188,6 @@
  db " mov_eax,ebp "
  db " call_edx "
  db " mov_eax,ecx "
- db " call_edx "
- db " mov_eax,ebp "
  db " call_edx "
  db " ret "
 
