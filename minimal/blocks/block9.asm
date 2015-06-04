@@ -17,16 +17,17 @@ db " ' chr ' BADWORD CELL+ ! "
 db " FORTH32 CONTEXT ! "
 db " span's UNLINK "
 
+ db ' WORD: span              WITHIN  DUP HEX.     ;WORD '
 
  db " IMMEDIATES CURRENT ! "
- db " WORD: (span)          OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE  SP@ TYPEZ B, LOOP  ;WORD "
+ db " WORD: (span)          OVER LIT, DUP LIT, COMPILE span  COMPILE BRANCH HERE COMPILE 0  >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!  ;WORD "
  db " FORTH32 CURRENT !    "
 
- db ' WORD: span            >R >R  WITHIN  HEX.  R> R> HEX. HEX.    ;WORD '
 
- db " WORD: tesst       [ 0x 10 0x 19 ]   (span)  q w e r t y u i o p  Q W E R T Y U I O P   HERE HEX. HEX. ;WORD "
- db ' WORD: tsts        ." begin test" stop BRANCH [ HERE ] 0  0x_as_lit, DDEEFF  HEX. [ DUP HEX. HERE CELL- SWAP! ] ." end test " ;WORD '
- db " tsts "
+ db " .( tessts ) "
+ db " WORD: tesst          [ 0x 10 0x 19 ]    (span)  q w e r t y u i o p  Q W E R T Y U I O P   ;WORD "
+ ;db ' WORD: tsts        ." begin test" stop BRANCH [ HERE ] 0  0x_as_lit, DDEEFF  HEX. [ DUP HEX. HERE CELL- SWAP! ] ." end test " ;WORD '
+ db " 0x 13 tesst  HEX. HEX. "
 ; db " tesst "
  ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
  ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
