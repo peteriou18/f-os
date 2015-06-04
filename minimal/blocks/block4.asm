@@ -16,8 +16,6 @@
  db " HEADER VARIABLE   interpret# ,    "
  db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
- db " VARIABLE IJK 0x 0 , "
-
  db " HEADER LIT,  interpret# , "
  db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
 
@@ -112,6 +110,8 @@
  db ' WORD: ."      ," '
  db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
 
+ db " WORD: .((     .(              ;WORD "
+
 
  db " WORD: Begin       BEGIN  ;WORD "
  db " WORD: Until       UNTIL  ;WORD "
@@ -129,6 +129,8 @@
  db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
  db " WORD: LOOP      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
  db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
+
+
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
