@@ -1,5 +1,5 @@
 
-;block 2    opcodes  2, 3, 4, 5
+;block 2    opcodes  3, 4, 5
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
 
