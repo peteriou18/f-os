@@ -26,20 +26,23 @@ db " span's UNLINK "
  db " WORD: span:             HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
  db " FORTH32 CURRENT !    "
 
-
+ db ' WORD: ;span  WITHIN  0 = If  >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Pop  Else Pop Then   ;WORD '
  db " .( tessts ) "
- db " WORD: tesst   DUP  [ 0x 10 0x 19 ]   span:  q w e r t y u i o p  Q W E R T Y U I O P   WITHIN  0 = If   >R  R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Then    ;WORD "
- ;db ' WORD: tsts        ." begin test" stop BRANCH [ HERE ] 0  0x_as_lit, DDEEFF  HEX. [ DUP HEX. HERE CELL- SWAP! ] ." end test " ;WORD '
- db " 0x 11   tesst .( tersts )  "
-; db " tesst "
+
+
+; db " WORD: tesst    [ 0x 10 0x 19 ]   span:  q w e r t y u i o p  Q W E R T Y U I O P  ;span   ;WORD "
+
+
+; db " 0x 11  DUP  tesst .( tersts )  "
+
  ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
  ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
 
- ;db " WORD: eng                      "
+ db " WORD: eng                      "
 ;db "           upper_shift_caps "
- ;db '          HERE   SP@ HEX.   span  q w e r t y u i o p  Q W E R T Y U I O P SP@ HEX.   '
-; db "        stop         0x 1E  0x 26 span  a s d f g h j k l    A S D F G H J K L "
-; db "                 0x 2C  0x 32 span  z x c v b n m        Z X C V B N M "
+ db '              [ 0x 10 0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P ;span DUP '
+ db "              [ 0x 1E 0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L   ;span DUP "
+ db "              [ 0x 2C 0x 32 ]  span:  z x c v b n m        Z X C V B N M       ;span "
 
 ;db "          upper_shift_only "
 
@@ -49,7 +52,8 @@ db " span's UNLINK "
 ; db "                 0x 2B  0x 2B span  \ | "
 ; db "                 0x 33  0x 35 span , . / < > ? "
 ; db '                 0x 39  0x 39  span  BL BL .( after) SP@ HEX.   TYPEZ '
-; db " ;WORD "
+ db " ;WORD "
+
 ; db " 0x 13  0x 10  0x 19 span "
 ;db " layout: rus_win1251 "
 ;db "         upper_shift_caps "
@@ -60,7 +64,7 @@ db " span's UNLINK "
 ;db "            0x 02 0x 0D span 1 2 3 4 5 6 7 8 9 0 - =  ! QUOTE ¹ ; % : ? * ( ) _ + "
 ;db "                0x 35 0x 35 span . , "
 ;db "                0x 39 0x 39 span BL BL "
-db " "
+;db " 0x 11 DUP eng "
 db " EXIT "
 db     0
  alignhe20
