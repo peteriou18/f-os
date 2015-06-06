@@ -1,6 +1,8 @@
 ; block 9
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
+
+
 db " VOCABULARY span's "
 db " span's CURRENT ! "
 
@@ -19,15 +21,16 @@ db " span's UNLINK "
 ; db " WORD: span             COMPILE BRANCH HERE COMPILE 0  >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
 
  db " IMMEDIATES CURRENT ! "
+ db " WORD: HEX,  [ ' 0x_as_lit, LIT, ] , ;WORD "
  ;db " WORD: (span)             OVER LIT, DUP LIT, COMPILE WITHIN  COMPILE HEX. [ ' Of LIT, ] ,   COMPILE HERE span [ ' EndOf LIT, ] ,     ;WORD "
- db " WORD: span            .(( HERE LIT, OVER LIT, DUP LIT, ) COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
+ db " WORD: span:             HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
  db " FORTH32 CURRENT !    "
 
 
  db " .( tessts ) "
- db " WORD: tesst       DUP [   0x 10 DUP LIT,  0x 19 DUP  LIT,  HERE  ]   WITHIN 0 = If [ SWAP 0x 3 CELLs - @ LIT, ] -  0x_as_lit, 7ECC +  C@ SP@ TYPEZ Then  span  q w e r t y u i o p  Q W E R T Y U I O P    ;WORD "
+ db " WORD: tesst   DUP  [ 0x 10 0x 19 ]   span:  q w e r t y u i o p  Q W E R T Y U I O P   WITHIN  0 = If   >R  R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Then    ;WORD "
  ;db ' WORD: tsts        ." begin test" stop BRANCH [ HERE ] 0  0x_as_lit, DDEEFF  HEX. [ DUP HEX. HERE CELL- SWAP! ] ." end test " ;WORD '
- db " 0x 11 tesst .( tersts )  "
+ db " 0x 11   tesst .( tersts )  "
 ; db " tesst "
  ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
  ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
