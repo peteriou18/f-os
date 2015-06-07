@@ -23,7 +23,11 @@ db " span's UNLINK "
  db " IMMEDIATES CURRENT ! "
  db " WORD: HEX,  [ ' 0x_as_lit, LIT, ] , ;WORD "
  ;db " WORD: (span)             OVER LIT, DUP LIT, COMPILE WITHIN  COMPILE HEX. [ ' Of LIT, ] ,   COMPILE HERE span [ ' EndOf LIT, ] ,     ;WORD "
- db " WORD: span:             HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
+ db " WORD: span:           
+ HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  
+ HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    
+ ;WORD "
+ 
  db " FORTH32 CURRENT !    "
 
  db ' WORD: ;span  WITHIN  0 = If  >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Pop  Else Pop Then   ;WORD '
