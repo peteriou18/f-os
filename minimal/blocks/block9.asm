@@ -19,18 +19,14 @@ db " ' chr ' BADWORD CELL+ ! "
 db " FORTH32 CONTEXT ! "
 db " span's UNLINK "
 ; db " WORD: span             COMPILE BRANCH HERE COMPILE 0  >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
-
+db ' WORD: ;span  WITHIN  0 = If  >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Pop  Else Pop Then   ;WORD '
  db " IMMEDIATES CURRENT ! "
  db " WORD: HEX,  [ ' 0x_as_lit, LIT, ] , ;WORD "
  ;db " WORD: (span)             OVER LIT, DUP LIT, COMPILE WITHIN  COMPILE HEX. [ ' Of LIT, ] ,   COMPILE HERE span [ ' EndOf LIT, ] ,     ;WORD "
- db " WORD: span:           
- HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  
- HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    
- ;WORD "
- 
+ db " WORD: span:             HERE LIT, COMPILE SWAP OVER LIT, DUP LIT,  COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!   COMPILE ;span  ;WORD "
  db " FORTH32 CURRENT !    "
 
- db ' WORD: ;span  WITHIN  0 = If  >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, 9 CELLs + + C@ SP@ TYPEZ Pop  Else Pop Then   ;WORD '
+
  db " .( tessts ) "
 
 
@@ -44,9 +40,9 @@ db " span's UNLINK "
 
  db " WORD: eng                      "
 ;db "           upper_shift_caps "
- db '              [ 0x 10 0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P ;span DUP '
- db "              [ 0x 1E 0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L   ;span DUP "
- db "              [ 0x 2C 0x 32 ]  span:  z x c v b n m        Z X C V B N M       ;span "
+ db '              [ 0x 10 0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P  DUP '
+ db "              [ 0x 1E 0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L    DUP "
+ db "              [ 0x 2C 0x 32 ]  span:  z x c v b n m        Z X C V B N M        "
 
 ;db "          upper_shift_only "
 
