@@ -12,14 +12,18 @@ db " WORD:    0x    0x       ;WORD    "
 
 db " FORTH32 CURRENT ! "
 
-
+db " WORD: VECTOR       HEADER [ ' BADWORD @ LIT, ] ,  0 , ;WORD "
 
 db " span's FORTH32 LINK    span's CONTEXT ! "
 db " ' chr ' BADWORD CELL+ ! "
 db " FORTH32 CONTEXT ! "
 db " span's UNLINK "
 ; db " WORD: span             COMPILE BRANCH HERE COMPILE 0  >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!    ;WORD "
-db ' WORD: ;span  >R WITHIN R> SWAP   0 = If  >R >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, B CELLs + + R> + C@ SP@ TYPEZ Pop  Else Pop Pop Then   DUP ;WORD '
+db " VECTOR upper? "
+
+db " ' upper_shift_caps  ' upper? CELL+ ! "
+
+db ' WORD: ;span  >R WITHIN R> SWAP   0 = If  >R >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, B CELLs + + R> upper? AND + C@ SP@ TYPEZ Pop  Else Pop Pop Then   DUP ;WORD '
  db " IMMEDIATES CURRENT ! "
  db " WORD: HEX,  [ ' 0x_as_lit, LIT, ] , ;WORD "
  ;db " WORD: (span)             OVER LIT, DUP LIT, COMPILE WITHIN  COMPILE HEX. [ ' Of LIT, ] ,   COMPILE HERE span [ ' EndOf LIT, ] ,     ;WORD "
