@@ -24,13 +24,21 @@ db " VECTOR upper? "
 db " WORD:  caps_shift   [ ' upper_shift_caps  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
 db " WORD:  only_shift   [ ' upper_shift_only  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
 
-db ' WORD: ;span  >R WITHIN R> SWAP   0 = If  >R >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R> 0x_as_lit, B CELLs + + R> upper? AND + C@ SP@ TYPEZ Pop  Else Pop Pop Then   DUP ;WORD '
+db " WORD: ;span        "
+db "                    >R WITHIN R> SWAP   0 = If  >R >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R>               "
+db "                    0x_as_lit, B CELLs + + R> upper? AND + C@ SP@ TYPEZ Pop  Else Pop Pop Then   DUP       "
+db " ;WORD "
+
+
 db " IMMEDIATES CURRENT ! "
-db " WORD: HEX,  [ ' 0x_as_lit, LIT, ] , ;WORD "
+db " WORD: span:        "
+db "                    HERE LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+ LIT,   "
+db "                    COMPILE BRANCH HERE COMPILE 0  HERE HEX.  >R OVER OVER SWAP- + 1+             "
+db "                    DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP               "
+db "                    R>  HERE  CELL- SWAP!   COMPILE ;span "
+db " ;WORD "
 
-db " WORD: span:             HERE LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+ LIT,   COMPILE BRANCH HERE COMPILE 0  HERE HEX. >R OVER OVER SWAP- + 1+ DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP R>  HERE  CELL- SWAP!   COMPILE ;span  ;WORD "
-db " FORTH32 CURRENT !    "
-
+ db " FORTH32 CURRENT !    "
  ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
  ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
 
