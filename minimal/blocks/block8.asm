@@ -105,7 +105,8 @@
 
  db " ALIGN      "
 
-
+ db " WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD "
+ db " WORD: SPACE     BL SP@ TYPEZ ;WORD "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
