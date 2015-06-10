@@ -115,6 +115,7 @@
 
  db " WORD: Begin       BEGIN  ;WORD "
  db " WORD: Until       UNTIL  ;WORD "
+ db " WORD: Again       AGAIN  ;WORD "
  db " WORD: If          IF     ;WORD "
  db " WORD: Then        THEN   ;WORD "
  db " WORD: Else        ELSE   ;WORD "
