@@ -62,6 +62,7 @@ ep1:
         mov dword [gs:44], "h   "
 
         jmp $
+        shl     eax,2
         xchg    eax,ebp
         seta    al
         setnc   al
@@ -635,8 +636,8 @@ prtstr4:
         int 10h
         jmp prtstr4
 prtstr3:
-        mov     ax,0e20h
-        int     10h
+       ; mov     ax,0e20h
+      ;  int     10h
         ret
 
 ;----------------------------
