@@ -81,6 +81,8 @@
  db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
  db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
 
+ db " Word: ENDOF       ',   COMPILE ', BRANCH  ', HERE ', >R  ', COMPILE ', 0 ', THEN  ', R> ;Word "
+ db " Word: OF          ',   COMPILE ', ?OF     ', HERE        ', COMPILE ', 0                ;Word "
 
 
  db " VOCABULARY IMMEDIATES "
@@ -124,7 +126,7 @@
 
  db " WORD: Case       0x_as_lit,  0  ;WORD "
  db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
- db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>   ;WORD "
+ db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
  db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
              ;
  db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
