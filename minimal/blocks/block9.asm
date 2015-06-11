@@ -48,7 +48,7 @@ db " IMMEDIATES CURRENT ! "
 db "                    COMPILE DUP HERE  LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+  LIT,   "
 db "                    COMPILE BRANCH HERE COMPILE 0    >R OVER OVER SWAP- + 1+             "
 db "                    DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP               "
-db "                    R>  THEN " ;  COMPILE (span1) [ ' Of  , ]  COMPILE (span2) [ ' EndOf , ]   DUP HEX. SP@ HEX. "
+db "                    R>  THEN  COMPILE (span1)   OF  COMPILE (span2) ENDOF COMPILE Pop COMPILE Pop      "
 db " ;WORD "
 
  db " FORTH32 CURRENT !    "
@@ -57,18 +57,18 @@ db " ;WORD "
 
  db " WORD: eng       Case  "
  db "           caps_shift "
- db '              [ 0x 10  0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P   (span1)  Of   (span2) EndOf Pop Pop  '
- db '              [ 0x 1E  0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L   (span1)   Of  (span2) EndOf   Pop Pop '
- db "              [ 0x 2C  0x 32 ]  span:  z x c v b n m        Z X C V B N M      (span1) Of (span2) EndOf Pop Pop  "
+ db '              [ 0x 10  0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P         '
+ db '              [ 0x 1E  0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L        '
+ db "              [ 0x 2C  0x 32 ]  span:  z x c v b n m        Z X C V B N M           "
 
  db "           only_shift "
 
- db "              [ 0x 02  0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ + (span1) Of (span2) EndOf Pop Pop "
- db "              [ 0x 1A  0x 1B ] span: [ ] { }      (span1) Of (span2) EndOf   Pop Pop      "
- db "              [ 0x 27  0x 29 ] span: ; ' `   : QUOTE  ~  (span1) Of (span2) EndOf  Pop Pop "
- db "              [ 0x 2B  0x 2B ] span:  \ |              (span1) Of (span2) EndOf   Pop Pop  "
- db "              [ 0x 33  0x 35 ] span: , . / < > ?      (span1) Of (span2) EndOf   Pop Pop  "
- db "              [ 0x 39  0x 39 ] span:  BL BL       (span1) Of (span2) EndOf      Pop Pop "
+ db "              [ 0x 02  0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ +    "
+ db "              [ 0x 1A  0x 1B ] span: [ ] { }               "
+ db "              [ 0x 27  0x 29 ] span: ; ' `   : QUOTE  ~     "
+ db "              [ 0x 2B  0x 2B ] span:  \ |                    "
+ db "              [ 0x 33  0x 35 ] span: , . / < > ?            "
+ db "              [ 0x 39  0x 39 ] span:  BL BL               "
  db " EndCase ;WORD "
 
 
