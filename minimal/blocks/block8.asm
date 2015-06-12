@@ -42,33 +42,11 @@
  db " WORD: CHAR,     CHAR B, ;WORD "
 
 
- db " WORD: CHARs,    Begin   CHAR  B,   1-   DUP  0x_as_lit, 0   =  Until    Pop     ;WORD "
+ db " WORD: CHARs,    Begin   CHAR  B,   1-   DUP  hex, 0   =  Until    Pop     ;WORD "
  db " WORD: CREATE      HEADER variable# , ;WORD "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
-
-
-
- db " CREATE numkys "
- db "  0x 18 CHARs, 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ +  "
- db " VARIABLE numky1 "
- db "  0x  4 CHARs, [ ] { } "
- db " VARIABLE numky2 "
- db "  0x  4 CHARs, ; ' `   : QUOTE B, CHAR, ~  "
- db " VARIABLE numky3 "
- db "  0x  2 CHARs, \ | "
- db " VARIABLE numky4 "
- db "  0x  6 CHARs, , . / < > ? "
- db " VARIABLE space_ "
- db "  0x 20  B, "
- db " VARIABLE qwerty  "
- db "  0x 14 CHARs, q w e r t y u i o p  Q W E R T Y U I O P " ; F - tab, 1C - Enter
- db " VARIABLE asdfgh  "
- db "  0x 12 CHARs, a s d f g h j k l    A S D F G H J K L "
- db " VARIABLE zxcvbn  "
- db "  0x  E CHARs, z x c v b n m        Z X C V B N M  "
-
                     ;
 
  db " ALIGN     "
@@ -105,7 +83,7 @@
 
  db " ALIGN      "
 
- db " WORD: CR        0x_as_lit, 0D0A  SP@ TYPEZ ;WORD "
+ db " WORD: CR        hex, 0D0A  SP@ TYPEZ ;WORD "
  db " WORD: SPACE     BL SP@ TYPEZ ;WORD "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
