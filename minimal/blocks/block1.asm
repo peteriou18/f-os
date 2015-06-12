@@ -9,20 +9,32 @@
 
 
 
- db     "  0x  20202020 CONSTANT 4spaces "
+ db     "  0x  20202020 CONSTANT 4Spaces "
  db     "  0x  54495845 CONSTANT 'exit'  "
- db     " WORD: key "
- db     " KEY   eng  ;WORD "
 
- db     " WORD: EXPECT    4spaces  hex, 2000 ! hex, 1FFF  Begin  1+ DUP   key   SWAP  C! DUP   C@  hex, 1C = Until DUP 4spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+  0 SWAP!  ;WORD "
- db     ' WORD: F-SYSTEM  Begin CR ." OK>" EXPECT  0 >IN ! INTERPRET Again ;WORD '
+ db     " WORD: key      KEY   eng  ;WORD "
 
- db     " CR 0x 40 0x B8010 C!  0x B8010 C@ HEX.   F-SYSTEM   "
+ db     " WORD: do_backspace  HEX.  1- 1-  ;WORD   "
+
+ db     " WORD: ?do   Case           "
+ db     "                  DUP hex, 1C = Of   Pop  -1            EndOf  "
+ db     "                      hex, 8  = Of      do_backspace    EndOf  "
+ db     "                  0   "
+ db     " EndCase     ;WORD "
+
+ db     " WORD: EXPECT    4Spaces  hex, 2000 ! hex, 1FFF        "
+ db     "                 Begin  1+ DUP   key   SWAP  C! DUP   C@  ?do  Until      "
+ db     "                 DUP 4Spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+  0 SWAP!  ;WORD "
+
+
+ db     ' WORD: F-SYSTEM  Begin CR TIMER@ 2HEX. ."  OK>" EXPECT  CR 0 >IN ! INTERPRET Again ;WORD '
+
+ db     "   F-SYSTEM   "
 
  db     " CR .( ----------) CR "
 
 
- db     "  .( KEY:) key "
+ db     "   "
 
  db     " CR .( Here:) HERE HEX. .( Ticks:) TIMER@ 2HEX. EXIT    "
  db     0
