@@ -1,5 +1,7 @@
 
- ;block 5    BRANCH ?BRANCH ?OF AND  =  <> stop break  WITNIN rWITHIN  SP@
+ ;block 5    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
+ ;           SWAP OVER NEGATE CELLs
+
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
 
