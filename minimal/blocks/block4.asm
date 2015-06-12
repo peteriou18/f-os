@@ -1,7 +1,9 @@
 
- ;block 4 CONSTANT 0 ) " VARIABLE LIT, ;Word Word: 0x, ', .( PAD Word+ S" exec.
- ; ," @HEX. make_badword   make_exit  VOCABULARY NOOP compiler
- ; BEGIN AGAIN UNTIL IF THEN ELSE IMMEDIATES ;WORD   WORD: [ ] 0x_as_lit, ."
+ ;block 4 CONSTANT 0 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
+ ; ," make_badword   make_exit  VOCABULARY NOOP compiler
+ ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
+ ; .((  Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
+
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
  db " HEADER CONSTANT   interpret# ,           "
@@ -42,12 +44,8 @@
  db ' Word: S"  '
  db "  ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD  ;Word "
 
- db " Word: exec.   ', exec_point ', HEX. ;Word "
-
  db ' Word: ,"  '
  db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT    ;Word "
-
- db " Word: @HEX.  ', DUP ', @ ',  HEX. ',  CELL+ ;Word "
 
  db " Word: make_badword          "
  db ' ," BADWORD"   '
@@ -122,15 +120,15 @@
  db " WORD: Then        THEN   ;WORD "
  db " WORD: Else        ELSE   ;WORD "
 
- db " WORD: 0x_as_lit,    0x, ;WORD "
+ db " WORD: hex,        0x,     ;WORD "
 
- db " WORD: Case       0x_as_lit,  0  ;WORD "
+ db " WORD: Case       hex,  0  ;WORD "
  db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
  db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
  db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
              ;
- db " WORD: DO        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
- db " WORD: LOOP      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
+ db " WORD: Do        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
+ db " WORD: Loop      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
  db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
 
 
