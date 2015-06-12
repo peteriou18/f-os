@@ -1,5 +1,6 @@
 
- ;block 6
+ ;block 6        key  key_flags idtr interrupts forward> >forward backward< <backward
+ ;               make_interrupt_gate
  db " FORTH32 CURRENT !  "
 
  db " VARIABLE key     "
