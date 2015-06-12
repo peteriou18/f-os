@@ -1,5 +1,5 @@
 
-;block 2    opcodes  2, 3, 4, 5
+;block 2    opcodes   3, 4, 5
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
 
@@ -21,6 +21,7 @@
  db     "             0x C1 0x 92 0x 0F 0x 3 opcode setc_cl                   "
  db     "             0x C1 0x 96 0x 0F 0x 3 opcode setbe_cl                  "
  db     "             0x 02 0x E0 0x C0 0x 3 opcode shl_al,2                  "
+ db     "             0x 02 0x E0 0x C1 0x 3 opcode shl_eax,2                 "
  db     "             0x 02 0x E3 0x C1 0x 3 opcode shl_ebx,2                 "
  db     "             0x 03 0x E1 0x C1 0x 3 opcode shl_ecx,3                 "
  db     "             0x 10 0x E8 0x C1 0x 3 opcode shr_eax,16                "
