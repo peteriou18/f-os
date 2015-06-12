@@ -1,5 +1,4 @@
 ; block 9
-; chr span's VECTOR upper? caps_shift only_shift (span1) (span2) span: eng
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
 
@@ -25,30 +24,22 @@ db " VECTOR upper? "
 db " WORD:  caps_shift   [ ' upper_shift_caps  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
 db " WORD:  only_shift   [ ' upper_shift_only  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
 
-;db " WORD: ;span        "
-;db "                    >R WITHIN R> SWAP   0 = If  >R >R  DUP   R@ 0x_as_lit, 4 CELLs + @ -  R>               "
-;db "                    0x_as_lit, B CELLs + + R> upper? AND + C@ SP@ TYPEZ   Else HEX. HEX. Then   DUP  [ CR HEX. HEX. ]     "
-;db " ;WORD "
+
  db " WORD: (span1)        "
  db "                       >R WITHIN R> SWAP         "     ;  here scan low high length  -- here length flag
  db " ;WORD "
 
  db " WORD: (span2)        "
- db "                      >R  >R      R@  0x_as_lit, 4 CELLs + @   -  R>               "     ; here length
- db "                    0x_as_lit, B CELLs + +  R>  upper? AND + C@ SP@ TYPEZ      "
+ db "                      >R  >R      R@  hex, 4 CELLs + @   -  R>               "     ; here length
+ db "                    hex, B CELLs + +  R>  upper? AND + C@ SP@ TYPEZ      "
  db " ;WORD "
 
 db " IMMEDIATES CURRENT ! "
-;db " WORD: span:        "
-;db "                    HERE LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+ LIT,   "
-;db "                    COMPILE BRANCH HERE COMPILE 0  HERE HEX.  >R OVER OVER SWAP- + 1+             "
-;db "                    DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP               "
-;db "                    R>  HERE  CELL- SWAP!   COMPILE ;span "
-;db " ;WORD "
+
  db " WORD: span:        "
 db "                    COMPILE DUP HERE  LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+  LIT,   "
 db "                    COMPILE BRANCH HERE COMPILE 0    >R OVER OVER SWAP- + 1+             "
-db "                    DO    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, LOOP               "
+db "                    Do    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, Loop               "
 db "                    R>  THEN  COMPILE (span1)   OF  COMPILE (span2) ENDOF COMPILE Pop COMPILE Pop      "
 db " ;WORD "
 
