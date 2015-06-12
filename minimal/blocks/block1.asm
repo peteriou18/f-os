@@ -5,16 +5,18 @@
  db     " 0x 4 LOAD        0x 6 LOAD      "
  db     " 0x 8 LOAD        0x 9 LOAD      "
 
- db     " .( End of loads)  "
+ db     " .( End of loads)   "
 
 
 
 
  db     " WORD: key "
- db     " KEY  DUP  eng ;WORD "
+ db     " KEY   eng  ;WORD "
 
-; db     " WORD: EXPECT         0x_as_lit, 2020202020202020  0x_as_lit, 2000 ! 0x_as_lit, 1FFF  Begin  1+ DUP  key   SWAP  C! DUP  C@ DUP HEX.   0x_as_lit, 1C = Until  0x_as_lit, 2000 TYPEZ ;WORD "
-; db     " CR 0x 40 0x B8010 C!  0x B8010 C@ HEX.    CR .( OK>) EXPECT  0 >IN ! INTERPRET  "
+ db     " WORD: EXPECT         0x_as_lit, 2020202020202020  0x_as_lit, 2000 ! 0x_as_lit, 1FFF  Begin  1+ DUP   key   SWAP  C! DUP   C@  0x_as_lit, 1C = Until DUP 0x_as_lit, 2020202020202020 SWAP! CELL+ DUP 0x_as_lit, 54495845 SWAP! CELL+  0 SWAP!  ;WORD "
+ db     ' WORD: F-SYSTEM  Begin CR ." OK>" EXPECT  0 >IN ! INTERPRET Again ;WORD '
+
+ db     " CR 0x 40 0x B8010 C!  0x B8010 C@ HEX.   F-SYSTEM   "
 
  db     " CR .( ----------) CR "
 
