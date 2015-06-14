@@ -89,8 +89,12 @@
 
 
  db " VARIABLE frame "
- db " WORD: fix_frame   SP@ frame ! ;WORD "
- db " WORD: 3rd         frame @ hex, 3 CELLs - @ ;WORD "
+ db " WORD: fix_frame   SP@ frame !                 ;WORD "
+ db " WORD: 1st         frame @ @                   ;WORD "
+ db " WORD: 2nd         frame @ CELL- @             ;WORD "
+ db " WORD: 3rd         frame @ CELL- CELL- @       ;WORD "
+ db " WORD: 4th         frame @ CELL- CELL- CELL- @ ;WORD "
+ db " WORD: 5th         frame @ hex, 5 - @          ;WORD "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
