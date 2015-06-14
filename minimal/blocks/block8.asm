@@ -83,13 +83,14 @@
 
  db " ALIGN      "
 
+ db " FORTH32 CONTEXT ! "
  db " WORD: CR        hex, 0D0A  SP@ TYPEZ ;WORD "
  db " WORD: SPACE     BL SP@ TYPEZ ;WORD "
 
 
  db " VARIABLE frame "
  db " WORD: fix_frame   SP@ frame ! ;WORD "
- db " WORD: 3rd         frame @ hex, 3 CELLs SWAP- @ ;WORD "
+ db " WORD: 3rd         frame @ hex, 3 CELLs - @ ;WORD "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
