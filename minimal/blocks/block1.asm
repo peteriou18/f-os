@@ -14,11 +14,11 @@
 
  db     " WORD: key      KEY   eng  ;WORD "
 
- db     " WORD: do_backspace  HEX.  1- 1-  ;WORD   "
+ db     " WORD: do_backspace  1- 1- hex, 082008 SP@ TYPEZ Pop   ;WORD   "
 
  db     " WORD: ?do   Case           "
  db     "                  DUP hex, 1C = Of   Pop  -1            EndOf  "
- db     "                      hex, 8  = Of      do_backspace    EndOf  "
+ db     "                      hex, E  = Of   do_backspace 0   EndOf  "
  db     "                  0   "
  db     " EndCase     ;WORD "
 
