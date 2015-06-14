@@ -7,7 +7,7 @@
 
  db     " .( End of loads)   "
 
-
+ db     "  0x 11 0x 22 0x 33 0x 44 fix_frame frame @ HEX. 3rd HEX. CR "
 
  db     "  0x  20202020 CONSTANT 4Spaces "
  db     "  0x  54495845 CONSTANT 'exit'  "
