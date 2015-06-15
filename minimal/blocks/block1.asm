@@ -24,18 +24,19 @@
 
  db     " WORD: do_backspace  1- 1- hex, 082008 SP@ TYPEZ Pop   ;WORD   "
  db     " WORD: mask          hex, 3C0 AND  ;WORD "
- db     " WORD: save_cmd      strcopy ;WORD "
+ db     " WORD: prev_cmd      tib$ @ tibsize - mask  tib$ !   ;WORD "
  db     " WORD: next_cmd      tib$ @ tibsize + mask  tib$ !   ;WORD "
  db     " WORD: do_enter      DUP 4Spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+  0 SWAP!  ;WORD "
 
  db     " WORD: ?do   Case           "
- db     "                  DUP hex, 1C = Of   do_enter next_cmd Pop  -1   EndOf  "
- db     "                      hex, E  = Of   do_backspace 0     EndOf  "
+ db     "                  DUP    hex, 1C = Of   do_enter next_cmd Pop  -1   EndOf  "
+ db     "                  DUP    hex, E  = Of   do_backspace 0     EndOf  "
+ db     '                         hex, 48 = Of   ." do up" prev_cmd hex, 0A TYPEZ Pop   tib TYPEZ 0 EndOf '
  db     "                  0   "
  db     " EndCase     ;WORD "
 
  db     " WORD: EXPECT    4Spaces  tib ! tib 1-        "
- db     "                 Begin  1+ DUP   key   SWAP  C! DUP   C@  ?do  Until      "
+ db     "                 Begin  1+ DUP   key  SWAP  C! DUP   C@  ?do  Until      "
  db     "                 ;WORD "
 
  db     " WORD: set_console_input  0 BLOCK ! tibsize BLOCK CELL+ !  "
