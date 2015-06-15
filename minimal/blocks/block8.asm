@@ -65,10 +65,6 @@
 
  db " HEADER upper_shift_only   HERE CELL+ , "
  db " movsx_eax,b[] key_flags 1+ ,    "
- ;db " mov_eax,[] key_flags , "
- ;db " mov_eax,# key_flags ,      "
- ;db " inc_eax   "
- ;db " movsx_eax,b[eax]       "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret "
 
@@ -84,8 +80,8 @@
  db " ALIGN      "
 
  db " FORTH32 CONTEXT ! "
- db " WORD: CR        hex, 0D0A  SP@ TYPEZ ;WORD "
- db " WORD: SPACE     BL SP@ TYPEZ ;WORD "
+ db " WORD: CR        hex, 0D0A  SP@ TYPEZ Pop ;WORD "
+ db " WORD: SPACE     BL SP@ TYPEZ Pop         ;WORD "
 
 
  db " VARIABLE frame "
