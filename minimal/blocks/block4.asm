@@ -3,7 +3,16 @@
  ; ," make_badword   make_exit  VOCABULARY NOOP compiler
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
  ; .((  Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
+ 
+ db " HEADER lit#       HERE CELL+ ,        "
+ db " mov_eax,[esp+4]                        "
+ db " mov_eax,[eax+4]          "
+ db " mov_edx,#  ' Push @ ,           call_edx      "
+ db " add_d[esp+4],4      "
+ db " ret    "
 
+ db " ALIGN    "
+ 
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
  db " HEADER CONSTANT   interpret# ,           "
