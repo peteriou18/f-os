@@ -25,7 +25,7 @@
 
  db     ' WORD: key        KEY   eng   ;WORD '
 
- db     " WORD: do_backspace  1- hex, 082008 SP@ TYPEZ    ;WORD   "
+ db     " WORD: do_backspace  1- 1- hex, 082008 SP@ TYPEZ  Pop  ;WORD   "
  db     " WORD: mask          hex, 3C0 AND  ;WORD "
  db     " WORD: prev_cmd      tib$ @ tibsize - mask  tib$ !   ;WORD "
  db     " WORD: next_cmd      tib$ @ tibsize + mask  tib$ !   ;WORD "
@@ -33,7 +33,7 @@
 
  db     " WORD: ?do   Case           "
  db     '                   DUP      hex, 1C00 = Of    Pop tib - BLOCK CELL+ !  next_cmd   Pop  -1   EndOf  '
- db     "                   DUP      hex, E00  = Of    do_backspace Pop Pop 0     EndOf  "
+ db     "                   DUP      hex, E00  = Of    Pop Pop do_backspace  0     EndOf  "
  db     '                   DUP      hex, 4800 = Of    ."  BACK " prev_cmd hex, 0D SP@ TYPEZ Pop Pop  tib TYPEZ 0 EndOf '
  db     "             SWAP C! 0   "
  db     ' EndCase      ;WORD '
