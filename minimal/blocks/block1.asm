@@ -32,9 +32,9 @@
  db     " WORD: do_enter      DUP 4spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+ DUP 4spaces SWAP! CELL+  0 SWAP!  ;WORD "
 
  db     " WORD: ?do   Case           "
- db     '                   DUP      hex, 1C00 = Of    Pop  next_cmd  Pop Pop  -1   EndOf  '
+ db     '                   DUP      hex, 1C00 = Of    Pop tib - BLOCK CELL+ !  next_cmd   Pop  -1   EndOf  '
  db     "                   DUP      hex, E00  = Of    do_backspace Pop Pop 0     EndOf  "
- db     '                   DUP      hex, 4800 = Of    prev_cmd hex, 0A SP@ TYPEZ Pop Pop  tib TYPEZ 0 EndOf '
+ db     '                   DUP      hex, 4800 = Of    ."  BACK " prev_cmd hex, 0D SP@ TYPEZ Pop Pop  tib TYPEZ 0 EndOf '
  db     "             SWAP C! 0   "
  db     ' EndCase      ;WORD '
 
@@ -46,7 +46,7 @@
  db     "                        tib BLOCK CELL+ CELL+ !               ;WORD "
 
  db     ' WORD: F-SYSTEM  '
- db     '                 Begin set_console_input CR  ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
+ db     '                 Begin set_console_input CR  tib TYPEZ CR ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
  db     '                 ."  OK>" EXPECT   CR 0 >IN ! INTERPRET Again ;WORD '
 
  db     "   F-SYSTEM   "
