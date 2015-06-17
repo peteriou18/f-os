@@ -17,34 +17,37 @@
  db     "  VARIABLE tib$  0 tib$ !  "
  db     "  VARIABLE tib#  tibsize 0x 10 *  ALLOT     "
  db     "  WORD: tib      tib# tib$  @ +   ;WORD "
+ ;db     "  4Spaces fixframe tib DUP 1st SWAP! DUP CELL+ 1st  SWAP!  DUP CELL+ 1st  SWAP! DUP CELL+ 1st  SWAP! DUP CELL+ 1st  SWAP! "
+ db      " tib HEX.   tib @ HEX.    'exit' tib !   tib @ HEX. "
+ db     " WORD: test5      fix_frame  5th HEX. 4th HEX. 3rd HEX. 2nd HEX. 1st HEX. ;WORD "
 
 
 
- db     " WORD: key      KEY   eng  ;WORD "
+ db     ' WORD: key        KEY   eng   ;WORD '
 
- db     " WORD: do_backspace  1- 1- hex, 082008 SP@ TYPEZ Pop   ;WORD   "
+ db     " WORD: do_backspace  1- hex, 082008 SP@ TYPEZ    ;WORD   "
  db     " WORD: mask          hex, 3C0 AND  ;WORD "
  db     " WORD: prev_cmd      tib$ @ tibsize - mask  tib$ !   ;WORD "
  db     " WORD: next_cmd      tib$ @ tibsize + mask  tib$ !   ;WORD "
- db     " WORD: do_enter      DUP 4Spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+  0 SWAP!  ;WORD "
+ db     " WORD: do_enter      DUP 4spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+ DUP 4spaces SWAP! CELL+  0 SWAP!  ;WORD "
 
  db     " WORD: ?do   Case           "
- db     "                  DUP    hex, 1C = Of   do_enter next_cmd Pop  -1   EndOf  "
- db     "                  DUP    hex, E  = Of   do_backspace 0     EndOf  "
- db     '                         hex, 48 = Of   ." do up" prev_cmd hex, 0A TYPEZ Pop   tib TYPEZ 0 EndOf '
- db     "                  0   "
- db     " EndCase     ;WORD "
+ db     '                   DUP      hex, 1C00 = Of    Pop  next_cmd  Pop Pop  -1   EndOf  '
+ db     "                   DUP      hex, E00  = Of    do_backspace Pop Pop 0     EndOf  "
+ db     '                   DUP      hex, 4800 = Of    prev_cmd hex, 0A SP@ TYPEZ Pop Pop  tib TYPEZ 0 EndOf '
+ db     "             SWAP C! 0   "
+ db     ' EndCase      ;WORD '
 
- db     " WORD: EXPECT    4Spaces  tib ! tib 1-        "
- db     "                 Begin  1+ DUP   key  SWAP  C! DUP   C@  ?do  Until      "
+ db     " WORD: EXPECT    tib 1-        "
+ db     '                 Begin  1+ DUP   key    ?do   Until      '
  db     "                 ;WORD "
 
  db     " WORD: set_console_input  0 BLOCK ! tibsize BLOCK CELL+ !  "
  db     "                        tib BLOCK CELL+ CELL+ !               ;WORD "
 
  db     ' WORD: F-SYSTEM  '
- db     '                 Begin set_console_input CR ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
- db     '                 ."  OK>" EXPECT  CR 0 >IN ! INTERPRET Again ;WORD '
+ db     '                 Begin set_console_input CR  ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
+ db     '                 ."  OK>" EXPECT   CR 0 >IN ! INTERPRET Again ;WORD '
 
  db     "   F-SYSTEM   "
 
