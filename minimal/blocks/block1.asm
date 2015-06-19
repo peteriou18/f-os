@@ -8,7 +8,7 @@
  db     " .( End of loads)   "
 
  db     "  FORTH32 CURRENT ! FORTH32 CONTEXT ! "
- db     '  WORD: badw      ." Very bad Word:" HERE 1+ TYPEZ CR ;WORD '
+ db     '  WORD: badw      ." Very bad Word:" HERE 1+ TYPEZ CRLF ;WORD '
  db     " ' badw ' BADWORD CELL+ ! "
 
  db     "  0x  20202020 CONSTANT 4Spaces "
@@ -33,7 +33,7 @@
  db     " WORD: ?do   Case           "
  db     '                   DUP      hex, 1C00 = Of    Pop  tib  - DUP BLOCK CELL+ ! tib C!    Pop  -1   EndOf  '
  db     "                   DUP      hex, E00  = Of    Pop Pop do_backspace  0     EndOf  "
- db     '                   DUP      hex, 4800 = Of    Pop Pop Pop prev_cmd set_console_input hex, 0D SP@ TYPEZ Pop ." OK>" tib 1+ TYPEZ tib C@ tib +  0  EndOf '
+ db     '                   DUP      hex, 4800 = Of    Pop Pop Pop prev_cmd set_console_input  CR ." OK>" tib 1+ TYPEZ tib C@ tib +  0  EndOf '
  db     "             SWAP C! 0   "
  db     ' EndCase      ;WORD '
 
@@ -44,8 +44,8 @@
 
 
  db     ' WORD: F-SYSTEM  '
- db     '                 Begin set_console_input CR ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
- db     '                 CR ." OK>" EXPECT   CR 0 >IN !  INTERPRET next_cmd Again ;WORD '
+ db     '                 Begin set_console_input CRLF ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
+ db     '                 CRLF ." OK>" EXPECT   CRLF 0 >IN !  INTERPRET next_cmd Again ;WORD '
 
  db     "   F-SYSTEM   "
 
