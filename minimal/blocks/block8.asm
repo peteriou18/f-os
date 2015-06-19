@@ -81,7 +81,8 @@
 
  db " FORTH32 CONTEXT ! "
  db " WORD: EMIT      SP@ TYPEZ Pop            ;WORD "
- db " WORD: CR        hex, 0D0A EMIT           ;WORD "
+ db " WORD: CRLF      hex, 0D0A EMIT           ;WORD "
+ db " WORD: CR        hex, 0D   EMIT           ;WORD "
  db " WORD: SPACE     BL EMIT                  ;WORD "
 
 
