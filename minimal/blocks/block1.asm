@@ -17,11 +17,10 @@
  db     "  VARIABLE tib$  0 tib$ !  "
  db     "  VARIABLE tib#  tibsize 0x 10 *  ALLOT     "
  db     "  WORD: tib      tib# tib$  @ +   ;WORD "
- ;db     "  4Spaces fixframe tib DUP 1st SWAP! DUP CELL+ 1st  SWAP!  DUP CELL+ 1st  SWAP! DUP CELL+ 1st  SWAP! DUP CELL+ 1st  SWAP! "
-; db      " tib HEX.   tib @ HEX.    'exit' tib !   tib @ HEX. "
- db     " WORD: test5      fix_frame  5th HEX. 4th HEX. 3rd HEX. 2nd HEX. 1st HEX. ;WORD "
 
 
+ db     " WORD: set_console_input  0 BLOCK ! tibsize BLOCK CELL+ !  "
+ db     '                        tib 1+  BLOCK CELL+ CELL+  !               ;WORD '
 
  db     ' WORD: key        KEY   eng   ;WORD '
 
@@ -32,9 +31,9 @@
  db     " WORD: do_enter      DUP 4spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+ DUP 4spaces SWAP! CELL+  0 SWAP!  ;WORD "
 
  db     " WORD: ?do   Case           "
- db     '                   DUP      hex, 1C00 = Of    Pop tib  - DUP BLOCK CELL+ ! tib C!  next_cmd   Pop  -1   EndOf  '
+ db     '                   DUP      hex, 1C00 = Of    Pop  tib  - DUP BLOCK CELL+ ! tib C!    Pop  -1   EndOf  '
  db     "                   DUP      hex, E00  = Of    Pop Pop do_backspace  0     EndOf  "
- db     '                   DUP      hex, 4800 = Of    Pop HEX. prev_cmd  tib HEX. tib tib C@ + DUP HEX. tib 1+ TYPEZ Pop 0 EndOf '
+ db     '                   DUP      hex, 4800 = Of    Pop Pop Pop prev_cmd set_console_input hex, 0D SP@ TYPEZ Pop ." OK>" tib 1+ TYPEZ tib C@ tib +  0  EndOf '
  db     "             SWAP C! 0   "
  db     ' EndCase      ;WORD '
 
@@ -42,12 +41,11 @@
  db     '                 Begin  1+ DUP   key    ?do   Until      '
  db     "                 ;WORD "
 
- db     " WORD: set_console_input  0 BLOCK ! tibsize BLOCK CELL+ !  "
- db     "                        tib 1+ BLOCK CELL+ CELL+ !               ;WORD "
+
 
  db     ' WORD: F-SYSTEM  '
- db     '                 Begin set_console_input CR  tib 1+ TYPEZ CR ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
- db     '                 CR ." OK>" EXPECT   CR 0 >IN ! INTERPRET Again ;WORD '
+ db     '                 Begin set_console_input CR ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
+ db     '                 CR ." OK>" EXPECT   CR 0 >IN !  INTERPRET next_cmd Again ;WORD '
 
  db     "   F-SYSTEM   "
 
