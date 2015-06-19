@@ -80,8 +80,9 @@
  db " ALIGN      "
 
  db " FORTH32 CONTEXT ! "
- db " WORD: CR        hex, 0D0A  SP@ TYPEZ Pop ;WORD "
- db " WORD: SPACE     BL SP@ TYPEZ Pop         ;WORD "
+ db " WORD: EMIT      SP@ TYPEZ Pop            ;WORD "
+ db " WORD: CR        hex, 0D0A EMIT           ;WORD "
+ db " WORD: SPACE     BL EMIT                  ;WORD "
 
 
  db " VARIABLE frame "
