@@ -1,4 +1,4 @@
-; block 9
+; block 9 chr span's QUOTE BL 0x VECTOR upper?  caps_shift only_shift (span1) (span2) span: eng
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
 
