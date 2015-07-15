@@ -1,5 +1,5 @@
 
-;block 2    opcodes   3, 4, 5
+;block 3    opcodes   3, 4, 5
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
 
@@ -11,6 +11,7 @@
  db     "             0x 03 0x E0 0x 83 0x 3 opcode and_eax,3                 "
  db     "             0x FC 0x E0 0x 83 0x 3 opcode and_eax,-4                "
  db     "             0x 03 0x E3 0x 83 0x 3 opcode and_ebx,3                 "
+ db     "             0x C5 0x AF 0x 0F 0x 3 opcode imul_eax,ebp              "
  db     "             0x C0 0x 97 0x 0F 0x 3 opcode seta_al                   "
  db     "             0x C0 0x 94 0x 0F 0x 3 opcode sete_al                   "
  db     "             0x C0 0x 92 0x 0F 0x 3 opcode setc_al                   "
@@ -76,6 +77,7 @@
  db     "       0x 04 0x 24 0x 44 0x 01 0x 4 opcode add_[esp+4],eax               "
  db     "       0x 04 0x 40 0x B6 0x 0F 0x 4 opcode movzx_eax,b[eax+4]            "
  db     "       0x 04 0x 58 0x B6 0x 0F 0x 4 opcode movzx_ebx,b[eax+4]            "
+ db     "       0x 00 0x C7 0x 66 0x 65 0x 4 opcode mov_w[gs:eax],#               "
 
  db     "       0x 20 0x E6 0x 20 0x B0 0x 4 opcode eoi                           "
 
