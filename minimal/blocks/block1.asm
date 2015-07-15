@@ -4,6 +4,7 @@
  db     " 0x 3 LOAD        0x 5 LOAD      "
  db     " 0x 4 LOAD        0x 6 LOAD      "
  db     " 0x 8 LOAD        0x 9 LOAD      "
+ db     " 0x A LOAD                       "
 
  db     " .( End of loads)   "
 
