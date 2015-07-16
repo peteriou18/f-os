@@ -1,5 +1,5 @@
 ; block 3   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
- ;   2HEX. HEX. - SWAP- +  TIMER@  lit# 1+ 1- C@ C! ALLOT SLIT  strcopy DUP >R R> R@ SWAP!
+ ;   2HEX.  HEX. - SWAP- +  TIMER@  lit# 1+ 1- 2* C@ C! ALLOT SLIT  DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER  CELL-     HERE CELL+ ,             "
@@ -113,6 +113,7 @@
  db " ret           "
 
  db " ALIGN           "
+
  db " HEADER +        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
@@ -123,6 +124,16 @@
 
  db " ALIGN                    "
 
+ db " HEADER *        HERE CELL+ ,                "
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " imul_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
+
+ db " ALIGN  "
+
  db " HEADER TIMER@     HERE CELL+ ,       "
  db " rdtsc         "
  db " mov_ebp,edx                  "
@@ -132,8 +143,6 @@
  db " ret       "
 
  db " ALIGN    "
-
- 
 
  db " HEADER 1+         HERE CELL+ ,       "
  db " mov_edx,#  ' Pop @ ,            call_edx       "
@@ -146,6 +155,14 @@
  db " HEADER 1-         HERE CELL+ ,       "
  db " mov_edx,#  ' Pop @ ,            call_edx       "
  db " dec_eax            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
+ db " HEADER 2*         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " shl_eax,1            "
  db " mov_edx,#  ' Push @ ,           call_edx           "
  db " ret        "
 
@@ -196,19 +213,6 @@
 
 
 
- db " HEADER strcopy            HERE CELL+ ,                      "
- db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
- db " mov_edi,eax        "
- db " mov_edx,#  ' Pop @ ,            call_edx         "   ; copy from
- db " mov_esi,eax                "
- db " movzx_ecx,b[esi]            "     ;counter
- db " shr_ecx,2                "
- db " inc_ecx           "
- db " cld               "
- db " rep_movsd                       "
- db " ret      "
-
- db " ALIGN    "
 
  db " HEADER DUP        HERE CELL+ ,     "
  db " mov_edx,#  ' Pop @ ,            call_edx     "
