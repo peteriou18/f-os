@@ -69,13 +69,13 @@ db "                     3rd 2nd 2* +  Right_upper  "
 db "                     3rd 1st hex, A0 * +  Left_lower   "
 db "                     3rd 2nd 2* + 1st hex, A0 * +  Right_lower  ;WORD "
 
-db " WORD: sides  hex, 0220 hex, 14 Hline "
-db "              hex, 0450 hex, 14 Hline "
-db "              hex, 0222 hex, 05 Vline "
-db "              hex, 0452 hex, 05 Vline ;WORD "
+db " WORD: sides  3rd 2nd Hline "
+db "              3rd 1st hex, A0 * + 2nd Hline "
+db "              3rd 1st Vline "
+db "              3rd 2nd 2* + 1st Vline ;WORD "
 
 db " WORD: border  hex, 0A8  hex, 8   hex, 3 (( address of Left upper corner width height ) "
-db "               fix_frame corners sides  ;WORD "
+db "               fix_frame  sides corners ;WORD "
 
 db " WORD: DRAW border ;WORD "
 db " WORD: KEY  NOOP ;WORD "
