@@ -64,17 +64,18 @@ db " ALIGN    "
 
 db " editor FORTH32 LINK   editor CONTEXT ! "
 
-db ' WORD: corners       hex, 0120 Left_upper '
-db "                     hex, 0122 Right_upper  "
-db "                     hex, 01C0 Left_lower   "
-db "                     hex, 01C2 Right_lower  ;WORD "
+db ' WORD: corners       3rd  Left_upper '
+db "                     3rd 2nd 2* +  Right_upper  "
+db "                     3rd 1st hex, A0 * +  Left_lower   "
+db "                     3rd 2nd 2* + 1st hex, A0 * +  Right_lower  ;WORD "
 
 db " WORD: sides  hex, 0220 hex, 14 Hline "
 db "              hex, 0450 hex, 14 Hline "
 db "              hex, 0222 hex, 05 Vline "
 db "              hex, 0452 hex, 05 Vline ;WORD "
 
-db ' WORD: border  hex, 0450  hex, 14   hex, 5  corners sides  ;WORD '
+db " WORD: border  hex, 0A8  hex, 8   hex, 3 (( address of Left upper corner width height ) "
+db "               fix_frame corners sides  ;WORD "
 
 db " WORD: DRAW border ;WORD "
 db " WORD: KEY  NOOP ;WORD "
