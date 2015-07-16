@@ -2,11 +2,10 @@
  ;block 4 CONSTANT 0 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
  ; ," make_badword   make_exit  VOCABULARY NOOP compiler
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
- ; .((  Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
- 
- db " ASSEMBLER FORTH32 LINK   "
- db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "  
-  
+ ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
+ db " ASSEMBLER FORTH32 LINK    "
+ db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
+
  db " HEADER lit#       HERE CELL+ ,        "
  db " mov_eax,[esp+4]                        "
  db " mov_eax,[eax+4]          "
@@ -15,7 +14,7 @@
  db " ret    "
 
  db " ALIGN    "
- 
+
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
  db " HEADER CONSTANT   interpret# ,           "
@@ -123,6 +122,7 @@
  db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
 
  db " WORD: .((     .(              ;WORD "
+ db " WORD: ((   ) WORD             ;WORD   "
 
 
  db " WORD: Begin       BEGIN  ;WORD "
