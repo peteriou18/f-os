@@ -1,6 +1,6 @@
 
  ;block 5    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
- ;           SWAP OVER NEGATE CELLs
+ ;           SWAP OVER NEGATE CELLs strcopy
 
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
@@ -210,6 +210,20 @@
  db " shl_eax,2            "
  db " mov_edx,#  ' Push @ ,           call_edx           "
  db " ret        "
+
+ db " ALIGN    "
+
+ db " HEADER strcopy            HERE CELL+ ,                      "
+ db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
+ db " mov_edi,eax        "
+ db " mov_edx,#  ' Pop @ ,            call_edx         "   ; copy from
+ db " mov_esi,eax                "
+ db " movzx_ecx,b[esi]            "     ;counter
+ db " shr_ecx,2                "
+ db " inc_ecx           "
+ db " cld               "
+ db " rep_movsd                       "
+ db " ret      "
 
  db " ALIGN    "
 
