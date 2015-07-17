@@ -98,8 +98,10 @@ db "              3rd 2nd 2* + 1st Vline ;WORD "
 db " WORD: border   (( address of Left upper corner width height ) "
 db "               fix_frame  sides corners ;WORD "
 
-db " WORD: fill  hex, 4000 C@   hex, 1 hex, 1 xy-adr fix_frame (( char addr_to ) "
-db "             0 win_width @ 1- 1- Do 2nd 1st symb hex, 1 2nd+ hex, 2 1st+ Loop Pop Pop ;WORD  "
+db " WORD: fill  BUFFER   hex, 1 hex, 1 xy-adr fix_frame (( addr_from addr_to ) "
+;db "             0 win_height @ 1- 1- Do                                         "
+db "             0 win_width @ 1- 1- Do 2nd C@ 1st symb hex, 1 2nd+ hex, 2 1st+ Loop "
+db "                               ((     hex, A0 1st+ win_width 2* NEGATE 1st+ Loop ) Pop Pop  ;WORD  "
 
 db " WORD: DRAW   border fill ;WORD "
 db " WORD: key  KEY eng ;WORD "
