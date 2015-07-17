@@ -14,6 +14,7 @@
  db     "                         0x 25 0x 1 opcode and_eax,#                 "
  db     "                         0x 3D 0x 1 opcode cmp_eax,#                 "
  db     "                         0x A9 0x 1 opcode test_eax,#                "
+ db     "                         0x B5 0x 1 opcode mov_ch,#                  "
  db     "                         0x A3 0x 1 opcode mov_[],eax                "
  db     "                         0x A1 0x 1 opcode mov_eax,[]                "
  db     "                         0x 40 0x 1 opcode inc_eax                   "
