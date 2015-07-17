@@ -37,12 +37,7 @@
 
  db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
  db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
- db " WORD: b,        1+ DUP C@ DUP HEX.  B, ;WORD  "
 
- db " WORD: CHAR,     CHAR B, ;WORD "
-
-
- db " WORD: CHARs,    Begin   CHAR  B,   1-   DUP  hex, 0   =  Until    Pop     ;WORD "
  db " WORD: CREATE      HEADER variable# , ;WORD "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
@@ -93,6 +88,8 @@
  db " WORD: 3rd         frame @ CELL- CELL- @       ;WORD "
  db " WORD: 4th         frame @ CELL- CELL- CELL- @ ;WORD "
  db " WORD: 5th         frame @ hex, 5 - @          ;WORD "
+ db " WORD: 1st+        1st + frame @ !             ;WORD "
+ db " WORD: 2nd+        2nd + frame @ CELL- !       ;WORD "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
  db " EXIT "
