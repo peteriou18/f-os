@@ -79,8 +79,9 @@
 
  db " Word: NOOP        ;Word     "
 
- db "  Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
+ db " Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
 
+ db " Word: (           ', )  ', WORD ;Word "
 
  db " Word: BEGIN    ', HERE ', CELL-   ;Word       "
  db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
