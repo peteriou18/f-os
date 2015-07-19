@@ -63,6 +63,7 @@
 
  db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
  db     "                   0x E0 0x D1 0x 2 opcode shl_eax,1                 "
+ db     "                   0x E8 0x D1 0x 2 opcode shr_eax,1                 "
  db     "                   0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
  db     "                   0x C1 0x 89 0x 2 opcode mov_ecx,eax               "
  db     "                   0x E8 0x 89 0x 2 opcode mov_eax,ebp               "
