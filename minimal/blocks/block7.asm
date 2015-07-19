@@ -1,113 +1,307 @@
 
- ;block 2    opcodes 1,2
+ ;block 7        key  key_flags idtr interrupts forward> >forward backward< <backward
+ ;               make_interrupt_gate
+ db " FORTH32 CURRENT !  "
 
- db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
- db     "                         0x C3 0x 1 opcode ret                       "
- db     "                         0x CF 0x 1 opcode iretd                     "
- db     "                         0x F4 0x 1 opcode hlt                       "
- db     "                         0x FC 0x 1 opcode cld                       "
- db     "                         0x CE 0x 1 opcode into                      "
- db     "                         0x CC 0x 1 opcode int3                      "
- db     "                         0x BA 0x 1 opcode mov_edx,#                 "
- db     "                         0x B8 0x 1 opcode mov_eax,#                 "
- db     "                         0x 05 0x 1 opcode add_eax,#                 "
- db     "                         0x 25 0x 1 opcode and_eax,#                 "
- db     "                         0x 3D 0x 1 opcode cmp_eax,#                 "
- db     "                         0x A9 0x 1 opcode test_eax,#                "
- db     "                         0x B5 0x 1 opcode mov_ch,#                  "
- db     "                         0x A3 0x 1 opcode mov_[],eax                "
- db     "                         0x A1 0x 1 opcode mov_eax,[]                "
- db     "                         0x 40 0x 1 opcode inc_eax                   "
- db     "                         0x 43 0x 1 opcode inc_ebx                   "
- db     "                         0x 41 0x 1 opcode inc_ecx                   "
- db     "                         0x 46 0x 1 opcode inc_esi                   "
- db     "                         0x 48 0x 1 opcode dec_eax                   "
- db     "                         0x 49 0x 1 opcode dec_ecx                   "
- db     "                         0x 4D 0x 1 opcode dec_ebp                   "
- db     "                         0x 4F 0x 1 opcode dec_edi                   "
- db     "                         0x 58 0x 1 opcode pop_eax                   "
- db     "                         0x 5B 0x 1 opcode pop_ebx                   "
- db     "                         0x 59 0x 1 opcode pop_ecx                   "
- db     "                         0x 5D 0x 1 opcode pop_ebp                   "
- db     "                         0x 50 0x 1 opcode push_eax                  "
- db     "                         0x 53 0x 1 opcode push_ebx                  "
- db     "                         0x 51 0x 1 opcode push_ecx                  "
- db     "                         0x 55 0x 1 opcode push_ebp                  "
- db     "                         0x 60 0x 1 opcode pushad                    "
- db     "                         0x 61 0x 1 opcode popad                     "
- db     "                         0x 95 0x 1 opcode xchg_eax,ebp              "
- db     "                         0x 96 0x 1 opcode xchg_eax,esi              "
- db     "                         0x E9 0x 1 opcode jmp                       "
+ db " VARIABLE key     "
+ db " VARIABLE key_flags "
+ db " VARIABLE idtr 0 , "
+ db " VOCABULARY interrupts "
 
- db     "                   0x 1D 0x 8B 0x 2 opcode mov_ebx,[]                "
- db     "                   0x 0D 0x 8B 0x 2 opcode mov_ecx,[]                "
- db     "                   0x 15 0x 8B 0x 2 opcode mov_edx,[]                "
- db     "                   0x 3D 0x 8B 0x 2 opcode mov_edi,[]                "
- db     "                   0x 15 0x 89 0x 2 opcode mov_[],edx                "
- db     "                   0x 0D 0x 89 0x 2 opcode mov_[],ecx                "
- db     "                   0x 1D 0x 89 0x 2 opcode mov_[],ebx                "
- db     "                   0x 05 0x C7 0x 2 opcode mov_d[],#                 "
- db     "                   0x 05 0x C6 0x 2 opcode mov_b[],#                 "
- db     "                   0x 00 0x 8B 0x 2 opcode mov_eax,[eax]             "
- db     "                   0x 28 0x 89 0x 2 opcode mov_[eax],ebp             "
- db     "                   0x 06 0x 88 0x 2 opcode mov_[esi],al              "
- db     "                   0x 05 0x 01 0x 2 opcode add_[],eax                "
- db     "                   0x D8 0x F7 0x 2 opcode neg_eax                   "
 
- db     "                   0x C8 0x 0F 0x 2 opcode bswap_eax                 "
- db     "                   0x CB 0x 0F 0x 2 opcode bswap_ebx                 "
- db     "                   0x C9 0x 0F 0x 2 opcode bswap_ecx                 "
- db     "                   0x CA 0x 0F 0x 2 opcode bswap_edx                 "
 
- db     "                   0x 31 0x 0F 0x 2 opcode rdtsc                     "
+ db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
 
- db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
- db     "                   0x E0 0x D1 0x 2 opcode shl_eax,1                 "
- db     "                   0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
- db     "                   0x C1 0x 89 0x 2 opcode mov_ecx,eax               "
- db     "                   0x E8 0x 89 0x 2 opcode mov_eax,ebp               "
- db     "                   0x C2 0x 89 0x 2 opcode mov_edx,eax               "
- db     "                   0x C6 0x 89 0x 2 opcode mov_esi,eax               "
- db     "                   0x C7 0x 89 0x 2 opcode mov_edi,eax               "
- db     "                   0x F8 0x 89 0x 2 opcode mov_eax,edi               "
- db     "                   0x C8 0x 89 0x 2 opcode mov_eax,ecx               "
- db     "                   0x D8 0x 89 0x 2 opcode mov_eax,ebx               "
- db     "                   0x D0 0x 89 0x 2 opcode mov_eax,edx               "
- db     "                   0x D5 0x 89 0x 2 opcode mov_ebp,edx               "
- db     "                   0x EA 0x 89 0x 2 opcode mov_edx,ebp               "
- db     "                   0x 0E 0x 8A 0x 2 opcode mov_cl,[esi]              "
- db     "                   0x A5 0x F3 0x 2 opcode rep_movsd                 "
- db     "                   0x AB 0x 66 0x 2 opcode stosw                     "
- db     "                   0x D8 0x 01 0x 2 opcode add_eax,ebx               "
- db     "                   0x E8 0x 01 0x 2 opcode add_eax,ebp               "
- db     "                   0x CF 0x 01 0x 2 opcode add_edi,ecx               "
- db     "                   0x CB 0x 21 0x 2 opcode and_ebx,ecx               "
- db     "                   0x E8 0x 21 0x 2 opcode and_eax,ebp               "
- db     "                   0x D8 0x 29 0x 2 opcode sub_eax,ebx               "
- db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
- db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
- db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
- db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "
- db     "                   0x D8 0x 31 0x 2 opcode xor_eax,ebx               "
- db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
- db     "                   0x 0D 0x 81 0x 2 opcode or_d[],#                  "
- db     "                   0x 25 0x 81 0x 2 opcode and_d[],#                 "
- db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
- db     "                   0x F8 0x 39 0x 2 opcode cmp_eax,edi               "
- db     "                   0x F0 0x 39 0x 2 opcode cmp_eax,esi               "
- db     "                   0x 3D 0x 81 0x 2 opcode cmp_d[],#                 "
- db     "                   0x C0 0x 85 0x 2 opcode test_eax,eax              "
+ db " WORD: forward>   HERE  0 ,   HERE        ;WORD "
+ db " WORD: >forward   HERE  SWAP- SWAP!       ;WORD "
+ db " WORD: backward<  HERE    ;WORD "
+ db " WORD: <backward  HERE CELL+ -  ,         ;WORD "
 
- db     "                   0x 60 0x E4 0x 2 opcode in_al,60h                 "
- db     "                   0x 64 0x E4 0x 2 opcode in_al,64h                 "
- db     "                   0x 64 0x E6 0x 2 opcode out_64h,al                "
+ db " ASSEMBLER  FORTH32 LINK  "
 
- db     "                   0x 84 0x 0F 0x 2 opcode je                        "
- db     "                   0x 85 0x 0F 0x 2 opcode jne                       "
+ db " HEADER make_interrupt_gate        HERE CELL+ ,   "
+ db " mov_edx,# ' Pop @ ,   call_edx              " ;Interrupt No
+ db " mov_ecx,eax "
+ db " sidt_[]  idtr  , "
+ db " mov_edi,[]  idtr  0x 2 +  ,   "
+ db " shl_ecx,3         "
+ db " add_edi,ecx       "
+ db " call_edx          "      ; link to handler
+ db " push_eax          "
+ db " stosw             "
+ db " mov_eax,# 0x 8 ,          "
+ db " stosw             "
+ db " mov_eax,# 0x 8E00 , "
+ db " stosw     "
+ db " pop_eax   "
+ db " shr_eax,16        "
+ db " stosw             "
 
- db     " EXIT                                                                "
+ db "        "
+ db " ret "
 
- db 0
+ db " ALIGN      "
 
-db     0
+ db "  interrupts CURRENT !  interrupts ASSEMBLER LINK  interrupts CONTEXT ! "
+
+  db ' WORD: by_0_msg      ." Divide by zero:"            ;WORD '
+  db ' WORD: debug_msg     ." Debug:"                     ;WORD '
+  db ' WORD: nmi_msg       ." NMI"                        ;WORD '
+  db ' WORD: break_msg     ." BREAKPOINT"                 ;WORD '
+  db ' WORD: overflow_msg  ." Overflow"                   ;WORD '
+  db ' WORD: bound_msg     ." Bound exception"            ;WORD '
+  db ' WORD: ud_msg        HEX. ." Invalid opcode"             ;WORD '
+  db ' WORD: nomath_msg    ." No Math exception"          ;WORD '
+  db ' WORD: df_msg        ." Double fault"               ;WORD '
+  db ' WORD: mf_msg        ." Coprocessor segment fault"  ;WORD '
+  db ' WORD: tss_msg       ." Invalid TSS"                ;WORD '
+  db ' WORD: np_msg        ." Segment not present"        ;WORD '
+  db ' WORD: ss_msg        ." Stack segment fault"        ;WORD '
+  db ' WORD: gp_msg        ." General protection"         ;WORD '
+  db ' WORD: pf_msg        ." Page fault"                 ;WORD '
+
+  db ' WORD: mf_msg        ." Floating point error"       ;WORD '
+  db ' WORD: ac_msg        ." Alignment check"            ;WORD '
+  db ' WORD: mc_msg        ." Machine check"              ;WORD '
+  db ' WORD: xm_msg        ." SIMD FP exception"          ;WORD '
+
+ db " HEADER div_by_zero      HERE CELL+ , "
+ db " mov_eax,# '  by_0_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER debug_int   HERE CELL+ , "
+ db " mov_eax,# '  debug_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER nmi_int   HERE CELL+ , "
+ db " mov_eax,# '  debug_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN  "
+
+ db " HEADER break_int HERE CELL+ , "
+ db " mov_eax,# '  break_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER overflow HERE CELL+ , "
+ db " mov_eax,# '  overflow_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER bound_int HERE CELL+ , "
+ db " mov_eax,# '  bound_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER ud_int HERE CELL+ , "
+ db " mov_eax,[esp] "
+ db " mov_edx,# ' Push @ ,   call_edx "
+ db " mov_eax,# ' ud_msg , "
+ db " call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+
+ db " hlt iretd "
+
+ db " ALIGN  "
+
+ db " HEADER nomath_int HERE CELL+ , "
+ db " mov_eax,# ' nomath_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER df_int HERE CELL+ , "
+ db " mov_eax,# ' df_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN  "
+
+ db " HEADER mf_int HERE CELL+ , "
+ db " mov_eax,# ' mf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER tss_int HERE CELL+ , "
+ db " mov_eax,# ' tss_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN  "
+
+ db " HEADER np_int HERE CELL+ , "
+ db " mov_eax,# ' np_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN  "
+
+ db " HEADER ss_int HERE CELL+ , "
+ db " mov_eax,# ' ss_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN  "
+
+ db " HEADER gp_int HERE CELL+ , "
+ db " mov_eax,# ' gp_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN   "
+
+
+ db " HEADER pf_int HERE CELL+ , "
+ db " mov_eax,# ' pf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+
+ db " HEADER mf_int HERE CELL+ , "
+ db " mov_eax,# ' mf_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER ac_int HERE CELL+ , "
+ db " mov_eax,# ' ac_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER mc_int HERE CELL+ , "
+ db " mov_eax,# ' mc_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+ db " HEADER xm_int HERE CELL+ , "
+ db " mov_eax,# ' xm_msg , "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " iretd "
+
+ db " ALIGN      "
+
+
+ db " HEADER key_int    HERE  CELL+  , "
+ db " pushad "
+ db " xor_eax,eax "
+ db " in_al,60h "
+ db " cmp_eax,# 0x 58 , "  ;F12
+ db " je  forward> "
+ db " cmp_eax,# 0x 3A , "  ;CAPS
+ db " je forward> "
+ db " cmp_eax,# 0x 2A , "
+ db " je forward> "
+ db " cmp_eax,# 0x AA  , "
+ db " je forward> "
+ db " cmp_eax,# 0x 36  , "
+ db " je forward> "
+ db " cmp_eax,# 0x B6  , "
+ db " je forward> "
+ db " cmp_eax,# 0x BA  , "
+ db " je forward> "
+ db " test_eax,# 0x 80 , "
+ db " jne forward> "
+ db " mov_[],eax  key , "
+ db " >forward "
+ db " add_[],eax 0x B8000 ,  "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+ db " >forward "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+ db " >forward "
+ db " and_d[],# key_flags ,  0x FFFC00FF  , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+ db " >forward "
+ db " or_d[],# key_flags , 0x 1FF00 , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+
+ db " >forward "
+ db " and_d[],# key_flags ,  0x FFFC00FF  , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+
+ db " >forward "
+ db " or_d[],# key_flags , 0x 2FF00 , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+
+ db " >forward "
+ db " xor_d[],# key_flags , 0x FF , "
+ db " eoi "
+ db " popad "
+ db " iretd "
+
+
+ db "  >forward "
+ db " backward< DUP "
+ db " in_al,64h "
+ db " test_eax,# 0x 2 , "
+ db " jne <backward "
+ db " mov_eax,# 0x FE , "
+ db " out_64h,al "
+ db " jmp <backward  "
+
+ db " ALIGN      "
+
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+
+ db     0
  alignhe20
