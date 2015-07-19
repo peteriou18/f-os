@@ -1,4 +1,4 @@
-; block 9 chr span's QUOTE BL 0x VECTOR upper?  caps_shift only_shift (span1) (span2) span: eng
+; block 9
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
 
@@ -36,12 +36,14 @@ db " WORD:  only_shift   [ ' upper_shift_only  LIT,  ' upper? CELL+ LIT, ] ! ;WO
 
 db " IMMEDIATES CURRENT ! "
 
- db " WORD: span:        "
+db " WORD: span:        "
 db "                    COMPILE DUP HERE  LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+  LIT,   "
 db "                    COMPILE BRANCH HERE COMPILE 0    >R OVER OVER SWAP- + 1+             "
-db "                    Do    BL WORD  span's SFIND EXECUTE SP@ TYPEZ B, Loop               "
+db "                    Do    BL WORD  span's SFIND EXECUTE  B, Loop               "
 db "                    R>  THEN  COMPILE (span1)   OF  COMPILE (span2) ENDOF COMPILE Pop COMPILE Pop      "
 db " ;WORD "
+
+
 
  db " FORTH32 CURRENT !    "
  ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
@@ -61,7 +63,7 @@ db " ;WORD "
  db "              [ 0x 2B  0x 2B ] span:  \ |                    "
  db "              [ 0x 33  0x 35 ] span: , . / < > ?            "
  db "              [ 0x 39  0x 39 ] span:  BL BL               "
- db " EndCase ;WORD "
+ db " hex, 100 * EndCase ;WORD "
 
 
 ;db " WORD: rus_win1251 "
