@@ -1,307 +1,168 @@
 
- ;block 6        key  key_flags idtr interrupts forward> >forward backward< <backward
- ;               make_interrupt_gate
- db " FORTH32 CURRENT !  "
-
- db " VARIABLE key     "
- db " VARIABLE key_flags "
- db " VARIABLE idtr 0 , "
- db " VOCABULARY interrupts "
-
-
-
- db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
-
- db " WORD: forward>   HERE  0 ,   HERE        ;WORD "
- db " WORD: >forward   HERE  SWAP- SWAP!       ;WORD "
- db " WORD: backward<  HERE    ;WORD "
- db " WORD: <backward  HERE CELL+ -  ,         ;WORD "
-
- db " ASSEMBLER  FORTH32 LINK  "
-
- db " HEADER make_interrupt_gate        HERE CELL+ ,   "
- db " mov_edx,# ' Pop @ ,   call_edx              " ;Interrupt No
- db " mov_ecx,eax "
- db " sidt_[]  idtr  , "
- db " mov_edi,[]  idtr  0x 2 +  ,   "
- db " shl_ecx,3         "
- db " add_edi,ecx       "
- db " call_edx          "      ; link to handler
- db " push_eax          "
- db " stosw             "
- db " mov_eax,# 0x 8 ,          "
- db " stosw             "
- db " mov_eax,# 0x 8E00 , "
- db " stosw     "
- db " pop_eax   "
- db " shr_eax,16        "
- db " stosw             "
-
- db "        "
- db " ret "
-
- db " ALIGN      "
-
- db "  interrupts CURRENT !  interrupts ASSEMBLER LINK  interrupts CONTEXT ! "
-
-  db ' WORD: by_0_msg      ." Divide by zero:"            ;WORD '
-  db ' WORD: debug_msg     ." Debug:"                     ;WORD '
-  db ' WORD: nmi_msg       ." NMI"                        ;WORD '
-  db ' WORD: break_msg     ." BREAKPOINT"                 ;WORD '
-  db ' WORD: overflow_msg  ." Overflow"                   ;WORD '
-  db ' WORD: bound_msg     ." Bound exception"            ;WORD '
-  db ' WORD: ud_msg        HEX. ." Invalid opcode"             ;WORD '
-  db ' WORD: nomath_msg    ." No Math exception"          ;WORD '
-  db ' WORD: df_msg        ." Double fault"               ;WORD '
-  db ' WORD: mf_msg        ." Coprocessor segment fault"  ;WORD '
-  db ' WORD: tss_msg       ." Invalid TSS"                ;WORD '
-  db ' WORD: np_msg        ." Segment not present"        ;WORD '
-  db ' WORD: ss_msg        ." Stack segment fault"        ;WORD '
-  db ' WORD: gp_msg        ." General protection"         ;WORD '
-  db ' WORD: pf_msg        ." Page fault"                 ;WORD '
-
-  db ' WORD: mf_msg        ." Floating point error"       ;WORD '
-  db ' WORD: ac_msg        ." Alignment check"            ;WORD '
-  db ' WORD: mc_msg        ." Machine check"              ;WORD '
-  db ' WORD: xm_msg        ." SIMD FP exception"          ;WORD '
-
- db " HEADER div_by_zero      HERE CELL+ , "
- db " mov_eax,# '  by_0_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER debug_int   HERE CELL+ , "
- db " mov_eax,# '  debug_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER nmi_int   HERE CELL+ , "
- db " mov_eax,# '  debug_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN  "
-
- db " HEADER break_int HERE CELL+ , "
- db " mov_eax,# '  break_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER overflow HERE CELL+ , "
- db " mov_eax,# '  overflow_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
+ ;block 4 CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
+ ; ," make_badword   make_exit  VOCABULARY NOOP compiler
+ ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
+ ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
+ db " ASSEMBLER FORTH32 LINK    "
+ db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
- db " ALIGN      "
+ db " HEADER lit#       HERE CELL+ ,        "
+ db " mov_eax,[esp+4]                        "
+ db " mov_eax,[eax+4]          "
+ db " mov_edx,#  ' Push @ ,           call_edx      "
+ db " add_d[esp+4],4      "
+ db " ret    "
 
- db " HEADER bound_int HERE CELL+ , "
- db " mov_eax,# '  bound_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
+ db " ALIGN    "
 
- db " ALIGN      "
+ db " HEADER set_cursor HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_ecx,eax "
+db " mov_edx,# 0x 3D4 , "
+db " mov_eax,# 0x 030F , "
+db " mov_ah,cl "
+db " out_dx,ax "
+db " mov_eax,# 0x 040E , "
+db " mov_ah,ch "
+db " out_dx,ax "
+db " ret "
+db " ALIGN    "
 
- db " HEADER ud_int HERE CELL+ , "
- db " mov_eax,[esp] "
- db " mov_edx,# ' Push @ ,   call_edx "
- db " mov_eax,# ' ud_msg , "
- db " call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
+ db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
- db " hlt iretd "
+ db " HEADER CONSTANT   interpret# ,           "
+ db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
- db " ALIGN  "
+ db " 0x 0        CONSTANT 0      "
+ db " 0x 1        CONSTANT 1      "
+ db " 0x FFFFFFFF CONSTANT -1 "
+ db " 0x 20       CONSTANT BL     "
+ db " 0x 29       CONSTANT )      "
+ db " 0x 22       CONSTANT QUOTE     "
 
- db " HEADER nomath_int HERE CELL+ , "
- db " mov_eax,# ' nomath_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
+ db " HEADER VARIABLE   interpret# ,    "
+ db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
 
- db " ALIGN      "
+ db " HEADER LIT,  interpret# , "
+ db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
 
- db " HEADER df_int HERE CELL+ , "
- db " mov_eax,# ' df_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN  "
-
- db " HEADER mf_int HERE CELL+ , "
- db " mov_eax,# ' mf_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER tss_int HERE CELL+ , "
- db " mov_eax,# ' tss_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN  "
-
- db " HEADER np_int HERE CELL+ , "
- db " mov_eax,# ' np_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN  "
-
- db " HEADER ss_int HERE CELL+ , "
- db " mov_eax,# ' ss_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN  "
-
- db " HEADER gp_int HERE CELL+ , "
- db " mov_eax,# ' gp_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN   "
-
-
- db " HEADER pf_int HERE CELL+ , "
- db " mov_eax,# ' pf_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
-
- db " HEADER mf_int HERE CELL+ , "
- db " mov_eax,# ' mf_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER ac_int HERE CELL+ , "
- db " mov_eax,# ' ac_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER mc_int HERE CELL+ , "
- db " mov_eax,# ' mc_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
- db " HEADER xm_int HERE CELL+ , "
- db " mov_eax,# ' xm_msg , "
- db " mov_edx,# ' Push @ , call_edx   "
- db " mov_edx,# ' EXECUTE @ , call_edx   "
- db " iretd "
-
- db " ALIGN      "
-
-
- db " HEADER key_int    HERE  CELL+  , "
- db " pushad "
- db " xor_eax,eax "
- db " in_al,60h "
- db " cmp_eax,# 0x 58 , "  ;F12
- db " je  forward> "
- db " cmp_eax,# 0x 3A , "  ;CAPS
- db " je forward> "
- db " cmp_eax,# 0x 2A , "
- db " je forward> "
- db " cmp_eax,# 0x AA  , "
- db " je forward> "
- db " cmp_eax,# 0x 36  , "
- db " je forward> "
- db " cmp_eax,# 0x B6  , "
- db " je forward> "
- db " cmp_eax,# 0x BA  , "
- db " je forward> "
- db " test_eax,# 0x 80 , "
- db " jne forward> "
- db " mov_[],eax  key , "
- db " >forward "
- db " add_[],eax 0x B8000 ,  "
- db " eoi "
- db " popad "
- db " iretd "
-
- db " >forward "
- db " eoi "
- db " popad "
- db " iretd "
-
- db " >forward "
- db " and_d[],# key_flags ,  0x FFFC00FF  , "
- db " eoi "
- db " popad "
- db " iretd "
-
- db " >forward "
- db " or_d[],# key_flags , 0x 1FF00 , "
- db " eoi "
- db " popad "
- db " iretd "
-
-
- db " >forward "
- db " and_d[],# key_flags ,  0x FFFC00FF  , "
- db " eoi "
- db " popad "
- db " iretd "
-
-
- db " >forward "
- db " or_d[],# key_flags , 0x 2FF00 , "
- db " eoi "
- db " popad "
- db " iretd "
-
-
- db " >forward "
- db " xor_d[],# key_flags , 0x FF , "
- db " eoi "
- db " popad "
- db " iretd "
-
-
- db "  >forward "
- db " backward< DUP "
- db " in_al,64h "
- db " test_eax,# 0x 2 , "
- db " jne <backward "
- db " mov_eax,# 0x FE , "
- db " out_64h,al "
- db " jmp <backward  "
-
- db " ALIGN      "
-
-
- db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
-
- db     0
+ db " HEADER ;Word     interpret# ,   ' EXIT LIT,  ' , ,    ' EXIT , "
+
+ db " HEADER Word:     interpret# ,  "
+ db "        ' HEADER , ' interpret# ,  ' , ,  ;Word "
+
+
+ db " Word: 0x,     ' 0x ,  '  LIT, ,    ;Word "
+
+ db " Word: ',      ' ' ,  ' , ,  ;Word       "
+
+ db " Word: WORD       ', BLOCK  ', CELL+  ', CELL+  ', @  ', HERE  ', (WORD)  ;Word  "
+
+
+
+ db " Word: .(   ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ  ;Word "
+
+ db " Word: PAD          0x, HERE 0x, 200  ', +   ;Word "
+
+ db " Word: Word+       ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)  ;Word  "
+
+ db ' Word: S"  '
+ db "  ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD  ;Word "
+
+ db ' Word: ,"  '
+ db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT    ;Word "
+
+ db " Word: make_badword          "
+ db ' ," BADWORD"   '
+ db "  ', DUP  "
+ db "  ', HERE ', strcopy  ', C@ ', CELL+ ', ALLOT "
+ db " 0x, 0 ', , ', lit#  ' BADWORD @ ,  ', , ', lit# ', ABORT ', , ;Word  "
+
+ db " Word: make_exit           "
+ db ' ," EXIT" '
+ db "  ', DUP  "
+ db "  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT "
+ db " ', ,  ', lit#  ', EXIT ', ,  ;Word  "
+
+
+ db " Word: VOCABULARY               "
+ db " ', VARIABLE   ', HERE ', CELL- "
+ db " ', HERE ', make_badword        "
+ db " ', HERE  ', >R  ', make_exit   "
+ db " ', R>  ', SWAP!          ;Word "
+
+ db " Word: NOOP        ;Word     "
+
+ db " Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
+
+ db " Word: (           ', )  ', WORD ;Word "
+
+ db " Word: BEGIN    ', HERE ', CELL-   ;Word       "
+ db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
+ db " Word: UNTIL    ', lit#    ' ?OF ,  ', , ', , ;Word "
+
+ db " Word: IF       ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', , ;Word   "
+ db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
+ db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
+
+ db " Word: ENDOF       ',   COMPILE ', BRANCH  ', HERE ', >R  ', COMPILE ', 0 ', THEN  ', R> ;Word "
+ db " Word: OF          ',   COMPILE ', ?OF     ', HERE        ', COMPILE ', 0                ;Word "
+
+
+ db " VOCABULARY IMMEDIATES "
+ db " IMMEDIATES CURRENT !  "
+
+ db " Word: ;WORD    ', lit#  ' EXIT ,  ', ,  ', break ;Word  "
+
+ db " FORTH32 CURRENT ! "
+ db " IMMEDIATES FORTH32 LINK "
+
+
+ db " IMMEDIATES CONTEXT ! "
+
+ db " ' compiler  ' BADWORD CELL+ !   "
+
+ db " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
+
+ db " Word: WORD: "
+ db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
+
+
+ db " IMMEDIATES CURRENT ! "
+
+ db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
+ db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
+
+ db ' WORD: ."      ," '
+ db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
+
+ db " WORD: .((     .(              ;WORD "
+ db " WORD: ((   ) WORD             ;WORD   "
+
+
+ db " WORD: Begin       BEGIN  ;WORD "
+ db " WORD: Until       UNTIL  ;WORD "
+ db " WORD: Again       AGAIN  ;WORD "
+ db " WORD: If          IF     ;WORD "
+ db " WORD: Then        THEN   ;WORD "
+ db " WORD: Else        ELSE   ;WORD "
+
+ db " WORD: hex,        0x,     ;WORD "
+
+ db " WORD: Case       hex,  0  ;WORD "
+ db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
+ db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
+ db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
+             ;
+ db " WORD: Do        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
+ db " WORD: Loop      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
+ db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
+
+
+
+ db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
+
+ db " EXIT "
+ db  0
+
  alignhe20
