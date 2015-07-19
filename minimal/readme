@@ -89,7 +89,10 @@ key key_flags idtr interrupts forward> >forward backward< <backward
  make_interrupt_gate
 
 Block 8
+Interrupts setup
+
 Block 9 
+chr span's VECTOR  upper? caps_shift only_shift (span1) (span2)  span: eng 
 
 Block A
 editor 
