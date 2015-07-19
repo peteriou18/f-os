@@ -20,6 +20,8 @@ db " mov_[gs:eax],cx "
 db " ret "
 db " ALIGN    "
 
+
+
 db " HEADER Left_upper HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx "
 db " mov_w[gs:eax],# 0x C9 B, 0x 1F B, "
@@ -81,7 +83,9 @@ db " call_edx ( width ) "
 db " mov_ebp,eax      "
 db " dec_ebp          "
 db " call_edx ( adr_to ) "
+db " add_eax,# 0x A2 , "
 db " mov_esi,eax       "
+
 db " call_edx ( adr_from ) "
 db " xchg_eax,esi       "
 db " mov_edx,ebp        "
@@ -131,7 +135,7 @@ db " WORD: border   (( address of Left upper corner width height ) "
 db "               fix_frame  sides corners ;WORD "
 
 
-db " WORD: DRAW   border BUFFER hex, 1 hex, 1 xy-adr win_width @ win_height @ Fill ;WORD "
+db " WORD: DRAW   border BUFFER win Fill hex, 51 set_cursor  ;WORD "
 db " WORD: key  KEY eng ;WORD "
 db " WORD: ?Esc hex, 100 = ;WORD "
 
