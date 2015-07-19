@@ -1,6 +1,7 @@
 
- ;block 4 CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
- ; ," make_badword   make_exit  VOCABULARY NOOP compiler
+ ;block 6
+ ; lit# set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
+ ; ," make_badword   make_exit  VOCABULARY NOOP compiler  (
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
  ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
  db " ASSEMBLER FORTH32 LINK    "
