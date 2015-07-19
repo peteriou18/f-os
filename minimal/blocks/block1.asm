@@ -1,10 +1,10 @@
 ;block1
  db     " TYPEZ                                                                         "
- db     " 0x 7 LOAD        0x 2 LOAD      "
- db     " 0x 3 LOAD        0x 5 LOAD      "
- db     " 0x 4 LOAD        0x 6 LOAD      "
+ db     " 0x 2 LOAD        0x 3 LOAD      "
+ db     " 0x 4 LOAD        0x 5 LOAD      "
+ db     " 0x 6 LOAD        0x 7 LOAD      "
  db     " 0x 8 LOAD        0x 9 LOAD      "
- db     " 0x A LOAD                       "
+ db     " 0x A LOAD        "
 
  db     " .( End of loads)   "
 
@@ -12,8 +12,6 @@
  db     '  WORD: badw      ." Very bad Word:" HERE 1+ TYPEZ CRLF ;WORD '
  db     " ' badw ' BADWORD CELL+ ! "
 
- db     "  0x  20202020 CONSTANT 4Spaces "
- db     "  0x  54495845 CONSTANT 'exit'  "
  db     "  0x  40       CONSTANT tibsize "
  db     "  VARIABLE tib$  0 tib$ !  "
  db     "  VARIABLE tib#  tibsize 0x 10 *  ALLOT     "
@@ -29,7 +27,6 @@
  db     " WORD: mask          hex, 3C0 AND  ;WORD "
  db     " WORD: prev_cmd      tib$ @ tibsize - mask  tib$ ! tib C@  BLOCK CELL+ !  ;WORD "
  db     " WORD: next_cmd      tib$ @ tibsize + mask  tib$ !   ;WORD "
- db     " WORD: do_enter      DUP 4spaces SWAP! CELL+ DUP 'exit' SWAP! CELL+ DUP 4spaces SWAP! CELL+  0 SWAP!  ;WORD "
 
  db     " WORD: ?do   Case           "
  db     '                   DUP      hex, 1C00 = Of    Pop  tib  - DUP BLOCK CELL+ ! tib C!    Pop  -1   EndOf  '
