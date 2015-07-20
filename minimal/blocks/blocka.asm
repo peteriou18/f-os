@@ -140,13 +140,14 @@ db "               fix_frame  sides corners ;WORD "
 db " WORD: DRAW   border BUFFER win Fill curpos @ set_cursor  ;WORD "
 
 db " WORD: key  KEY eng ;WORD "
-db " WORD: cursor+      curpos CELL+ @ 1+ DUP curpos CELL+ ! win_width @ =  If curpos @  DUP HEX. 1+  curpos !   Else  curpos @ win_width @ - hex, 52 +  curpos ! 1 curpos CELL+ ! Then  ;WORD "
-db " WORD: cursor-      curpos @ 1- curpos !  ;WORD "
+db " WORD: cursor+      curpos CELL+ @ 1+ DUP curpos CELL+ ! win_width @ =  If curpos @  1+  curpos !   Else  curpos @ win_width @ - hex, 52 +  curpos ! 1 curpos CELL+ ! Then  ;WORD "
+db " WORD: cursor-      curpos CELL+ @ 1- DUP curpos CELL+ ! 0 = If  curpos @  1-  curpos ! Else  curpos @ win_width @ + hex, 52 -  curpos !   win_width @ curpos CELL+ ! Then  ;WORD "
 
 db " WORD: ?do          "
 db "           Case     "
 db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
 db "           DUP hex, 4D00 = Of (( Right )  cursor+  0 EndOf       "
+db "           DUP hex, 4B00 = Of (( Left  )  cursor-  0 EndOf       "
 db "           Pop 0   "
 db " EndCase ;WORD "
 
