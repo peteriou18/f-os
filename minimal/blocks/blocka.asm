@@ -111,6 +111,8 @@ db " ALIGN    "
 
 db " editor FORTH32 LINK   editor CONTEXT ! "
 
+db " CREATE curpos   0x 51 , 1 , 1 ,    "
+
 db " CREATE (win)       0 , 0 , 0 ,    "
 db " WORD: win          (win) @ (win) CELL+ @ (win) CELL+ CELL+ @ ;WORD "
 
@@ -135,14 +137,23 @@ db " WORD: border   (( address of Left upper corner width height ) "
 db "               fix_frame  sides corners ;WORD "
 
 
-db " WORD: DRAW   border BUFFER win Fill hex, 51 set_cursor  ;WORD "
+db " WORD: DRAW   border BUFFER win Fill curpos @ set_cursor  ;WORD "
+
 db " WORD: key  KEY eng ;WORD "
-db " WORD: ?Esc hex, 100 = ;WORD "
+db " WORD: cursor+      curpos CELL+ @ 1+ DUP curpos CELL+ ! win_width @ =  If curpos @  DUP HEX. 1+  curpos !   Else  curpos @ win_width @ - hex, 52 +  curpos ! 1 curpos CELL+ ! Then  ;WORD "
+db " WORD: cursor-      curpos @ 1- curpos !  ;WORD "
+
+db " WORD: ?do          "
+db "           Case     "
+db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
+db "           DUP hex, 4D00 = Of (( Right )  cursor+  0 EndOf       "
+db "           Pop 0   "
+db " EndCase ;WORD "
 
 
 db " FORTH32 CURRENT !  "
 db " 0x 0  0x 0 win_point !  0x 48 win_width !  0x 14 win_height ! "
-db ' WORD: EDIT  ." editor "  Begin win DRAW key ?Esc Until  ;WORD '
+db ' WORD: EDIT  ." editor "  Begin win DRAW key ?do Until  ;WORD '
 db " FORTH32 CONTEXT ! "
 db " EXIT "
 
