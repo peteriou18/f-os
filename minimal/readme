@@ -73,6 +73,9 @@ lit# set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD
 BEGIN AGAIN UNTIL IF THEN ELSE ENDOF OF IMMEDIATES ;WORD WORD: [ ] ."
 .(( (( Begin Until Again If Then Else hex, Case Of EndOf EndCase Do Loop
 
+Block 7 
+key key_flags idtr interrupts forward> >forward backward< <backward
+ make_interrupt_gate
 
 forward> - place for jump from 
 >forward - place for jump to
@@ -82,11 +85,6 @@ forward> - place for jump from
 
 backward<
 <backward
-
-
-Block 7 
-key key_flags idtr interrupts forward> >forward backward< <backward
- make_interrupt_gate
 
 Block 8
 Interrupts setup
