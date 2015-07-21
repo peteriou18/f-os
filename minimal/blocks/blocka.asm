@@ -111,6 +111,8 @@ db " ALIGN    "
 
 db " editor FORTH32 LINK   editor CONTEXT ! "
 
+db " VARIABLE 1st_symb   BUFFER 1st_symb ! "
+
 db " CREATE curpos   0x 51 , 1 , 1 ,    "
 
 db " CREATE (win)       0 , 0 , 0 ,    "
@@ -137,11 +139,19 @@ db " WORD: border   (( address of Left upper corner width height ) "
 db "               fix_frame  sides corners ;WORD "
 
 
-db " WORD: DRAW   border BUFFER win Fill curpos @ set_cursor  ;WORD "
+db " WORD: DRAW   border 1st_symb @ win Fill curpos @ set_cursor  ;WORD "
 
 db " WORD: key  KEY eng ;WORD "
-db " WORD: cursor+      curpos CELL+ @ 1+ DUP curpos CELL+ ! win_width @ =  If curpos @  1+  curpos !   Else  curpos @ win_width @ - hex, 52 +  curpos ! 1 curpos CELL+ ! Then  ;WORD "
-db " WORD: cursor-      curpos CELL+ @ 1- DUP curpos CELL+ ! 0 = If  curpos @  1-  curpos ! Else  curpos @ win_width @ + hex, 52 -  curpos !   win_width @ 1- curpos CELL+ ! Then  ;WORD "
+
+db " WORD: cur_x+       curpos CELL+ @ + DUP curpos CELL+ ! ;WORD "
+db " WORD: curpos+      curpos @ + curpos !   ;WORD "
+db " WORD: ?right_border  win_width @ =  If   1 curpos+   Else "
+db "                                          hex, 52 win_width @ -  curpos+  1 curpos CELL+ ! Then   ;WORD "
+
+db " WORD: cursor+       1 cur_x+  ?right_border ;WORD "
+
+db " WORD: cursor-      -1 cur_x+              0 = If  -1 curpos+   Else "
+db "                                                       win_width @ hex, 52 -  curpos+  win_width @ 1- curpos CELL+ ! Then  ;WORD "
 
 db " WORD: ?do          "
 db "           Case     "
