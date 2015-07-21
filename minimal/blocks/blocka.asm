@@ -139,19 +139,32 @@ db " WORD: border   (( address of Left upper corner width height ) "
 db "               fix_frame  sides corners ;WORD "
 
 
-db " WORD: DRAW   border 1st_symb @ win Fill curpos @ set_cursor  ;WORD "
+
 
 db " WORD: key  KEY eng ;WORD "
 
 db " WORD: cur_x+       curpos CELL+ @ + DUP curpos CELL+ ! ;WORD "
 db " WORD: curpos+      curpos @ + curpos !   ;WORD "
-db " WORD: ?right_border  win_width @ =  If   1 curpos+   Else "
-db "                                          hex, 52 win_width @ -  curpos+  1 curpos CELL+ ! Then   ;WORD "
+
+db " WORD: set_to_left_border     hex, 52 win_width @ -  curpos+  1 curpos CELL+ ! ;WORD "
+db " WORD: set_to_right_border    win_width @ hex, 52 -  curpos+ win_width @ 1- curpos CELL+ ! ;WORD "
+
+db " WORD: cur_y+       curpos CELL+ CELL+ @ + DUP curpos CELL+ CELL+ ! ;WORD "
+
+db " WORD: ?lower_border   win_height @ = If set_to_left_border Else       "
+db "                       -1 cur_y+ Pop set_to_right_border 1st_symb @ 1+ 1st_symb ! hex, A curpos+  Then    ;WORD "
+
+db " WORD: ?upper_border   ;WORD "
+
+db " WORD: ?right_border  win_width @ = If   1 curpos+  (( within borders ) Else "
+db "                                         1 cur_y+ ?lower_border Then   ;WORD "
+
+db " WORD: ?left_border             0 = If  -1 curpos+  (( within borders ) Else "
+db "                                           set_to_right_border -1 cur_y+ Then  ;WORD "
 
 db " WORD: cursor+       1 cur_x+  ?right_border ;WORD "
 
-db " WORD: cursor-      -1 cur_x+              0 = If  -1 curpos+   Else "
-db "                                                       win_width @ hex, 52 -  curpos+  win_width @ 1- curpos CELL+ ! Then  ;WORD "
+db " WORD: cursor-      -1 cur_x+  ?left_border  ;WORD "
 
 db " WORD: ?do          "
 db "           Case     "
@@ -161,6 +174,7 @@ db "           DUP hex, 4B00 = Of (( Left  )  cursor-  0 EndOf       "
 db "           Pop 0   "
 db " EndCase ;WORD "
 
+db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor  ;WORD "
 
 db " FORTH32 CURRENT !  "
 db " 0x 0  0x 0 win_point !  0x 48 win_width !  0x 14 win_height ! "
