@@ -151,8 +151,8 @@ db " WORD: set_to_right_border    win_width @ hex, 52 -  curpos+ win_width @ 1- 
 
 db " WORD: cur_y+       curpos CELL+ CELL+ @ + DUP curpos CELL+ CELL+ ! ;WORD "
 
-db " WORD: ?lower_border   win_height @ = If set_to_left_border Else       "
-db "                       -1 cur_y+ Pop set_to_right_border 1st_symb @ 1+ 1st_symb ! hex, A curpos+  Then    ;WORD "
+db " WORD: ?lower_border   win_height @ = If hex, 50 curpos+ Else       "
+db "                       -1 cur_y+ Pop 1st_symb @ win_width @ 1- +  1st_symb !  Then    ;WORD "
 
 db " WORD: ?upper_border   ;WORD "
 
@@ -162,15 +162,16 @@ db "                                         1 cur_y+ ?lower_border Then   ;WORD
 db " WORD: ?left_border             0 = If  -1 curpos+  (( within borders ) Else "
 db "                                           set_to_right_border -1 cur_y+ Then  ;WORD "
 
-db " WORD: cursor+       1 cur_x+  ?right_border ;WORD "
+db " WORD: cursor+        cur_x+  ?right_border ;WORD "
 
-db " WORD: cursor-      -1 cur_x+  ?left_border  ;WORD "
+db " WORD: cursor-        cur_x+  ?left_border  ;WORD "
 
 db " WORD: ?do          "
 db "           Case     "
 db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
-db "           DUP hex, 4D00 = Of (( Right )  cursor+  0 EndOf       "
-db "           DUP hex, 4B00 = Of (( Left  )  cursor-  0 EndOf       "
+db "           DUP hex, 4D00 = Of (( Right )  1 cursor+  0 EndOf       "
+db "           DUP hex, 4B00 = Of (( Left  ) -1 cursor-  0 EndOf       "
+db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ ?lower_border 0 EndOf   "
 db "           Pop 0   "
 db " EndCase ;WORD "
 
