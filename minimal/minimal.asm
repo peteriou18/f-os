@@ -61,7 +61,31 @@ ep1:
         mov dword [gs:40], "i s "
         mov dword [gs:44], "h   "
 
+
         jmp $
+        shr eax,1
+        mov ah,cl
+        mov ah,ch
+        mov edx,3d4h
+        mov eax,30fh
+        out dx,ax
+        mov eax,40eh
+        out dx,ax
+        mov     edx,ebp
+        dec     edi
+        push    ebp
+        pop     ebp
+        inc     esi
+        mov     cl,[esi]
+        dec     ebp
+        xchg    eax,esi
+        xchg    esi,eax
+        mov     ch,1Fh
+        mov     [gs:eax],cx
+        shl     eax,1
+        dec     ecx
+        mov     word [gs:eax],0x1234
+        imul    eax,ebp
         shl     eax,2
         xchg    eax,ebp
         seta    al
@@ -246,6 +270,7 @@ _abort:
         mov esi,msgabort
         call os_output
         ret
+
 msgbad db " Badword: ",0
 msgabort db " Abort!",0
 ;----------------------------
@@ -308,7 +333,7 @@ nfa_9:
 parse_:
         dd _parse
 _parse:
-        mov     eax,[block_value]
+        ;mov     eax,[block_value]
         mov eax,[block_value+8] ;input buffer
         call _push
         mov eax,[here_value] ;here
@@ -596,9 +621,53 @@ rdsec2:
         USE32
         align 4
 nfa_21:
+        db 7,"wrblock",0
+        alignhe
+        dd nfa_20
+        dd _wrblock
+_wrblock:
+        call _pop ;bufadr
+        mov [offset_data],ax
+        xor edx,edx
+        call _pop ; block
+        shld edx,eax,4
+        shl eax,4
+        mov [sect],eax
+        mov [sect+4],edx
+        pushad
+        mov eax,wrsec1
+        and eax,0ffffh
+        mov [rmback],eax
+        mov dword [pmback],rdsec2
+        jmp switch_to_rm
+
+        USE16
+wrsec1:
+
+
+        mov dl,[0x4ff]
+        mov si,dap_p
+        mov ah,43h
+        int 13h
+        jnb wrsec3
+mov dword [gs:0],"D i "
+mov dword [gs:4],"s k "
+mov dword [gs:8],"  E "
+mov dword [gs:12],"r r "
+mov dword [gs:16],"o r "
+wrsec3:
+
+        jmp switch_to_pm
+        align 4
+
+;----------------------------
+        USE32
+        align 4
+
+nfa_22:
          db        5,"TYPEZ",0
          alignhe
-         dd nfa_20
+         dd nfa_21
          dd _typez
 _typez:
         call    _pop
@@ -803,10 +872,10 @@ fes:            dq      0x0f0f0f0f0f0f0f0f
 
 ;-----------------------
         align 4
-nfa_22:
+nfa_23:
         db        3,"0xd",0
         alignhe
-        dd nfa_21
+        dd nfa_22
         dd _0xd1
 _0xd1:
         call    _number
@@ -863,10 +932,10 @@ _0xd:
         ret
 ;----------------------------
         align 4
-nfa_23:
+nfa_24:
         db        2,"0x",0
         alignhe
-        dd nfa_22
+        dd nfa_23
         dd _0x
 _0x:
         call    _0xd1
@@ -878,10 +947,10 @@ bytemask:       dq      0ff00ff00ff00ffh
 
 ;----------------------------
         align 4
-nfa_24:
+nfa_25:
         db        6,"number",0
         alignhe
-        dd nfa_23
+        dd nfa_24
         dd _number
 _number:
         mov     esi,[block_value+8]
@@ -939,10 +1008,10 @@ number2:
 ;--------------------
         align 4
 
-nfa_25:
+nfa_26:
         db      1,",",0
         alignhe
-        dd nfa_24
+        dd nfa_25
         dd _comma
 _comma:
         mov     edx,[here_value]
@@ -954,10 +1023,10 @@ _comma:
 ;--------------------
         align 4
 
-nfa_26:
+nfa_27:
         db      8,"(HEADER)",0
         alignhe
-        dd nfa_25
+        dd nfa_26
         dd _hheader
 _hheader:
         mov     [esi],eax       ;fill link field
@@ -971,10 +1040,10 @@ _hheader:
 ;--------------------
         align 4
 
-nfa_27:
+nfa_28:
         db      6,"N>LINK",0
         alignhe
-        dd      nfa_26
+        dd      nfa_27
 nlink_:
         dd      _nlink
 _nlink:
@@ -996,10 +1065,10 @@ nlink2:
 ;--------------------
         align 4
 
-nfa_28:
+nfa_29:
         db      6,"LATEST",0
         alignhe
-        dd      nfa_27
+        dd      nfa_28
 latest_:
         dd      _latest
 
@@ -1014,10 +1083,10 @@ latest_code2:
         ret
 ;--------------------
         align 4
-nfa_29:
+nfa_30:
         db      1,"'",0
         alignhe
-        dd      nfa_28
+        dd      nfa_29
         dd      _addr_interp
         dd      parse_
         dd      context_
@@ -1028,20 +1097,20 @@ nfa_29:
 ;----------------------------
         align 4
 
-nfa_30:
+nfa_31:
         db 7,"CURRENT",0
         alignhe
-        dd nfa_29
+        dd nfa_30
 current_:
         dd _variable_code
 current_value:
         dd f32_list
 ;--------------------------------
         align 4
-nfa_31:
+nfa_32:
         db      10,"interpret#",0
         alignhe
-        dd      nfa_30
+        dd      nfa_31
         dd      _constant
         dd      _addr_interp
 _addr_interp:
@@ -1055,10 +1124,10 @@ _addr_interp:
 ;--------------------------------
         align 4
 
-nfa_32:
+nfa_33:
         db      5,"CELL+",0
         alignhe
-        dd      nfa_31
+        dd      nfa_32
 cellp_:
         dd      _cellp
 _cellp:
@@ -1069,10 +1138,10 @@ _cellp:
 ;--------------------------------
         align 4
 
-nfa_33:
+nfa_34:
         db      5,"ALIGN",0
         alignhe
-        dd      nfa_32
+        dd      nfa_33
 align_:
         dd      _align
 
@@ -1098,10 +1167,10 @@ _align2:
 ;----------------------------
         align 4
 
-nfa_34:
+nfa_35:
         db      1,"!",0
         alignhe
-        dd      nfa_33
+        dd      nfa_34
         dd      _store
 
 _store:
@@ -1113,15 +1182,15 @@ _store:
 ;--------------------------------
         align 4
 
-nfa_35:
+nfa_36:
         db      9,"ASSEMBLER",0
         alignhe
-        dd     nfa_34
+        dd     nfa_35
         dd     _vocabulary
         dd     _nfa_assembler_last
 ;----------------------------
         align 4
-nfa_36:
+nfa_37:
         db 7,"BADWORD",0
         alignhe
         dd nfa_last ; zero LFA. End of search or link winth another vocabulary if not zero
@@ -1130,19 +1199,19 @@ nfa_36:
 
 ;----------------------------
         align 4
-nfa_37:
+nfa_38:
 
         db 4,"EXIT",0
         alignhe
-        dd nfa_36
+        dd nfa_37
         dd _ret
 ;----------------------------
         align 4
 _nfa_assembler_last:
-nfa_38:
+nfa_39:
         db      6,"opcode",0
         alignhe
-        dd      nfa_37
+        dd      nfa_38
         dd      _opcode_code
 _opcode_code:
         call    _header
@@ -1183,10 +1252,10 @@ occ1:
 ;----------------------------
         align 4
 
-nfa_39:
+nfa_40:
         db      6,"UNLINK",0
         alignhe
-        dd      nfa_35
+        dd      nfa_36
         dd      _unlink
 
 _unlink:
@@ -1198,10 +1267,10 @@ _unlink:
 ;----------------------------
         align 4
 
-nfa_40:
+nfa_41:
         db      10,"BADWORD-xt",0
         alignhe
-        dd      nfa_39
+        dd      nfa_40
         dd      _badword_xt
 _badword_xt:
         mov     edx,[here_value]
@@ -1213,10 +1282,10 @@ _badword_xt:
 ;----------------------------
         align 4
 
-nfa_41:
+nfa_42:
         db      4,"LINK",0
         alignhe
-        dd      nfa_40
+        dd      nfa_41
         dd      _link
 _link:
         call    _pop
@@ -1230,10 +1299,10 @@ _link:
 ;----------------------------
         align 4
 
-nfa_42:
+nfa_43:
         db 6,"(WORD)",0
         alignhe
-        dd nfa_41
+        dd nfa_42
         dd _word
 _word:
         call _pop ; to address
@@ -1283,10 +1352,10 @@ word_symb       db      20h
 ;--------------------------------
         align 4
 nfa_last:
-nfa_43:
+nfa_44:
         db      6,"HEADER",0
         alignhe
-        dd nfa_42
+        dd nfa_43
         dd _header
 _header:
        ; call    _align
