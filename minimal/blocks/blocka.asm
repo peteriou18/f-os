@@ -171,23 +171,23 @@ db " WORD: ?lower_border   curposy @  win_height @ 1+ =         "
 db "                                  If hex, 50 curpos+    Else       "
 db "                                  win_height @ curposy ! ?last_symb  Then    ;WORD "
 
-db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+ win_width @ 1- NEGATE  cur_symb+ Else "
+db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+  Else "
 db "                                   ?1st_symb hex, 2 curposy !  Then    ;WORD "
 
 db " WORD: ?right_border   curposx @ win_width @ 1+ = If   1 curpos+  (( within borders ) Else "
 db "                                               set_to_left_border 1 cur_y+ ?lower_border  Then    ;WORD "
 
-db " WORD: ?left_border   curposx @  1      = If  -1 curpos+ -1 cur_symb+ (( within borders ) Else "
+db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
 db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
 
 
 db " WORD: ?do          "
 db "           Case     "
 db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
-db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+ 1 cur_symb+ ?right_border 0 EndOf       "
-db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ ?left_border  0 EndOf       "
+db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+  1 cur_symb+ ?right_border 0 EndOf       "
+db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ -1 cur_symb+ ?left_border  0 EndOf       "
 db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
-db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ ?upper_border 0 EndOf   "
+db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
 db "           DUP (( Any key) cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
 db " EndCase  SWAP Pop  ;WORD "
 
