@@ -145,12 +145,12 @@ db "               fix_frame  sides corners ;WORD "
 
 db " WORD: key  KEY eng ;WORD "
 
-db " WORD: cur_x+       curposx @ + curposx ! ;WORD "
+db " WORD: cur_x+       curposx @ + DUP HEX. curposx ! ;WORD "
 db " WORD: curpos+      curpos @ +  curpos !   ;WORD "
 
 db " WORD: set_to_left_border     win_width @ 1- 1- NEGATE  curpos+   hex, 2 curposx  ! ;WORD "
 
-db " WORD: set_to_right_border    win_width @ hex, 52 -  curpos+ win_width @ 1- curpos CELL+ ! ;WORD "
+db " WORD: set_to_right_border    win_width @ 1- 1- curpos+    win_width @  curposx ! ;WORD "
 
 db " WORD: cur_y+       curposy @ + curposy ! ;WORD "
 
@@ -166,13 +166,13 @@ db " WORD: ?lower_border   curposy @  win_height @ 1+ = If hex, 50 curpos+  Else
 db "                       win_height @ curposy ! ?last_symb  Then    ;WORD "
 
 db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+ Else "
-db "                       ?1st_symb 1 cur_y+  Then    ;WORD "
+db "                       ?1st_symb hex, 2 curposy !  Then    ;WORD "
 
 db " WORD: ?right_border  curposx @ win_width @ 1+ = If   1 curpos+  (( within borders ) Else "
 db "                                               set_to_left_border 1 cur_y+ ?lower_border  Then   ;WORD "
 
-db " WORD: ?left_border             0 = If  -1 curpos+  (( within borders ) Else "
-db "                                           set_to_right_border -1 cur_y+ Then  ;WORD "
+db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
+db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
 
 
 db " WORD: ?do          "
