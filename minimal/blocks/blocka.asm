@@ -112,6 +112,7 @@ db " ALIGN    "
 db " editor FORTH32 LINK   editor CONTEXT ! "
 
 db " VARIABLE 1st_symb   BUFFER 1st_symb ! "
+db " VARIABLE cur_symb   BUFFER cur_symb ! "
 
 db " VARIABLE curpos   0x 51  curpos !    "
 db " VARIABLE curposx  0x 2   curposx !   "
@@ -145,11 +146,12 @@ db "               fix_frame  sides corners ;WORD "
 
 db " WORD: key  KEY eng ;WORD "
 
-db " WORD: cur_x+       curposx @ + curposx ! ;WORD "
-db " WORD: cur_y+       curposy @ + curposy ! ;WORD "
-db " WORD: curpos+      curpos  @ +  curpos ! ;WORD "
+db " WORD: cur_x+       curposx  @ + curposx  ! ;WORD "
+db " WORD: cur_y+       curposy  @ + curposy  ! ;WORD "
+db " WORD: curpos+      curpos   @ + curpos   !  ;WORD "
+db " WORD: cur_symb+    cur_symb @ + cur_symb !  ;WORD "
 
-db " WORD: set_to_left_border     win_width @ 1- 1- NEGATE curpos+   hex, 2      curposx ! ;WORD "
+db " WORD: set_to_left_border     win_width @ 1- 1- NEGATE curpos+   hex, 2      curposx !  ;WORD "
 
 db " WORD: set_to_right_border    win_width @ 1- 1- curpos+          win_width @ curposx ! ;WORD "
 
@@ -166,27 +168,27 @@ db " WORD: ?1st_symb    BUFFER   1st_symb @  <  If  win_width @ 1- NEGATE 1st_sy
 db "                                                               BUFFER 1st_symb ! Then ;WORD "
 
 db " WORD: ?lower_border   curposy @  win_height @ 1+ =         "
-db "                                  If hex, 50 curpos+  Else       "
+db "                                  If hex, 50 curpos+    Else       "
 db "                                  win_height @ curposy ! ?last_symb  Then    ;WORD "
 
-db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+ Else "
+db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+ win_width @ 1- NEGATE  cur_symb+ Else "
 db "                                   ?1st_symb hex, 2 curposy !  Then    ;WORD "
 
 db " WORD: ?right_border   curposx @ win_width @ 1+ = If   1 curpos+  (( within borders ) Else "
 db "                                               set_to_left_border 1 cur_y+ ?lower_border  Then    ;WORD "
 
-db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
+db " WORD: ?left_border   curposx @  1      = If  -1 curpos+ -1 cur_symb+ (( within borders ) Else "
 db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
 
 
 db " WORD: ?do          "
 db "           Case     "
 db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
-db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+ ?right_border 0 EndOf       "
+db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+ 1 cur_symb+ ?right_border 0 EndOf       "
 db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ ?left_border  0 EndOf       "
-db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ ?lower_border 0 EndOf   "
+db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
 db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ ?upper_border 0 EndOf   "
-db "              0   "
+db "           DUP (( Any key) cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
 db " EndCase  SWAP Pop  ;WORD "
 
 db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;WORD "
