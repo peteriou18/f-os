@@ -85,6 +85,7 @@
  db     "                   0x CC 0x 88 0x 2 opcode mov_ah,cl                 "
  db     "                   0x EC 0x 88 0x 2 opcode mov_ah,ch                 "
  db     "                   0x A5 0x F3 0x 2 opcode rep_movsd                 "
+ db     "                   0x AA 0x F3 0x 2 opcode rep_stosb                 "
  db     "                   0x AB 0x 66 0x 2 opcode stosw                     "
  db     "                   0x D8 0x 01 0x 2 opcode add_eax,ebx               "
  db     "                   0x E8 0x 01 0x 2 opcode add_eax,ebp               "
