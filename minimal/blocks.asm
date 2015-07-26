@@ -22,5 +22,6 @@ include "blocks\block8.asm"
 include "blocks\block9.asm"
 include "blocks\blocka.asm"
 include "blocks\blockb.asm"
+include "blocks\blockc.asm"
 
  ;block 9
