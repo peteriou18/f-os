@@ -1,203 +1,83 @@
-; block A editor
-db " FORTH32 CURRENT ! FORTH32 CONTEXT !   "
+; block 9
 
-db " VOCABULARY editor "
-db " editor CURRENT ! "
+db ' WORD: chr   HERE 1+ @  ;WORD '
 
 
+db " VOCABULARY span's "
+db " span's CURRENT ! "
 
- db " ASSEMBLER FORTH32 LINK    "
- db " ASSEMBLER CONTEXT !    "
+db " QUOTE CONSTANT QUOTE "
+db " BL CONSTANT BL  "
+db " WORD:    0x    0x       ;WORD    "
 
-db " HEADER symb HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_ebp,eax "
-db " call_edx     "
-db " mov_ecx,eax  "
-db " mov_eax,ebp      "
-db " mov_ch,# 0x 1F B, "
-db " mov_[gs:eax],cx "
-db " ret "
-db " ALIGN    "
+db " FORTH32 CURRENT ! "
 
+db " WORD: VECTOR       HEADER [ ' BADWORD @ LIT, ] ,  0 , ;WORD "
 
-
-db " HEADER Left_upper HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_w[gs:eax],# 0x C9 B, 0x 1F B, "
-db " ret "
-db " ALIGN    "
-
-db " HEADER Right_upper HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_w[gs:eax],# 0x BB B, 0x 1F B, "
-db " ret "
-db " ALIGN    "
-
-db " HEADER Left_lower HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_w[gs:eax],# 0x C8 B, 0x 1F B, "
-db " ret "
-db " ALIGN    "
-
-
-
-db " HEADER Right_lower HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_w[gs:eax],# 0x BC B, 0x 1F B, "
-db " ret "
-db " ALIGN    "
-
-db " HEADER Vline HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_ecx,eax "
-db " call_edx "
-db " backward< "
-db " mov_w[gs:eax],# 0x BA B, 0x 1F B, "
-db " add_eax,# 0x A0 ,      "
-db " dec_ecx         "
-db " jne <backward   "
-db " ret "
-
-db " ALIGN    "
-
-db " HEADER Hline HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_ecx,eax "
-db " call_edx "
-db " backward< "
-db " mov_w[gs:eax],# 0x CD B, 0x 1F B, "
-db " inc_eax         "
-db " inc_eax         "
-db " dec_ecx         "
-db " jne <backward   "
-db " ret "
-
-db " ALIGN    "
-
-db " HEADER Fill HERE CELL+ , ( adr_from adr_to width height ) "
-db " mov_edx,# ' Pop @ , call_edx ( height ) "
-db " mov_edi,eax "
-db " dec_edi     "
-db " call_edx ( width ) "
-db " mov_ebp,eax      "
-db " dec_ebp          "
-db " call_edx ( adr_to ) "
-db " add_eax,# 0x A2 , "
-db " mov_esi,eax       "
-
-db " call_edx ( adr_from ) "
-db " xchg_eax,esi       "
-db " mov_edx,ebp        "
-
-db " backward< DUP "
-db " mov_cl,[esi]       "
-db " mov_ch,# 0x 1F B, "
-db " mov_[gs:eax],cx "
-db " inc_esi         "
-db " inc_eax         "
-db " inc_eax         "
-db " dec_ebp         "
-db " jne <backward   "
-db " add_eax,# 0x A0 , "
-db " mov_ebp,edx   "
-db " sub_eax,ebp  "
-db " sub_eax,ebp  "
-db " dec_edi      "
-db " jne <backward      "
-db " ret "
-
-db " ALIGN    "
-
-db " editor FORTH32 LINK   editor CONTEXT ! "
-
-db " VARIABLE 1st_symb   BUFFER 1st_symb ! "
-db " VARIABLE cur_symb   BUFFER cur_symb ! "
-
-db " VARIABLE curpos   0x 51  curpos !    "
-db " VARIABLE curposx  0x 2   curposx !   "
-db " VARIABLE curposy  0x 2   curposy !   "
-
-db " CREATE (win)       0 , 0 , 0 ,    "
-db " WORD: win          (win) @ (win) CELL+ @ (win) CELL+ CELL+ @ ;WORD "
-
-db " WORD: xy-adr   (( x y -- addr ) hex, A0 * SWAP 2* + ;WORD "
-
-db " WORD: win_point    xy-adr (win)        ;WORD "
-db " WORD: win_width    (win)  CELL+        ;WORD "
-db " WORD: win_height   (win)  CELL+ CELL+  ;WORD "
-
-
-db ' WORD: corners       3rd  Left_upper '
-db "                     3rd 2nd 2* +  Right_upper  "
-db "                     3rd 1st hex, A0 * +  Left_lower   "
-db "                     3rd 2nd 2* + 1st hex, A0 * +  Right_lower  ;WORD "
-
-db " WORD: sides  3rd 2nd Hline "
-db "              3rd 1st hex, A0 * + 2nd Hline "
-db "              3rd 1st Vline "
-db "              3rd 2nd 2* + 1st Vline ;WORD "
-
-db " WORD: border   (( address of Left upper corner width height ) "
-db "               fix_frame  sides corners ;WORD "
-
-
-
-
-db " WORD: key  KEY eng ;WORD "
-
-db " WORD: cur_x+       curposx  @ + curposx  ! ;WORD "
-db " WORD: cur_y+       curposy  @ + curposy  ! ;WORD "
-db " WORD: curpos+      curpos   @ + curpos   !  ;WORD "
-db " WORD: cur_symb+    cur_symb @ + cur_symb !  ;WORD "
-
-db " WORD: set_to_left_border     win_width @ 1- 1- NEGATE curpos+   hex, 2      curposx !  ;WORD "
-
-db " WORD: set_to_right_border    win_width @ 1- 1- curpos+          win_width @ curposx ! ;WORD "
-
-
-db " WORD: win_size    hex, 2000 BUFFER + win_width @ 1- win_height @ 1- * - ;WORD "
-
-db " WORD: 1st_symb+   1st_symb @ + 1st_symb ! ;WORD "
-
-
-db " WORD: ?last_symb   1st_symb @ win_size  <  If   win_width @ 1- 1st_symb+   Else         "
-db "                                                   win_size  1- 1st_symb !  Then   ;WORD "
-
-db " WORD: ?1st_symb    BUFFER win_width @ +  1st_symb @  <  If      "
-db "                             win_width @ 1- NEGATE  1st_symb+  Else       "
-db "                                                               BUFFER  1st_symb ! Then ;WORD "
-
-db " WORD: ?lower_border   curposy @  win_height @ 1+ =         "
-db "                                  If hex, 50 curpos+    Else       "
-db "                                  win_height @ curposy ! ?last_symb  Then    ;WORD "
-
-db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+  Else "
-db "                                   ?1st_symb hex, 2 curposy !  Then    ;WORD "
-
-db " WORD: ?right_border   curposx @ win_width @ 1+ = If   1 curpos+  (( within borders ) Else "
-db "                                               set_to_left_border 1 cur_y+ ?lower_border  Then    ;WORD "
-
-db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
-db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
-
-
-db " WORD: ?do          "
-db "           Case     "
-db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
-db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+  1 cur_symb+ ?right_border 0 EndOf       "
-db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ -1 cur_symb+ ?left_border  0 EndOf       "
-db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
-db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
-db "           DUP (( Any key) cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
-db " EndCase  SWAP Pop  ;WORD "
-
-db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;WORD "
-
-db " FORTH32 CURRENT !  "
-db "  0  0 win_point !  0x 48 win_width !  0x 14 win_height ! "
-db ' WORD: EDIT  ." editor "  Begin win DRAW key ?do Until  ;WORD '
+db " span's FORTH32 LINK    span's CONTEXT ! "
+db " ' chr ' BADWORD CELL+ ! "
 db " FORTH32 CONTEXT ! "
-db " EXIT "
+db " span's UNLINK "
 
-alignhe20
+db " VECTOR upper? "
+
+db " WORD:  caps_shift   [ ' upper_shift_caps  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
+db " WORD:  only_shift   [ ' upper_shift_only  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
+
+
+ db " WORD: (span1)        "
+ db "                       >R WITHIN R> SWAP         "     ;  here scan low high length  -- here length flag
+ db " ;WORD "
+
+ db " WORD: (span2)        "
+ db "                      >R  >R      R@  hex, 4 CELLs + @   -  R>               "     ; here length
+ db "                    hex, B CELLs + +  R>  upper? AND + C@ SP@ TYPEZ      "
+ db " ;WORD "
+
+db " IMMEDIATES CURRENT ! "
+
+db " WORD: span:        "
+db "                    COMPILE DUP HERE  LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+  LIT,   "
+db "                    COMPILE BRANCH HERE COMPILE 0    >R OVER OVER SWAP- + 1+             "
+db "                    Do    BL WORD  span's SFIND EXECUTE  B, Loop               "
+db "                    R>  THEN  COMPILE (span1)   OF  COMPILE (span2) ENDOF COMPILE Pop COMPILE Pop      "
+db " ;WORD "
+
+
+
+ db " FORTH32 CURRENT !    "
+ ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
+ ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
+
+ db " WORD: eng       Case  "
+ db "           caps_shift "
+ db '              [ 0x 10  0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P         '
+ db '              [ 0x 1E  0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L        '
+ db "              [ 0x 2C  0x 32 ]  span:  z x c v b n m        Z X C V B N M           "
+
+ db "           only_shift "
+
+ db "              [ 0x 02  0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ +    "
+ db "              [ 0x 1A  0x 1B ] span: [ ] { }               "
+ db "              [ 0x 27  0x 29 ] span: ; ' `   : QUOTE  ~     "
+ db "              [ 0x 2B  0x 2B ] span:  \ |                    "
+ db "              [ 0x 33  0x 35 ] span: , . / < > ?            "
+ db "              [ 0x 39  0x 39 ] span:  BL BL               "
+ db " hex, 100 * EndCase ;WORD "
+
+
+;db " WORD: rus_win1251 "
+;db "          caps_shift "
+;db "              [  0x 10 0x 1B ] span: é ö ó ê å í ã ø ù ç õ ú  É Ö Ó Ê Å Í Ã Ø Ù Ç Õ Ú "
+;db "              [  0x 1E 0x 29 ] span: ô û â à ï ð î ë ä æ ý ¸  Ô Û Â À Ï Ð Î Ë Ä Æ Ý ¨ "
+;db "              [  0x 2C 0x 34 ] span: ÿ ÷ ñ ì è ò ü á þ        ß × Ñ Ì È Ò Ü Á Þ "
+;db "         only_shift "
+;db "              [ 0x 02 0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! QUOTE ¹ ; % : ? * ( ) _ + "
+;db "              [ 0x 35 0x 35 ] span: . , "
+;db "              [ 0x 39 0x 39 ] span: BL BL  "
+;db " ;WORD "
+
+
+db " EXIT "
+db     0
+ alignhe20
