@@ -164,8 +164,9 @@ db " WORD: 1st_symb+   1st_symb @ + 1st_symb ! ;WORD "
 db " WORD: ?last_symb   1st_symb @ win_size  <  If   win_width @ 1- 1st_symb+   Else         "
 db "                                                   win_size  1- 1st_symb !  Then   ;WORD "
 
-db " WORD: ?1st_symb    BUFFER   1st_symb @  <  If  win_width @ 1- NEGATE 1st_symb+  Else       "
-db "                                                               BUFFER 1st_symb ! Then ;WORD "
+db " WORD: ?1st_symb    BUFFER win_width @ +  1st_symb @  <  If      "
+db "                             win_width @ 1- NEGATE  1st_symb+  Else       "
+db "                                                               BUFFER  1st_symb ! Then ;WORD "
 
 db " WORD: ?lower_border   curposy @  win_height @ 1+ =         "
 db "                                  If hex, 50 curpos+    Else       "
