@@ -1,115 +1,216 @@
-db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+; block A editor
+db " FORTH32 CURRENT ! FORTH32 CONTEXT !   "
 
-db " VARIABLE apic_ticks  "
-db " VARIABLE testf       "
+db " VOCABULARY editor "
+db " editor CURRENT ! "
 
-db " FORTH32 CURRENT ! ASSEMBLER CONTEXT ! "
-db " ASSEMBLER FORTH32 LINK "
 
-db " HEADER init_apic_timer HERE CELL+ , "
-db " mov_d[],# 0x 0FEE00320 , 0x 20030 , "
+
+ db " ASSEMBLER FORTH32 LINK    "
+ db " ASSEMBLER CONTEXT !    "
+
+db " HEADER symb HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_ebp,eax "
+db " call_edx     "
+db " mov_ecx,eax  "
+db " mov_eax,ebp      "
+db " mov_ch,# 0x 1F B, "
+db " mov_[gs:eax],cx "
 db " ret "
-db " ALIGN "
+db " ALIGN    "
 
-db " HEADER init_PIT HERE CELL+ , "
-db " mov_eax,# 0x 36 , " ;set PIT CH0  mode
-db " mov_edx,# 0x 43 ,  "
-db " out_dx,al          "
-db " xor_eax,eax        "
-;db " mov_edx,# 0x 21 ,  "
-db " mov_d[],#  0x 4C0 , 0x FBF0 , "
-;db " out_dx,al         "
-db " ret "
-db " ALIGN "
-
-db " HEADER init_speaker HERE CELL+ , "
-db " mov_eax,# 0x B6 , " ;set PIT CH2  mode
-db " mov_edx,# 0x 43 ,  "
-db " out_dx,al          "
-db " ret "
-db " ALIGN "
-
-
-db " HEADER start_timer HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx " ;
+db " HEADER insert HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;addr
+db " mov_esi,# 0x 3FFE , "
+;db " add_esi,eax "
+db " mov_edi,# 0x 3FFF , "
+db " sub_eax,edi     "
+db " neg_eax         "
 db " mov_ecx,eax "
-db " mov_edx,# 0x 40 , "
-db " mov_al,cl "
-db " out_dx,al "
-db " mov_al,ch "
-db " out_dx,al "
-db " mov_d[],# 0x  0FEE00380 , 0x FFFFFFFF ,  "
-;db " mov_edx,# ' Push @ , call_edx "
-db " mov_d[],#  apic_ticks , 0x 0 ,       "
-db " mov_d[],# 0x 0B8140 , 0x 40404040 , "
+db " std         "
+db " rep_movsb "
 db " ret "
+db " ALIGN    "
 
-db " ALIGN "
 
-db " HEADER on_timer HERE CELL+ , "
+db " HEADER Left_upper HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_w[gs:eax],# 0x C9 B, 0x 1F B, "
+db " ret "
+db " ALIGN    "
 
-db " add_[],eax 0x B8144 , "
-;db " mov_d[],# 0x 0B8144 , 0x 41414141 , "
-db " mov_eax,[] 0x  0FEE00390 , "
-db " neg_eax    "
-db " mov_[],eax apic_ticks , "
-db " mov_d[],# 0x  0FEE00380 , apic_ticks ,  "
-;db " mov_[],eax apic_ticks ,        "
-;db " mov_d[],# testf , 0x FF    "
-db " eoi   "
-db " iretd "
-db " ALIGN "
+db " HEADER Right_upper HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_w[gs:eax],# 0x BB B, 0x 1F B, "
+db " ret "
+db " ALIGN    "
 
-db " HEADER stop_beep HERE CELL+ , "
-db " mov_edx,# 0x 61 , "
-db " in_al,dx  "
-db " and_eax,# 0x 0FFFFFFFC ,    "
-db " out_dx,al                "
-db " mov_d[],# 0x 0FEE000B0 , 0x 42424242 , "
-db " eoi   "
-db " iretd "
-db " ALIGN "
+db " HEADER Left_lower HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_w[gs:eax],# 0x C8 B, 0x 1F B, "
+db " ret "
+db " ALIGN    "
 
-db " HEADER on_apic_timer HERE CELL+ , "
-db " add_[],eax 0x B8148 , "
-;db " add_d[],# 0x 0B8148 , 0x 42424242 , "
-db " mov_d[],# 0x 0FEE000B0 , 0x 42424242 , "
-db " iretd "
-db " ALIGN "
 
-db " HEADER set_tone HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx " ;
+
+db " HEADER Right_lower HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
+db " mov_w[gs:eax],# 0x BC B, 0x 1F B, "
+db " ret "
+db " ALIGN    "
+
+db " HEADER Vline HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
 db " mov_ecx,eax "
-db " mov_edx,# 0x 42 , "
-db " mov_al,cl "
-db " out_dx,al "
-db " mov_al,ch "
-db " out_dx,al "
+db " call_edx "
+db " backward< "
+db " mov_w[gs:eax],# 0x BA B, 0x 1F B, "
+db " add_eax,# 0x A0 ,      "
+db " dec_ecx         "
+db " jne <backward   "
 db " ret "
-db " ALIGN "
 
-db " HEADER (beep) HERE CELL+ , "
-db " mov_d[],# 0x 0FEE00320 , 0x 0030 , "
-db " mov_edx,# ' Pop @ , call_edx " ;
-db " mov_[],eax 0x  0FEE00380 , "
+db " ALIGN    "
 
+db " HEADER Hline HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx "
 db " mov_ecx,eax "
-db " mov_edx,# 0x 61 , "
-db " in_al,dx  "
-db " or_eax,# 0x 3 ,    "
-db " out_dx,al           "
+db " call_edx "
+db " backward< "
+db " mov_w[gs:eax],# 0x CD B, 0x 1F B, "
+db " inc_eax         "
+db " inc_eax         "
+db " dec_ecx         "
+db " jne <backward   "
 db " ret "
-db " ALIGN "
 
-db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
+db " ALIGN    "
 
-;db " ' on_timer @ 0x 20 make_interrupt_gate "
-;db " ' on_apic_timer @ 0x 30 make_interrupt_gate "
-;db " init_apic_timer init_PIT 0 start_timer "
-;db " WORD: apic_calibrate  0   0 hex, 20   Do apic_ticks @ DUP HEX. + Loop  HEX.  ;WORD "
-;db " apic_calibrate "
+db " HEADER Fill HERE CELL+ , ( adr_from adr_to width height ) "
+db " mov_edx,# ' Pop @ , call_edx ( height ) "
+db " mov_edi,eax "
+db " dec_edi     "
+db " call_edx ( width ) "
+db " mov_ebp,eax      "
+db " dec_ebp          "
+db " call_edx ( adr_to ) "
+db " add_eax,# 0x A2 , "
+db " mov_esi,eax       "
 
-db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
-db "                 hex, 344 set_tone hex, FFFFFFF (beep)   ;WORD "
-db 0
+db " call_edx ( adr_from ) "
+db " xchg_eax,esi       "
+db " mov_edx,ebp        "
+
+db " backward< DUP "
+db " mov_cl,[esi]       "
+db " mov_ch,# 0x 1F B, "
+db " mov_[gs:eax],cx "
+db " inc_esi         "
+db " inc_eax         "
+db " inc_eax         "
+db " dec_ebp         "
+db " jne <backward   "
+db " add_eax,# 0x A0 , "
+db " mov_ebp,edx   "
+db " sub_eax,ebp  "
+db " sub_eax,ebp  "
+db " dec_edi      "
+db " jne <backward      "
+db " ret "
+
+db " ALIGN    "
+
+db " editor FORTH32 LINK   editor CONTEXT ! "
+
+db " VARIABLE 1st_symb   BUFFER 1st_symb ! "
+db " VARIABLE cur_symb   BUFFER cur_symb ! "
+
+db " VARIABLE curpos   0x 51  curpos !    "
+db " VARIABLE curposx  0x 2   curposx !   "
+db " VARIABLE curposy  0x 2   curposy !   "
+
+db " CREATE (win)       0 , 0 , 0 ,    "
+db " WORD: win          (win) @ (win) CELL+ @ (win) CELL+ CELL+ @ ;WORD "
+
+db " WORD: xy-adr   (( x y -- addr ) hex, A0 * SWAP 2* + ;WORD "
+
+db " WORD: win_point    xy-adr (win)        ;WORD "
+db " WORD: win_width    (win)  CELL+        ;WORD "
+db " WORD: win_height   (win)  CELL+ CELL+  ;WORD "
+
+
+db ' WORD: corners       3rd  Left_upper '
+db "                     3rd 2nd 2* +  Right_upper  "
+db "                     3rd 1st hex, A0 * +  Left_lower   "
+db "                     3rd 2nd 2* + 1st hex, A0 * +  Right_lower  ;WORD "
+
+db " WORD: sides  3rd 2nd Hline "
+db "              3rd 1st hex, A0 * + 2nd Hline "
+db "              3rd 1st Vline "
+db "              3rd 2nd 2* + 1st Vline ;WORD "
+
+db " WORD: border   (( address of Left upper corner width height ) "
+db "               fix_frame  sides corners ;WORD "
+
+
+
+
+db " WORD: key  KEY eng ;WORD "
+
+db " WORD: cur_x+       curposx  @ + curposx  ! ;WORD "
+db " WORD: cur_y+       curposy  @ + curposy  ! ;WORD "
+db " WORD: curpos+      curpos   @ + curpos   !  ;WORD "
+db " WORD: cur_symb+    cur_symb @ + cur_symb !  ;WORD "
+
+db " WORD: set_to_left_border     win_width @ 1- 1- NEGATE curpos+   hex, 2      curposx !  ;WORD "
+
+db " WORD: set_to_right_border    win_width @ 1- 1- curpos+          win_width @ curposx ! ;WORD "
+
+
+db " WORD: win_size    hex, 2000 BUFFER + win_width @ 1- win_height @ 1- * - ;WORD "
+
+db " WORD: 1st_symb+   1st_symb @ + 1st_symb ! ;WORD "
+
+
+db " WORD: ?last_symb   1st_symb @  win_size win_width @ -   <  If   win_width @ 1- 1st_symb+   Else         "
+db "                                                   win_size  1- DUP HEX. 1st_symb !   Then   ;WORD "
+
+db " WORD: ?1st_symb    BUFFER win_width @ +  1st_symb @  <  If      "
+db "                             win_width @ 1- NEGATE  1st_symb+  Else       "
+db "                                                               BUFFER  1st_symb ! Then ;WORD "
+
+db " WORD: ?lower_border   curposy @  win_height @ 1+ =         "
+db "                                  If hex, 50 curpos+    Else       "
+db "                                  win_height @ curposy ! ?last_symb  Then    ;WORD "
+
+db " WORD: ?upper_border   curposy @ 1 = If hex, 50 NEGATE curpos+  Else "
+db "                                   ?1st_symb hex, 2 curposy !  Then    ;WORD "
+
+db " WORD: ?right_border   curposx @ win_width @ 1+ = If   1 curpos+  (( within borders ) Else "
+db "                                               set_to_left_border 1 cur_y+ ?lower_border  Then    ;WORD "
+
+db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
+db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
+
+;db " WORD: insert     BUFFER  hex, 2000 + cur_symb @ -  cur_symb @ DUP 1+  strcopy ;WORD "
+
+db " WORD: ?do          "
+db "           Case     "
+db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
+db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+  1 cur_symb+ ?right_border 0 EndOf       "
+db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ -1 cur_symb+ ?left_border  0 EndOf       "
+db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
+db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
+db "           DUP (( Any key) cur_symb @ DUP HEX. insert cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
+db " EndCase  SWAP Pop  ;WORD "
+
+db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;WORD "
+
+db " FORTH32 CURRENT !  "
+db "  0  0 win_point !  0x 48 win_width !  0x 14 win_height ! "
+db ' WORD: EDIT  ." editor "  Begin win DRAW key ?do Until  ;WORD '
+db " FORTH32 CONTEXT ! "
+db " EXIT "
+
 alignhe20
