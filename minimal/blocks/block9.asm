@@ -1,83 +1,98 @@
-; block 9
 
-db ' WORD: chr   HERE 1+ @  ;WORD '
-
-
-db " VOCABULARY span's "
-db " span's CURRENT ! "
-
-db " QUOTE CONSTANT QUOTE "
-db " BL CONSTANT BL  "
-db " WORD:    0x    0x       ;WORD    "
-
-db " FORTH32 CURRENT ! "
-
-db " WORD: VECTOR       HEADER [ ' BADWORD @ LIT, ] ,  0 , ;WORD "
-
-db " span's FORTH32 LINK    span's CONTEXT ! "
-db " ' chr ' BADWORD CELL+ ! "
-db " FORTH32 CONTEXT ! "
-db " span's UNLINK "
-
-db " VECTOR upper? "
-
-db " WORD:  caps_shift   [ ' upper_shift_caps  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
-db " WORD:  only_shift   [ ' upper_shift_only  LIT,  ' upper? CELL+ LIT, ] ! ;WORD "
+ ;block 8
 
 
- db " WORD: (span1)        "
- db "                       >R WITHIN R> SWAP         "     ;  here scan low high length  -- here length flag
- db " ;WORD "
+ db "  .( Interrupts setup ) "
 
- db " WORD: (span2)        "
- db "                      >R  >R      R@  hex, 4 CELLs + @   -  R>               "     ; here length
- db "                    hex, B CELLs + +  R>  upper? AND + C@ SP@ TYPEZ      "
- db " ;WORD "
+ db " interrupts FORTH32 LINK   "
+ db " interrupts CONTEXT !   "
 
-db " IMMEDIATES CURRENT ! "
+ db     " ' div_by_zero @     0x 0   make_interrupt_gate  "
+ db     " ' debug_int   @     0x 1   make_interrupt_gate  "
+ db     " ' nmi_int     @     0x 2   make_interrupt_gate  "
+ db     " ' break_int   @     0x 3   make_interrupt_gate  "
+ db     " ' overflow    @     0x 4   make_interrupt_gate  "
+ db     " ' bound_int   @     0x 5   make_interrupt_gate  "
+ db     " ' ud_int      @     0x 6   make_interrupt_gate  "
+ db     " ' nomath_int  @     0x 7   make_interrupt_gate  "
+ db     " ' df_int      @     0x 8   make_interrupt_gate  "
+ db     " ' mf_int      @     0x 9   make_interrupt_gate  "
+ db     " ' tss_int     @     0x A   make_interrupt_gate  "
+ db     " ' np_int      @     0x B   make_interrupt_gate  "
+ db     " ' ss_int      @     0x C   make_interrupt_gate  "
+ db     " ' gp_int      @     0x D   make_interrupt_gate  "
+ db     " ' pf_int      @     0x E   make_interrupt_gate  "
 
-db " WORD: span:        "
-db "                    COMPILE DUP HERE  LIT, COMPILE SWAP OVER LIT, DUP LIT, OVER OVER SWAP- 1+  LIT,   "
-db "                    COMPILE BRANCH HERE COMPILE 0    >R OVER OVER SWAP- + 1+             "
-db "                    Do    BL WORD  span's SFIND EXECUTE  B, Loop               "
-db "                    R>  THEN  COMPILE (span1)   OF  COMPILE (span2) ENDOF COMPILE Pop COMPILE Pop      "
-db " ;WORD "
+ db     " ' mf_int      @     0x 10  make_interrupt_gate  "
+ db     " ' ac_int      @     0x 11  make_interrupt_gate  "
+ db     " ' mc_int      @     0x 12  make_interrupt_gate  "
+ db     " ' xm_int      @     0x 13  make_interrupt_gate  "
+; db     " ' xm_int      @     0x 14  make_interrupt_gate  "
+ db     " ' pit_int     @     0x 20  make_interrupt_gate  "
+ db     " ' key_int     @     0x 21  make_interrupt_gate  "
+
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
 
 
- db " FORTH32 CURRENT !    "
- ;db " WORD: layout:           [ ', WORD: ]    ;WORD "
- ;db " WORD: ;layout           [ ', ;WORD ]    ;WORD "
+ db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
+ db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
- db " WORD: eng       Case  "
- db "           caps_shift "
- db '              [ 0x 10  0x 19 ]  span:  q w e r t y u i o p  Q W E R T Y U I O P         '
- db '              [ 0x 1E  0x 26 ]  span:  a s d f g h j k l    A S D F G H J K L        '
- db "              [ 0x 2C  0x 32 ]  span:  z x c v b n m        Z X C V B N M           "
+ db " WORD: CREATE      HEADER variable# , ;WORD "
 
- db "           only_shift "
+ db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
+ db " FORTH32 CURRENT !  "
+                    ;
 
- db "              [ 0x 02  0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! @ # $ % ^ & * ( ) _ +    "
- db "              [ 0x 1A  0x 1B ] span: [ ] { }               "
- db "              [ 0x 27  0x 29 ] span: ; ' `   : QUOTE  ~     "
- db "              [ 0x 2B  0x 2B ] span:  \ |                    "
- db "              [ 0x 33  0x 35 ] span: , . / < > ?            "
- db "              [ 0x 39  0x 39 ] span:  BL BL               "
- db " hex, 100 * EndCase ;WORD "
+ db " ALIGN     "
+
+ db " HEADER KEY        HERE CELL+ , "
+ db " mov_d[],#  key  , 0x 0 ,    "
+ db " backward< "
+ db " hlt       "
+ db " cmp_d[],#  key , 0x 0 , "
+ db " je <backward  "
+ db " mov_eax,[]  key  , "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER upper_shift_only   HERE CELL+ , "
+ db " movsx_eax,b[] key_flags 1+ ,    "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER upper_shift_caps   HERE CELL+ , "
+ db " movsx_eax,b[] key_flags 1+ ,    "
+ db " movsx_ebx,b[] key_flags  ,    "
+ db " xor_eax,ebx   "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " FORTH32 CONTEXT ! "
+ db " WORD: EMIT      SP@ TYPEZ Pop            ;WORD "
+ db " WORD: CRLF      hex, 0D0A EMIT           ;WORD "
+ db " WORD: CR        hex, 0D   EMIT           ;WORD "
+ db " WORD: SPACE     BL EMIT                  ;WORD "
 
 
-;db " WORD: rus_win1251 "
-;db "          caps_shift "
-;db "              [  0x 10 0x 1B ] span: é ö ó ê å í ã ø ù ç õ ú  É Ö Ó Ê Å Í Ã Ø Ù Ç Õ Ú "
-;db "              [  0x 1E 0x 29 ] span: ô û â à ï ð î ë ä æ ý ¸  Ô Û Â À Ï Ð Î Ë Ä Æ Ý ¨ "
-;db "              [  0x 2C 0x 34 ] span: ÿ ÷ ñ ì è ò ü á þ        ß × Ñ Ì È Ò Ü Á Þ "
-;db "         only_shift "
-;db "              [ 0x 02 0x 0D ] span: 1 2 3 4 5 6 7 8 9 0 - =  ! QUOTE ¹ ; % : ? * ( ) _ + "
-;db "              [ 0x 35 0x 35 ] span: . , "
-;db "              [ 0x 39 0x 39 ] span: BL BL  "
-;db " ;WORD "
+ db " VARIABLE frame "
+ db " WORD: fix_frame   SP@ frame !                 ;WORD "
+ db " WORD: 1st         frame @ @                   ;WORD "
+ db " WORD: 2nd         frame @ CELL- @             ;WORD "
+ db " WORD: 3rd         frame @ CELL- CELL- @       ;WORD "
+ db " WORD: 4th         frame @ CELL- CELL- CELL- @ ;WORD "
+ db " WORD: 5th         frame @ hex, 5 - @          ;WORD "
+ db " WORD: 1st+        1st + frame @ !             ;WORD "
+ db " WORD: 2nd+        2nd + frame @ CELL- !       ;WORD "
 
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
+ db " EXIT "
 
-db " EXIT "
 db     0
  alignhe20
