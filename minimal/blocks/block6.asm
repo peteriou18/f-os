@@ -1,169 +1,246 @@
 
- ;block 6
- ; lit# set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
- ; ," make_badword   make_exit  VOCABULARY NOOP compiler  (
- ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
- ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
- db " ASSEMBLER FORTH32 LINK    "
+ ;block 5    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
+ ;           SWAP OVER NEGATE CELLs strcopy clear
+
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
- db " HEADER lit#       HERE CELL+ ,        "
+
+ db " HEADER COMPILE       HERE CELL+ ,        "
  db " mov_eax,[esp+4]                        "
  db " mov_eax,[eax+4]          "
  db " mov_edx,#  ' Push @ ,           call_edx      "
  db " add_d[esp+4],4      "
+ db " mov_edx,# ' , @ ,  call_edx "
  db " ret    "
 
  db " ALIGN    "
+ db " HEADER BRANCH          HERE   CELL+ , "
+ db " mov_eax,[esp+4]                        "
+ db " mov_eax,[eax+4]          "
+ db " mov_[esp+4],eax     "
+ db " ret    "
 
- db " HEADER set_cursor HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_ecx,eax "
-db " mov_edx,# 0x 3D4 , "
-db " mov_eax,# 0x 030F , "
-db " mov_ah,cl "
-db " out_dx,ax "
-db " mov_eax,# 0x 040E , "
-db " mov_ah,ch "
-db " out_dx,ax "
-db " ret "
-db " ALIGN    "
+ db " ALIGN "
 
- db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
+ db " HEADER ?OF          HERE   CELL+ , "
+ db " mov_ecx,[esp+4]                        " ; addrr interpr point
+ db " mov_ebp,[ecx+4]          "               ; branch value
+ db " add_ecx,4     "                          ; next cell
+ db " mov_edx,#  ' Pop @ ,            call_edx      "
+ db " test_eax,eax "
+ db " cmove_ecx,ebp     " ; if false-> branch
+ db " mov_eax,ecx       "
+ db " mov_[esp+4],ecx     "
+ db " ret    "
 
- db " HEADER CONSTANT   interpret# ,           "
- db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
+ db " ALIGN "
 
- db " 0x 0        CONSTANT 0      "
- db " 0x 1        CONSTANT 1      "
- db " 0x FFFFFFFF CONSTANT -1 "
- db " 0x 20       CONSTANT BL     "
- db " 0x 29       CONSTANT )      "
- db " 0x 22       CONSTANT QUOTE     "
+ db " HEADER ?BRANCH         HERE   CELL+ , "
+ db " mov_ecx,[esp+4]         " ; addrr interpr point
+ db " mov_ebp,[ecx+4]          "               ; branch value
+ db " add_ecx,4     "                          ; next cell
+ db " mov_edx,#  ' Pop @ ,   call_edx      "
+ db " test_eax,eax "
+ db " cmovne_ecx,ebp     " ; if true-> branch
+ db " mov_eax,ecx       "
+ db " mov_[esp+4],ecx     "
+ db " ret    "
 
- db " HEADER VARIABLE   interpret# ,    "
- db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
+ db " ALIGN "
 
- db " HEADER LIT,  interpret# , "
- db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
+ db " HEADER AND        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " and_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
 
- db " HEADER ;Word     interpret# ,   ' EXIT LIT,  ' , ,    ' EXIT , "
+ db " ALIGN                    "
 
- db " HEADER Word:     interpret# ,  "
- db "        ' HEADER , ' interpret# ,  ' , ,  ;Word "
-
-
- db " Word: 0x,     ' 0x ,  '  LIT, ,    ;Word "
-
- db " Word: ',      ' ' ,  ' , ,  ;Word       "
-
- db " Word: WORD       ', BLOCK  ', CELL+  ', CELL+  ', @  ', HERE  ', (WORD)  ;Word  "
-
-
-
- db " Word: .(   ', )  ', WORD  ', HERE  ', 1+  ', TYPEZ  ;Word "
-
- db " Word: PAD          0x, HERE 0x, 200  ', +   ;Word "
-
- db " Word: Word+       ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD)  ;Word  "
-
- db ' Word: S"  '
- db "  ', QUOTE  ', BLOCK  ', CELL+  ', CELL+  ', @  ', PAD  ', (WORD) ', PAD  ;Word "
-
- db ' Word: ,"  '
- db " ', lit#  ', SLIT   ', ,  ', HERE  ', QUOTE  ', WORD  ', C@ ', 1+ ', 1+ ', ALLOT    ;Word "
-
- db " Word: make_badword          "
- db ' ," BADWORD"   '
- db "  ', DUP  "
- db "  ', HERE ', strcopy  ', C@ ', CELL+ ', ALLOT "
- db " 0x, 0 ', , ', lit#  ' BADWORD @ ,  ', , ', lit# ', ABORT ', , ;Word  "
-
- db " Word: make_exit           "
- db ' ," EXIT" '
- db "  ', DUP  "
- db "  ', HERE ', strcopy  ', C@ ', CELL+  ', ALLOT "
- db " ', ,  ', lit#  ', EXIT ', ,  ;Word  "
+ db " HEADER =        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                 "
+ db " cmp_eax,ebp          "
+ db " sete_al            "
+ db " and_eax,# 0x FF , "
+ db " neg_eax   "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
 
 
- db " Word: VOCABULARY               "
- db " ', VARIABLE   ', HERE ', CELL- "
- db " ', HERE ', make_badword        "
- db " ', HERE  ', >R  ', make_exit   "
- db " ', R>  ', SWAP!          ;Word "
+ db " ALIGN                    "
 
- db " Word: NOOP        ;Word     "
+ db " HEADER <>        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                          "
+ db " cmp_eax,ebp          "
+ db " setne_al            "
+ db " and_eax,# 0x FF , "
+ db " neg_eax   "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
 
- db " Word: compiler    ', CONTEXT ', @ ', SFIND ', ,  ;Word "
+ db " ALIGN  "
 
- db " Word: (           ', )  ', WORD ;Word "
+ db " HEADER <        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                          "
+ db " cmp_eax,ebp          "
+ db " seta_al            "
+ db " and_eax,# 0x FF , "
+ db " neg_eax   "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
 
- db " Word: BEGIN    ', HERE ', CELL-   ;Word       "
- db " Word: AGAIN    ', lit#    '  BRANCH ,  ', , ', , ;Word "
- db " Word: UNTIL    ', lit#    ' ?OF ,  ', , ', , ;Word "
+ db " ALIGN                    "
 
- db " Word: IF       ', lit#    ' ?BRANCH ,  ', ,    ', HERE  0x, 0 ', , ;Word   "
- db " Word: THEN     ', HERE    ', CELL- ', SWAP!  ;Word "
- db " Word: ELSE     ', lit#    ' BRANCH ,  ', ,   ', HERE ', >R   0x, 0 ', ,    ', HERE ', CELL-  ', SWAP! ', R>   ;Word   "
+ db " HEADER stop HERE CELL+ , "
+ db " hlt "
+ db " ret "
 
- db " Word: ENDOF       ',   COMPILE ', BRANCH  ', HERE ', >R  ', COMPILE ', 0 ', THEN  ', R> ;Word "
- db " Word: OF          ',   COMPILE ', ?OF     ', HERE        ', COMPILE ', 0                ;Word "
+ db " ALIGN                    "
+
+ db " HEADER break HERE CELL+ , "
+ db  " add_d[esp+],# 0x 10 , 0x 8 , "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER exec_point          HERE CELL+ ,                   "
+ db " mov_eax,[esp+C]              "
+ db " mov_edx,#  ' Push @ ,           call_edx        "
+ db " ret                   "
+
+ db " ALIGN  "
+
+ db " HEADER WITHIN     HERE CELL+ , "      ; x low high
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_esi,eax "
+ db " call_edx    "
+ db " mov_edi,eax "
+ db " call_edx    "
+ db " xor_ebx,ebx "
+ db " xor_ecx,ecx "
+ db " cmp_eax,edi "
+ db " setnc_bl    "
+ db " cmp_eax,esi "
+ db " setbe_cl    "
+ db " xor_eax,eax "
+ db " and_ebx,ecx "
+ db " sub_eax,ebx "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER rWITHIN     HERE CELL+ , "      ;  low high x
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " mov_edi,eax "
+ db " call_edx    "
+ db " mov_esi,eax "
+ db " xor_ebx,ebx "
+ db " xor_ecx,ecx "
+ db " mov_eax,ebp "
+ db " cmp_eax,edi "
+ db " setnc_bl    "
+ db " cmp_eax,esi "
+ db " setc_cl    "
+ db " xor_eax,eax "
+ db " and_ebx,ecx "
+ db " sub_eax,ebx "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER SP@ HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebx "
+ db " add_eax,# 0x 80000 , "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER SWAP HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " xchg_eax,ebp "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebp "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
+
+ db " HEADER OVER HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx   "
+ db " mov_ebp,eax "
+ db " call_edx    "
+ db " mov_ecx,eax "
+ db " mov_edx,# ' Push @ , call_edx   "
+ db " mov_eax,ebp "
+ db " call_edx "
+ db " mov_eax,ecx "
+ db " call_edx "
+ db " ret "
+
+ db " ALIGN      "
 
 
- db " VOCABULARY IMMEDIATES "
- db " IMMEDIATES CURRENT !  "
+ db " HEADER NEGATE         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " neg_eax            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
 
- db " Word: ;WORD    ', lit#  ' EXIT ,  ', ,  ', break ;Word  "
-
- db " FORTH32 CURRENT ! "
- db " IMMEDIATES FORTH32 LINK "
-
-
- db " IMMEDIATES CONTEXT ! "
-
- db " ' compiler  ' BADWORD CELL+ !   "
-
- db " FORTH32 CONTEXT !   IMMEDIATES UNLINK "
-
- db " Word: WORD: "
- db " ', Word:  BEGIN ', PARSE ', IMMEDIATES ', SFIND  ', EXECUTE   AGAIN  ;Word "
+ db " ALIGN    "
 
 
- db " IMMEDIATES CURRENT ! "
+ db " HEADER CELLs         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " shl_eax,2            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
 
- db " WORD: [   IMMEDIATES CONTEXT @ LINK       ;WORD "
- db " WORD: ]   IMMEDIATES UNLINK     ;WORD "
+ db " ALIGN    "
 
- db ' WORD: ."      ," '
- db " COMPILE 1+    COMPILE TYPEZ  ;WORD "
+ db " HEADER strcopy            HERE CELL+ ,                      "
+ db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
+ db " mov_edi,eax        "
+ db " mov_edx,#  ' Pop @ ,            call_edx         "   ; copy from
+ db " mov_esi,eax                "
+ db " movzx_ecx,b[esi]            "     ;counter
+ db " shr_ecx,2                "
+ db " inc_ecx           "
+ db " cld               "
+ db " rep_movsd                       "
+ db " ret      "
 
- db " WORD: .((     .(              ;WORD "
- db " WORD: ((   ) WORD             ;WORD   "
+ db " ALIGN    "
 
+ db " HEADER clear            HERE CELL+ ,                      "
+ db " mov_edx,#  ' Pop @ ,  call_edx      "   ; addr
+ db " mov_edi,eax        "
+ db " mov_edx,#  ' Pop @ ,    call_edx         "   ; count in bytes
+ db " mov_ecx,eax                "
+ db " xor_eax,eax                "
+ db " cld               "
+ db " rep_stosb                  "
+ db " ret      "
 
- db " WORD: Begin       BEGIN  ;WORD "
- db " WORD: Until       UNTIL  ;WORD "
- db " WORD: Again       AGAIN  ;WORD "
- db " WORD: If          IF     ;WORD "
- db " WORD: Then        THEN   ;WORD "
- db " WORD: Else        ELSE   ;WORD "
-
- db " WORD: hex,        0x,     ;WORD "
-
- db " WORD: Case       hex,  0  ;WORD "
- db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
- db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
- db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
-             ;
- db " WORD: Do        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
- db " WORD: Loop      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
- db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
-
-
-
- db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
+ db " ALIGN    "
+ db " FORTH32 CONTEXT ! FORTH32 CURRENT !     "
 
  db " EXIT "
- db  0
 
+ db     0
  alignhe20
