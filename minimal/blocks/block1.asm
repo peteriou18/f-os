@@ -5,8 +5,10 @@
  db     " 0x 6 LOAD        0x 7 LOAD      "
  db     " 0x 8 LOAD        0x 9 LOAD      "
  db     " 0x A LOAD        0x B LOAD      "
+ db     " 0x C LOAD        "
 
  db     " .( End of loads)   "
+
 
  db     "  FORTH32 CURRENT ! FORTH32 CONTEXT ! "
  db     '  WORD: badw      ." Very bad Word:" HERE 1+ TYPEZ CRLF ;WORD '
@@ -17,6 +19,7 @@
  db     "  VARIABLE tib#  tibsize 0x 10 *  ALLOT     "
  db     "  WORD: tib      tib# tib$  @ +   ;WORD "
 
+ db     " tibsize tib# clear "
 
  db     " WORD: set_console_input  0 BLOCK ! tibsize BLOCK CELL+ !  "
  db     '                        tib 1+  BLOCK CELL+ CELL+  !               ;WORD '
