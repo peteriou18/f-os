@@ -205,8 +205,6 @@ db "                                               set_to_left_border 1 cur_y+ ?
 db " WORD: ?left_border   curposx @  1      = If  -1 curpos+  (( within borders ) Else "
 db "                                           set_to_right_border -1 cur_y+ ?upper_border Then  ;WORD "
 
-;db " WORD: insert     BUFFER  hex, 2000 + cur_symb @ -  cur_symb @ DUP 1+  strcopy ;WORD "
-
 db " WORD: ?do          "
 db "           Case     "
 db "           DUP hex, 0100 = Of (( Escape) -1 EndOf "
@@ -215,6 +213,7 @@ db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ -1 cur_symb+ ?left_border
 db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
 db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
 db "           DUP hex, 5300 = Of (( delete ) cur_symb @ delete   0 EndOf       "
+db "           DUP hex, 0E00 = Of (( backspace ) cur_symb @ delete -1 cur_symb+ ?left_border  0 EndOf       "
 db "           DUP (( Any key) cur_symb @  insert cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
 db " EndCase  SWAP Pop  ;WORD "
 
