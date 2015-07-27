@@ -1,4 +1,4 @@
-; block A editor
+; block b editor
 db " FORTH32 CURRENT ! FORTH32 CONTEXT !   "
 
 db " VOCABULARY editor "
@@ -23,7 +23,6 @@ db " ALIGN    "
 db " HEADER insert HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;addr
 db " mov_esi,# 0x 3FFE , "
-;db " add_esi,eax "
 db " mov_edi,# 0x 3FFF , "
 db " sub_eax,edi     "
 db " neg_eax         "
@@ -33,6 +32,19 @@ db " rep_movsb "
 db " ret "
 db " ALIGN    "
 
+db " HEADER delete HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;addr
+db " mov_esi,eax "
+db " mov_edi,eax "
+db " inc_esi     "
+db " mov_ecx,# 0x 3FFF , "
+db " sub_ecx,eax     "
+;db " neg_eax         "
+;db " mov_ecx,eax "
+db " cld         "
+db " rep_movsb "
+db " ret "
+db " ALIGN    "
 
 db " HEADER Left_upper HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx "
@@ -202,7 +214,8 @@ db "           DUP hex, 4D00 = Of (( Right )  1 cur_x+  1 cur_symb+ ?right_borde
 db "           DUP hex, 4B00 = Of (( Left  ) -1 cur_x+ -1 cur_symb+ ?left_border  0 EndOf       "
 db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ ?lower_border 0 EndOf   "
 db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
-db "           DUP (( Any key) cur_symb @ DUP HEX. insert cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
+db "           DUP hex, 5300 = Of (( delete ) cur_symb @ delete   0 EndOf       "
+db "           DUP (( Any key) cur_symb @  insert cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
 db " EndCase  SWAP Pop  ;WORD "
 
 db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;WORD "
