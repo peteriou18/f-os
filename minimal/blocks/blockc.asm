@@ -1,13 +1,53 @@
+; block c
+
 db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
 db " VARIABLE apic_ticks  "
-db " VARIABLE testf       "
+db " VARIABLE pci_adr       "
 
 db " FORTH32 CURRENT ! ASSEMBLER CONTEXT ! "
 db " ASSEMBLER FORTH32 LINK "
 
-db " HEADER init_apic_timer HERE CELL+ , "
-db " mov_d[],# 0x 0FEE00320 , 0x 20030 , "
+db " HEADER pci_register HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " shl_eax,2 "
+db " and_eax,# 0x FC ,  "
+db " or_[],eax pci_adr , "
+db " ret "
+db " ALIGN "
+
+db " HEADER pci_device HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " shl_eax,# 0x B B, "
+db " and_eax,# 0x F800 ,  "
+db " or_[],eax pci_adr , "
+db " ret "
+db " ALIGN "
+
+db " HEADER pci_bus HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " shl_eax,# 0x 10 B, "
+db " and_eax,# 0x FF0000 ,  "
+db " or_[],eax pci_adr , "
+db " ret "
+db " ALIGN "
+
+db " HEADER pci_function HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " shl_eax,# 0x 8 B, "
+db " and_eax,# 0x 700 ,  "
+db " or_[],eax pci_adr , "
+db " ret "
+db " ALIGN "
+
+db " HEADER pci_read HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " or_eax,# 0x 80000000 , "
+db " mov_edx,# 0x CF8 ,   "
+db " out_dx,eax   "
+db " mov_edx,# 0x CFC ,   "
+db " in_eax,dx "
+db " mov_edx,# ' Push @ , call_edx " ;
 db " ret "
 db " ALIGN "
 
@@ -16,9 +56,7 @@ db " mov_eax,# 0x 36 , " ;set PIT CH0  mode
 db " mov_edx,# 0x 43 ,  "
 db " out_dx,al          "
 db " xor_eax,eax        "
-;db " mov_edx,# 0x 21 ,  "
 db " mov_d[],#  0x 4C0 , 0x FBF0 , "
-;db " out_dx,al         "
 db " ret "
 db " ALIGN "
 
@@ -39,7 +77,6 @@ db " out_dx,al "
 db " mov_al,ch "
 db " out_dx,al "
 db " mov_d[],# 0x  0FEE00380 , 0x FFFFFFFF ,  "
-;db " mov_edx,# ' Push @ , call_edx "
 db " mov_d[],#  apic_ticks , 0x 0 ,       "
 db " mov_d[],# 0x 0B8140 , 0x 40404040 , "
 db " ret "
@@ -96,6 +133,7 @@ db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
 ;db " init_apic_timer init_PIT 0 start_timer "
 ;db " WORD: apic_calibrate  0   0 hex, 20   Do apic_ticks @ DUP HEX. + Loop  HEX.  ;WORD "
 ;db " apic_calibrate "
+db " WORD: pci_buses 0 hex, 3F Do R@ pci_bus pci_adr @ pci_read DUP -1 = If HEX. Else Pop Then Loop ;WORD "
 
 db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
 db "                 hex, 344 set_tone hex, FFFFFFF (beep)   ;WORD "
