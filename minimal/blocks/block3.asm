@@ -28,6 +28,7 @@
 
  db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
  db     "                   0x E0 0x D1 0x 2 opcode shl_eax,1                 "
+ db     "                   0x E0 0x C1 0x 2 opcode shl_eax,#                 "
  db     "                   0x E8 0x D1 0x 2 opcode shr_eax,1                 "
  db     "                   0x C5 0x 89 0x 2 opcode mov_ebp,eax               "
  db     "                   0x C1 0x 89 0x 2 opcode mov_ecx,eax               "
@@ -61,6 +62,7 @@
  db     "                   0x F8 0x 29 0x 2 opcode sub_eax,edi               "
  db     "                   0x C5 0x 2B 0x 2 opcode sub_eax,ebp               "
  db     "                   0x 05 0x 2B 0x 2 opcode sub_eax,[]                "
+ db     "                   0x C1 0x 29 0x 2 opcode sub_ecx,eax               "
  db     "                   0x 05 0x 29 0x 2 opcode sub_[],eax                "
  db     "                   0x 05 0x FF 0x 2 opcode inc_d[]                   "
  db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
@@ -68,6 +70,7 @@
  db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "
  db     "                   0x D8 0x 31 0x 2 opcode xor_eax,ebx               "
  db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
+ db     "                   0x 05 0x 09 0x 2 opcode or_[],eax                 "
  db     "                   0x 0D 0x 81 0x 2 opcode or_d[],#                  "
  db     "                   0x 25 0x 81 0x 2 opcode and_d[],#                 "
  db     "                   0x E8 0x 39 0x 2 opcode cmp_eax,ebp               "
