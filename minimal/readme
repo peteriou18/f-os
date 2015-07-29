@@ -51,12 +51,15 @@ ASSEMBLER - vocabulary for opcodes by default based on FORTH32
 opcode - define opcode name.
 
 Block1 (under construction)
-Loads and tests
+Loads, dialogue and tests
 
 Block2 (under construction)
-1, 2 bytes opcodes.
+1 byte opcodes.
 
 Block3
+2 bytes opcodes.
+
+Block4
 3, 4, 5 bytes opcodes.
 
 Block4
