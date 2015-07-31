@@ -5,10 +5,10 @@
  db     " 0x 6 LOAD        0x 7 LOAD      "
  db     " 0x 8 LOAD        0x 9 LOAD      "
  db     " 0x A LOAD        0x B LOAD      "
- db     " 0x C LOAD        "
+ db     " 0x C LOAD        0x D LOAD      "
 
  db     " .( End of loads)   "
-
+ db     " 0x F0F0 0x 4C0 !    init_rtc "
 
  db     "  FORTH32 CURRENT ! FORTH32 CONTEXT ! "
  db     '  WORD: badw      ." Very bad Word:" HERE 1+ TYPEZ CRLF ;WORD '
