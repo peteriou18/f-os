@@ -1,5 +1,5 @@
 
- ;block 7        key  key_flags idtr interrupts forward> >forward backward< <backward
+ ;block 8        key  key_flags idtr interrupts forward> >forward backward< <backward
  ;               make_interrupt_gate
  db " FORTH32 CURRENT !  "
 
@@ -308,6 +308,72 @@
 
  db " ALIGN      "
 
+db " HEADER slave_int HERE CELL+ , "
+db " pushad "
+db " eois "
+db " eoi "
+db " popad "
+db " iretd "
+
+db " HERE HERE HERE "
+db " xor_ecx,ecx    "
+db " mov_cl,al  "
+db " mov_ah,# 0x 1F B, "
+db " mov_ch,ah   "
+db " and_al,# 0x F B, "
+db " or_al,#  0x 30 B,  "
+
+db " and_cl,# 0x F0 B, "
+db " shr_cl,# 0x 4 B,   "
+db " or_cl,# 0x 30 B, "
+db " shl_eax,# 0x 10 B, "
+db " or_eax,ecx   "
+db " mov_[edi],eax "
+
+db " ret "
+db " ALIGN "
+
+db " HEADER rtc_int HERE CELL+ , "
+db " pushad "
+db " mov_edi,# 0x B8010 , " ; 0x B8EF0 , "
+db " mov_edx,# 0x 70 ,   "
+db " mov_eax,# 0x 4 ,    "
+db " out_dx,al "
+db " inc_edx     "
+db " in_al,dx   "
+db " mov_edx,# , call_edx "
+
+db " add_edi,b# 0x 4 B,       "
+db " mov_w[edi],# 0x 3A B, 0x 1F B, "
+
+db " add_edi,b# 0x 2 B,   "
+db " mov_edx,# 0x 70 ,   "
+db " mov_eax,# 0x 2 ,    "
+db " out_dx,al "
+db " inc_edx     "
+db " in_al,dx   "
+db " mov_edx,# ,  call_edx "
+
+db " add_edi,b# 0x 4 B,       "
+db " mov_w[edi],# 0x 3A B, 0x 1F B, "
+
+db " add_edi,b# 0x 2 B,   "
+db " mov_edx,# 0x 70 ,   "
+db " mov_eax,# 0x 0 ,    "
+db " out_dx,al "
+db " inc_edx     "
+db " in_al,dx   "
+db " mov_edx,# , call_edx "
+db " mov_edx,# 0x 70 ,    "
+db " mov_eax,# 0x C , "
+db " out_dx,al "
+db " inc_edx   "
+db " in_al,dx "
+db " eoi  "
+db " eois "
+db " popad "
+db " iretd "
+db " ALIGN "
 
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
