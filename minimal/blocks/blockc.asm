@@ -8,10 +8,46 @@ db " VARIABLE pci_adr       "
 db " FORTH32 CURRENT ! ASSEMBLER CONTEXT ! "
 db " ASSEMBLER FORTH32 LINK "
 
+db " HEADER port@ HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " mov_edx,eax "
+db " in_eax,dx  "
+db " mov_edx,# ' Push @ , call_edx " ;
+db " ret "
+db " ALIGN "
+
+db " HEADER port! HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ; port
+db " mov_ecx,eax "
+db " call_edx " ;data
+db " mov_edx,ecx        "
+db " out_dx,eax  "
+db " ret "
+db " ALIGN "
+
+db " HEADER bport@ HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " mov_edx,eax "
+db " xor_eax,eax "
+db " in_al,dx  "
+db " mov_edx,# ' Push @ , call_edx " ;
+db " ret "
+db " ALIGN "
+
+db " HEADER bport! HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ; port
+db " mov_ecx,eax "
+db " call_edx " ;data
+db " mov_edx,ecx        "
+db " out_dx,al  "
+db " ret "
+db " ALIGN "
+
 db " HEADER pci_register HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
-db " shl_eax,2 "
+db " shl_eax,# 0x 2 B, "
 db " and_eax,# 0x FC ,  "
+db " and_d[],# pci_adr , 0x FC NOT , "
 db " or_[],eax pci_adr , "
 db " ret "
 db " ALIGN "
@@ -20,6 +56,7 @@ db " HEADER pci_device HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
 db " shl_eax,# 0x B B, "
 db " and_eax,# 0x F800 ,  "
+db " and_d[],# pci_adr , 0x F800 NOT , "
 db " or_[],eax pci_adr , "
 db " ret "
 db " ALIGN "
@@ -28,6 +65,7 @@ db " HEADER pci_bus HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
 db " shl_eax,# 0x 10 B, "
 db " and_eax,# 0x FF0000 ,  "
+db " and_d[],# pci_adr , 0x FF0000 NOT , "
 db " or_[],eax pci_adr , "
 db " ret "
 db " ALIGN "
@@ -36,6 +74,7 @@ db " HEADER pci_function HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
 db " shl_eax,# 0x 8 B, "
 db " and_eax,# 0x 700 ,  "
+db " and_d[],# pci_adr , 0x 700 NOT , "
 db " or_[],eax pci_adr , "
 db " ret "
 db " ALIGN "
@@ -86,21 +125,17 @@ db " ALIGN "
 
 
 db " HEADER stop_beep HERE CELL+ , "
+db " pushad "
 db " mov_edx,# 0x 61 , "
 db " in_al,dx  "
 db " and_eax,# 0x 0FFFFFFFC ,    "
 db " out_dx,al                "
 db " mov_d[],# 0x 0FEE000B0 , 0x 42424242 , "
 db " eoi   "
+db " popad "
 db " iretd "
 db " ALIGN "
 
-db " HEADER on_apic_timer HERE CELL+ , "
-db " add_[],eax 0x B8148 , "
-;db " add_d[],# 0x 0B8148 , 0x 42424242 , "
-db " mov_d[],# 0x 0FEE000B0 , 0x 42424242 , "
-db " iretd "
-db " ALIGN "
 
 db " HEADER set_tone HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
@@ -133,9 +168,11 @@ db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
 ;db " init_apic_timer init_PIT 0 start_timer "
 ;db " WORD: apic_calibrate  0   0 hex, 20   Do apic_ticks @ DUP HEX. + Loop  HEX.  ;WORD "
 ;db " apic_calibrate "
-db " WORD: pci_buses 0 hex, 3F Do R@ pci_bus pci_adr @ pci_read DUP -1 = If HEX. Else Pop Then Loop ;WORD "
+db " WORD: pci_buses 0 hex, 3F Do R@ pci_bus pci_adr @ pci_read DUP -1 = If R@ HEX. HEX. Else Pop Then Loop ;WORD "
+db ' WORD: pci_registers 0 hex, 3F Do R@ pci_register pci_adr @ pci_read DUP -1 = If R@ HEX. ." :: " HEX. SPACE SPACE Else Pop Then Loop ;WORD '
+db " WORD: pcr           0 hex, 3F Do R@ HEX. R@ pci_register pci_adr @ HEX. Loop ;WORD "
 
 db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
-db "                 hex, 344 set_tone hex, FFFFFFF (beep)   ;WORD "
+db "                 hex, 344 set_tone hex, FFFFFF (beep)   ;WORD "
 db 0
 alignhe20
