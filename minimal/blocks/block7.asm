@@ -1,5 +1,5 @@
 
- ;block 6
+ ;block 7
  ; lit# set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
  ; ," make_badword   make_exit  VOCABULARY NOOP compiler  (
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
@@ -162,6 +162,11 @@ db " ALIGN    "
 
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
+
+ db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
+ db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+
+ db " WORD: CREATE      HEADER variable# , ;WORD "
 
  db " EXIT "
  db  0
