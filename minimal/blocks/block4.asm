@@ -1,5 +1,5 @@
 
-;block 3    opcodes   3, 4, 5
+;block 4    opcodes   3, 4, 5
 
  db     "       ASSEMBLER CURRENT !  ASSEMBLER CONTEXT  !                     "
 
@@ -41,6 +41,7 @@
  db     "             0x 24 0x 84 0x 81 0x 3 opcode add_d[esp+],#             "
  db     "             0x C2 0x 10 0x 00 0x 3 opcode retn_10h                  "
  db     "             0x 0D 0x 01 0x 0F 0x 3 opcode sidt_[]                   "
+ db     "             0x 07 0x C7 0x 66 0x 3 opcode mov_w[edi],#              "
 
  db     "       0x 05 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm0,[]            "
  db     "       0x 15 0x 6F 0x 0F 0x F3 0x 4 opcode movdqu_xmm2,[]            "
@@ -80,7 +81,9 @@
  db     "       0x 00 0x C7 0x 66 0x 65 0x 4 opcode mov_w[gs:eax],#               "
  db     "       0x 08 0x 89 0x 66 0x 65 0x 4 opcode mov_[gs:eax],cx               "
 
+
  db     "       0x 20 0x E6 0x 20 0x B0 0x 4 opcode eoi                           "
+ db     "       0x A0 0x E6 0x 20 0x B0 0x 4 opcode eois                          "
 
  db     " 0x 04 0x 04 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+4],4                "
  db     " 0x 08 0x 10 0x 24 0x 44 0x 83 0x 5 opcode add_d[esp+10],8                "
