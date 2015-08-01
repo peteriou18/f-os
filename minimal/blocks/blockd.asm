@@ -78,6 +78,15 @@ db " mov_edx,# , call_edx "
 db " ret "
 db " ALIGN "
 
+db " HEADER init_rtc HERE CELL+ , "
+db " mov_eax,# 0x B , "
+db " mov_edx,# 0x 70 , "
+db " out_dx,al "
+db " inc_edx "
+db " mov_eax,# 0x 42 , "
+db " out_dx,al      "
+db " ret "
+
 db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
 
 ;db " ' on_timer @ 0x 20 make_interrupt_gate "
