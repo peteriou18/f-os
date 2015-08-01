@@ -29,6 +29,7 @@ db " neg_eax         "
 db " mov_ecx,eax "
 db " std         "
 db " rep_movsb "
+;db " cld       "
 db " ret "
 db " ALIGN    "
 
@@ -214,7 +215,8 @@ db "           DUP hex, 5000 = Of (( Down  )  1 cur_y+ win_width @ 1- cur_symb+ 
 db "           DUP hex, 4800 = Of (( Up    ) -1 cur_y+ win_width @ 1- NEGATE cur_symb+ ?upper_border 0 EndOf   "
 db "           DUP hex, 5300 = Of (( delete ) cur_symb @ delete   0 EndOf       "
 db "           DUP hex, 0E00 = Of (( backspace ) cur_symb @ delete -1 cur_symb+ ?left_border  0 EndOf       "
-db "           DUP (( Any key) cur_symb @  insert cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
+db "           DUP hex, 5100 = Of (( PageDown ) win_height @ 1- cur_y+ win_width @ 1- win_height @ 1- * cur_symb+ ?lower_border 0 EndOf       "
+db "           DUP (( Any key)  cur_symb @  insert  cur_symb @ C!  1 cur_x+ 1 cur_symb+ ?right_border 0   "
 db " EndCase  SWAP Pop  ;WORD "
 
 db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;WORD "
@@ -222,6 +224,8 @@ db " WORD: DRAW   border 1st_symb @ win Fill curpos @  set_cursor Pop Pop Pop ;W
 db " FORTH32 CURRENT !  "
 db "  0  0 win_point !  0x 48 win_width !  0x 14 win_height ! "
 db ' WORD: EDIT  ." editor "  Begin win DRAW key ?do Until  ;WORD '
+db " WORD: load  BUFFER rdblock ;WORD "
+db " WORD: save  BUFFER wrblock ;WORD "
 db " FORTH32 CONTEXT ! "
 db " EXIT "
 
