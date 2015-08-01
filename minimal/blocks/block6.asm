@@ -1,5 +1,5 @@
 
- ;block 5    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
+ ;block 6    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
  ;           SWAP OVER NEGATE CELLs strcopy clear
 
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
@@ -199,6 +199,15 @@
  db " HEADER NEGATE         HERE CELL+ ,       "
  db " mov_edx,#  ' Pop @ ,            call_edx       "
  db " neg_eax            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
+
+ db " HEADER NOT         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " not_eax            "
  db " mov_edx,#  ' Push @ ,           call_edx           "
  db " ret        "
 
