@@ -1,5 +1,5 @@
 
- ;block 8
+ ;block 9
 
 
  db "  .( Interrupts setup ) "
@@ -30,15 +30,16 @@
 ; db     " ' xm_int      @     0x 14  make_interrupt_gate  "
  db     " ' pit_int     @     0x 20  make_interrupt_gate  "
  db     " ' key_int     @     0x 21  make_interrupt_gate  "
-
+ db     " ' slave_int   @     0x 22  make_interrupt_gate  "
+ db     " ' rtc_int     @     0x 28  make_interrupt_gate  "
  db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
 
 
- db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
- db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+; db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
+; db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
- db " WORD: CREATE      HEADER variable# , ;WORD "
+; db " WORD: CREATE      HEADER variable# , ;WORD "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
