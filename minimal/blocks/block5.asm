@@ -1,4 +1,4 @@
-; block 4   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
+; block 5   CELL-  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
  ;   2HEX.  HEX. - SWAP- +  TIMER@  lit# 1+ 1- 2* 2/ C@ C! ALLOT SLIT  DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
