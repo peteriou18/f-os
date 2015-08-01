@@ -1,4 +1,4 @@
-; block 9
+; block a
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
 
