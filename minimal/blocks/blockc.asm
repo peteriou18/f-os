@@ -168,9 +168,22 @@ db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
 ;db " init_apic_timer init_PIT 0 start_timer "
 ;db " WORD: apic_calibrate  0   0 hex, 20   Do apic_ticks @ DUP HEX. + Loop  HEX.  ;WORD "
 ;db " apic_calibrate "
-db " WORD: pci_buses 0 hex, 3F Do R@ pci_bus pci_adr @ pci_read DUP -1 = If R@ HEX. HEX. Else Pop Then Loop ;WORD "
-db ' WORD: pci_registers 0 hex, 3F Do R@ pci_register pci_adr @ pci_read DUP -1 = If R@ HEX. ." :: " HEX. SPACE SPACE Else Pop Then Loop ;WORD '
+
+db " VECTOR pci_inner "
+db ' WORD: pci_registers 0 hex, 3F Do R@ pci_register pci_adr @ pci_read DUP -1 = If pci_adr @ HEX. ." :: " HEX. SPACE SPACE Else Pop Then Loop ;WORD '
+
+db ' WORD: jjj           pci_adr @ pci_read  hex, 0C030002  <>   If   ." USB 1.1 at:" pci_adr @ HEX. ." Base:" hex, 8 pci_register pci_adr @ pci_read HEX.  Then hex, 2 pci_register    ;WORD '
+
+db ' WORD: pci_functions 0 hex, 7 Do R@ pci_function pci_adr @ pci_read  -1 = If  jjj   Then  Loop  0 pci_function ;WORD '
+db " WORD: pci_devices 0 hex, 1F Do R@ pci_device pci_adr @ -1 = If pci_functions Then Loop 0 pci_device  ;WORD "
+db " WORD: pci_buses hex, 2 pci_register 0 hex, FF Do R@ pci_bus pci_adr @ pci_read  -1 = If pci_devices Then Loop ;WORD "
+
+
 db " WORD: pcr           0 hex, 3F Do R@ HEX. R@ pci_register pci_adr @ HEX. Loop ;WORD "
+
+db " ( scan all buses dev:0 func:0 reg: 2 ) "
+db " WORD: find_usb 0 pci_adr ! hex, 2 pci_register  0 hex, 3F Do  R@ pci_bus  pci_adr @ pci_read DUP "
+db "       -1 = If (( something on this bus ) HEX.   Then  Loop ;WORD "
 
 db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
 db "                 hex, 344 set_tone hex, FFFFFF (beep)   ;WORD "
