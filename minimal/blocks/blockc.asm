@@ -169,16 +169,16 @@ db " FORTH32 CURRENT ! FORTH32 CONTEXT ! "
 ;db " WORD: apic_calibrate  0   0 hex, 20   Do apic_ticks @ DUP HEX. + Loop  HEX.  ;WORD "
 ;db " apic_calibrate "
 
-db " VECTOR pci_inner "
 
-;db " CREATE USB "
 db " WORD: usb_pci_adr NOOP ;WORD "
 db " WORD: usb_base_adr CELL+ ;WORD "
+
+
 db ' WORD: pci_registers 0 hex, 3F Do R@ pci_register pci_adr @ pci_read DUP -1 = If pci_adr @ HEX. ." :: " HEX. SPACE SPACE Else Pop Then Loop ;WORD '
 
 db " WORD: get_usb_pci_config          "
 db " pci_adr @ pci_read  hex, 0C030002  <>   If  "
-db           ' ." USB 1.1 at:" pci_adr @ DUP ,  HEX.  ." Base:" hex, 8 pci_register pci_adr @ pci_read  DUP HEX. ,   Then '
+db           ' CRLF ." USB 1.1 at:" pci_adr @ DUP ,  HEX.  ." Base:" hex, 8 pci_register pci_adr @ pci_read  DUP HEX. ,   Then '
 db           " hex, 2 pci_register    ;WORD "
 
 db ' WORD: pci_functions 0 hex, 7 Do R@ pci_function pci_adr @ pci_read  -1 = If   get_usb_pci_config   Then  Loop  0 pci_function ;WORD '
@@ -190,6 +190,23 @@ db " WORD: pcr           0 hex, 3F Do R@ HEX. R@ pci_register pci_adr @ HEX. Loo
 
 db " ( scan all buses dev:0 func:0 reg: 2 ) "
 db " WORD: find_usb  HERE  pci_buses  ;WORD "
+
+db " CREATE USB find_usb "
+db " WORD: USB0 USB hex, 1 CELLs + @   hex, F NOT AND  ;WORD "
+db " WORD: USB1 USB hex, 3 CELLs + @   hex, F NOT AND  ;WORD "
+db " WORD: USB2 USB hex, 5 CELLs + @   hex, F NOT AND  ;WORD "
+db " WORD: USB3 USB hex, 7 CELLs + @   hex, F NOT AND  ;WORD "
+
+db " WORD: usb_state          port@ HEX.  ;WORD "
+db " WORD: usb_frame_num      hex, 1 CELLs + port@ HEX. ;WORD "
+db " WORD: usb_base_frame     hex, 2 CELLs + port@ HEX. ;WORD "
+db " WORD: usb_sof            hex, 3 CELLs + port@ HEX. ;WORD "
+db " WORD: usb_port_status    hex, 4 CELLs + port@ HEX. ;WORD "
+
+db " CRLF .( USB0:)USB0 usb_state USB0 usb_frame_num USB0 usb_base_frame USB0 usb_sof USB0 usb_port_status "
+db " CRLF .( USB1:)USB1 usb_state USB1 usb_frame_num USB1 usb_base_frame USB1 usb_sof USB1 usb_port_status "
+db " CRLF .( USB2:)USB2 usb_state USB2 usb_frame_num USB2 usb_base_frame USB2 usb_sof USB2 usb_port_status "
+db " CRLF .( USB3:)USB3 usb_state USB3 usb_frame_num USB3 usb_base_frame USB3 usb_sof USB3 usb_port_status "
 
 db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
 db "                 hex, 344 set_tone hex, FFFFFF (beep)   ;WORD "
