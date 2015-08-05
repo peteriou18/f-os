@@ -92,6 +92,8 @@ backward<
 Block 9
 Interrupts setup
 
+0x4C0 low 16-bits dword mask irqs.
+
 Block A 
 chr span's VECTOR  upper? caps_shift only_shift (span1) (span2)  span: eng 
 
