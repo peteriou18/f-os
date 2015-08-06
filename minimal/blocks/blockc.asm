@@ -208,6 +208,16 @@ db " CRLF .( USB1:)USB1 usb_state USB1 usb_frame_num USB1 usb_base_frame USB1 us
 db " CRLF .( USB2:)USB2 usb_state USB2 usb_frame_num USB2 usb_base_frame USB2 usb_sof USB2 usb_port_status "
 db " CRLF .( USB3:)USB3 usb_state USB3 usb_frame_num USB3 usb_base_frame USB3 usb_sof USB3 usb_port_status "
 
+db " 1 CONSTANT Terminate "
+db " ( Link_Pointer dword ) "
+db " ( Act_len&status dword ) "
+db " ( PID adr endpoint ) "
+db " ( buffer pointer ) "
+db " CREATE setup_TD    0 , ( link pointer) "
+db "                    0 ,                 "
+db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 4FF  B, B, ( packet length ) "
+db "                    0 , ( buffer pointer )       "
+
 db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
 db "                 hex, 344 set_tone hex, FFFFFF (beep)   ;WORD "
 db 0
