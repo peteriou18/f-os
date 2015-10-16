@@ -12,6 +12,7 @@
 ;
 cell_size = 4 ; 32bit
 data_stack_base = 080000h
+irq_mask_store  = 4C0h
 
 macro alignhe
 { virtual
@@ -25,6 +26,8 @@ db algn dup 0
 ;entry point
 ;----------------------------
         USE32
+        mov     eax,int_aa
+        mov     [0xAA*4],eax
         cli
 ep1:
         in      al,64h
@@ -46,6 +49,7 @@ ep1:
         in      al,64h
         test    al,2
         jne     ep3
+        mov     dword [irq_mask_store],0x0F9
         sti
         mov dword [gs:20], "  S "
         mov dword [gs:24], "t a "
@@ -63,6 +67,65 @@ ep1:
 
 
         jmp $
+USE16
+int_aa:
+        mov     ax,0b800h
+        mov     fs,ax
+        mov     word [fs:0],4040h
+        hlt
+        iret
+USE32
+        push    edx
+        pop     edx
+        mov ecx,1bh
+        rdmsr
+        mov eax,1
+        cpuid
+        movdqa xmm0,[edx]
+        movdqa [ebx+7fff0h],xmm0
+        mov word [edi], 0x1234
+        mov al,20h
+        out 0A0h,al
+
+        add edi,0x4
+        mov ah,0x0F
+        mov ch,ah
+        shr cl,4
+        and cl,0x0F
+        or  cl,0x30
+        or  eax,ecx
+        mov [edi],eax
+        and al,0x0f
+        or  al,0x30
+        inc edx
+        mov cl,al
+        shl ecx,8
+        dec edx
+        mov edx,ecx
+        and dword [0x1234],0x1234
+        not eax
+        shl eax,7
+        or  [0x1234],eax
+        in  eax,dx
+        out dx,eax
+        sub ecx,eax
+        mov edi,0x1234
+        sub eax,edi
+        mov ecx,0x1234
+        std
+        rep     movsb
+        inc edi
+        mov edi,esi
+        add esi,eax
+        mov esi,0x1234
+        inc dword [0x1234]
+        rep stosb
+        or  eax,1234h
+        in  al,dx
+        sub [0x1234],eax
+        mov al,cl
+        mov al,ch
+        out dx,al
         shr eax,1
         mov ah,cl
         mov ah,ch
@@ -282,25 +345,26 @@ nfa_5:
         dd _constant
 here_value:
         dd _here
-;----------------------------
-        align 4
-nfa_6:
-        db 9,"constant#",0
-        alignhe
-        dd nfa_5
-        constantb_:
-        dd _constant
-        dd _constant
 _constant:
         mov eax,[eax+4]
         call _push
         ret
 ;----------------------------
+;        align 4
+;nfa_6:
+;        db 9,"constant#",0
+;        alignhe
+;        dd nfa_5
+;constantb_:
+;        dd _constant
+;        dd _constant
+
+;----------------------------
         align 4
 nfa_7:
         db 3,"Pop",0
         alignhe
-        dd nfa_6
+        dd nfa_5        ;nfa_6
         dd _pop
 _pop:
         mov ebx,[stack_pointer]
@@ -369,6 +433,7 @@ _enclose:
 ; clear 32 bytes
         xor eax,eax
         mov ecx,8
+        cld
         rep stosd
         mov edi,ebx
         mov ecx,[block_value+4] ; size of buffer
@@ -443,6 +508,7 @@ _find2:
         mov ebp,esi
         mov eax,[edi]
 find22:
+        cld
         cmpsd
         jne _find11
         loop find22
@@ -494,14 +560,14 @@ block_value:
         dd 8192 ;size of buffer
         dd 2000h ;address of input buffer
 ;----------------------------
-        align 4
-nfa_16:
-        db 9,"variable#",0
-        alignhe
-        dd nfa_15
-variableb_:
-        dd _constant
-        dd _variable_code
+;        align 4
+;nfa_16:
+;        db 9,"variable#",0
+;        alignhe
+;        dd nfa_15
+;variableb_:
+;        dd _constant
+;        dd _variable_code
 _variable_code:
         add eax,cell_size
         call _push
@@ -511,7 +577,7 @@ _variable_code:
 nfa_17:
         db 3,">IN",0
         alignhe
-        dd nfa_16
+        dd nfa_15       ; nfa_16
         dd _variable_code
 _in_value:
         dd 0
@@ -718,7 +784,7 @@ prtstr3:
         mov eax, cr0
         or al, 0x01 ; Set protected mode bit
         mov cr0, eax
-        wbinvd
+        ;wbinvd
         jmp far 8:pm2
 
 esp_save dd 0
@@ -765,7 +831,7 @@ rm3:
         and al, 0xfe
 ; clear protected mode bit
         mov cr0, eax
-        wbinvd
+        ;wbinvd
         jmp 0:start163
         align 4
 
@@ -781,7 +847,10 @@ start163:
         call remap_irq_real
         lidt [rlidt]
         sti
-        call unmask_irqs
+        mov al, 0x0
+        out 0x21, al
+        out 0xA1, al
+     ;   call unmask_irqs
         jmp far [rmback]
         USE32
 ;----------------------------
@@ -821,12 +890,16 @@ remap_irq_pm:
         align 4
 unmask_irqs:
 ; Enable specific interrupts
+ ;       mov       byte [0x100000], 11111001b
         in al, 0x21
-        mov al, 11111001b ; Enable Cascade, Keyboard
+        mov al,   [irq_mask_store];11111001b ;[0x4f0] ;cEnable Cascade, Keyboard, PIT
         out 0x21, al
         in al, 0xA1
-        mov al, 11111101b ; Enable RTC
+        mov al, [irq_mask_store] ;11111101b ;[0x4f1] ; Enable RTC
         out 0xA1, al
+        mov al,0Ch
+        out 70h,al
+        in  al,71h
         ret
 ;----------------------------
         align 4
@@ -961,6 +1034,7 @@ _number:
         ; fill 32 bytes with zeroes
         mov     eax,30h
         mov     ecx,32
+        cld
         rep     stosb
         
         mov     edi,ebx
@@ -1317,6 +1391,7 @@ _word:
 ; clear 32 bytes
         xor eax,eax
         mov ecx,8
+        cld
         rep stosd
         mov edi,ebx
         mov ecx,[block_value+4] ; size of buffer

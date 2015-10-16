@@ -1,22 +1,114 @@
 
  ;block 7
- ; lit# set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
+ ; - set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
  ; ," make_badword   make_exit  VOCABULARY NOOP compiler  (
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
  ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
  db " ASSEMBLER FORTH32 LINK    "
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
- db " HEADER lit#       HERE CELL+ ,        "
- db " mov_eax,[esp+4]                        "
- db " mov_eax,[eax+4]          "
- db " mov_edx,#  ' Push @ ,           call_edx      "
- db " add_d[esp+4],4      "
- db " ret    "
+ db " HEADER -      HERE CELL+ ,      "
+ db " mov_edx,# ' Pop @ ,     "
+ db " call_edx           "
+ db " mov_ebp,eax                                 "
+ db " call_edx          "
+ db " sub_eax,ebp       "
+ db " mov_edx,#  ' Push @ ,                       "
+ db " call_edx    "
+ db " ret         "
+
+ db " ALIGN          "
+
+ db " HEADER +        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " add_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
+
+ db " HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,                                  "
+ db " HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , ,  "
+ db " HEADER   efes           variable#  , 0xd 0F0F0F0F0F0F0F0F , , 0xd   0F0F0F0F0F0F0F0F , ,  "
+ db " HEADER   sevens         variable#  , 0xd 0707070707070707 , , 0xd   0707070707070707 , ,  "
+ db " HEADER   zeroes         variable#  , 0xd 3030303030303030 , , 0xd   3030303030303030 , ,  "
+ db " HEADER   hexstr         variable#  , 0xd 3332323536394143 , , 0xd 20 , , 0x 20 ,            "
+
+ db " ASSEMBLER FORTH32 LINK                           "
 
  db " ALIGN    "
+ db " HEADER    inverse_hexstr  HERE CELL+ ,           "
+ db " mov_eax,[] hexstr ,                              "
+ db " mov_ebx,[] hexstr CELL+ ,                        "
+ db " mov_ecx,[] hexstr CELL+ CELL+ ,                  "
+ db " mov_edx,[] hexstr CELL+ CELL+ CELL+ ,            "
+ db " bswap_eax  bswap_ebx    bswap_ecx   bswap_edx    "
+ db " mov_[],edx hexstr ,                              "
+ db " mov_[],ecx hexstr CELL+ ,                        "
+ db " mov_[],ebx hexstr CELL+ CELL+ ,                  "
+ db " mov_[],eax hexstr CELL+ CELL+ CELL+ ,            "
+ db " ret                                              "
 
- db " HEADER set_cursor HERE CELL+ , "
+ db " ALIGN                                            "
+
+ db " HEADER (hex_dot) HERE CELL+ ,                    "
+
+ db " mov_edx,#  ' Pop @ ,                             "
+ db " call_edx                                                                                                                                                                  "
+ db " mov_[],eax   hex_dot_value  ,                    "
+ db " movdqu_xmm0,[]   hex_dot_value  ,                "
+ db " pxor_xmm1,xmm1                                   "
+ db " punpcklbw_xmm0,xmm1                              "
+ db " movdqa_xmm1,xmm0                                 "
+ db " movdqu_xmm2,[] efes ,                            "
+ db " pand_xmm1,xmm2                                   "
+ db " psllq_xmm0,4                                     "
+ db " pand_xmm0,xmm2                                   "
+ db " por_xmm0,xmm1                                    "
+ db " movdqa_xmm1,xmm0                                 "
+ db " movdqu_xmm4,[] sixes ,                           "
+ db " paddb_xmm1,xmm4                                  "
+ db " psrlq_xmm1,4                                     "
+ db " pand_xmm1,xmm2                                   "
+ db " pxor_xmm3,xmm3                                   "
+ db " psubb_xmm3,xmm1                                  "
+ db " movdqu_xmm2,[] sevens ,                          "
+ db " pand_xmm3,xmm2                                   "
+ db " paddb_xmm0,xmm3                                  "
+ db " movdqu_xmm2,[] zeroes ,                     "
+ db " paddb_xmm0,xmm2                                  "
+ db " movdqu_[],xmm0 hexstr ,                   "
+ db " ret                                              "
+
+ db " ALIGN                                           "
+
+ db " ASSEMBLER FORTH32 LINK                        "
+
+ db " HEADER 2HEX.   HERE CELL+ ,                  "
+ db " mov_edx,#  ' Pop @ ,            call_edx "
+ db " mov_[],eax   hex_dot_value CELL+ ,                "
+ db " mov_edx,#  ' (hex_dot) @ ,      call_edx       "
+ db " mov_edx,#  ' inverse_hexstr @ , call_edx         "
+
+ db " mov_eax,# hexstr ,                             "
+ db " mov_edx,#  ' Push @ ,           call_edx         "
+ db " mov_edx,#  ' TYPEZ @ ,          call_edx        "
+ db " ret                                              "
+
+ db " ALIGN       "
+
+ db " HEADER HEX.   HERE CELL+ ,                  "
+ db " pxor_xmm0,xmm0                             "
+ db " movdqu_[],xmm0  hex_dot_value  ,           "
+ db " mov_edx,#  ' (hex_dot) @ ,      call_edx   "
+ db " mov_edx,#  ' inverse_hexstr @ , call_edx        "
+ db " mov_eax,# hexstr CELL+ CELL+  ,            "
+ db " mov_edx,#  ' Push @ ,           call_edx        "
+ db " mov_edx,#  ' TYPEZ @ ,          call_edx     "
+ db " ret                                            "
+
+ db " ALIGN        "
+db " HEADER set_cursor HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx "
 db " mov_ecx,eax "
 db " mov_edx,# 0x 3D4 , "
@@ -31,27 +123,9 @@ db " ALIGN    "
 
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
- db " HEADER CONSTANT   interpret# ,           "
- db " ' HEADER , ' constant# , ' , , ' , ,   ' EXIT ,   "
 
- db " 0x 0        CONSTANT 0      "
- db " 0x 1        CONSTANT 1      "
- db " 0x FFFFFFFF CONSTANT -1 "
- db " 0x 20       CONSTANT BL     "
- db " 0x 29       CONSTANT )      "
- db " 0x 22       CONSTANT QUOTE     "
 
- db " HEADER VARIABLE   interpret# ,    "
- db " ' HEADER , ' variable# , ' , , ' 0 , ' , ,  ' EXIT , "
-
- db " HEADER LIT,  interpret# , "
- db "  ' lit# , ' lit# , ' , ,  ' , ,  ' EXIT , "
-
- db " HEADER ;Word     interpret# ,   ' EXIT LIT,  ' , ,    ' EXIT , "
-
- db " HEADER Word:     interpret# ,  "
- db "        ' HEADER , ' interpret# ,  ' , ,  ;Word "
-
+ db " Word: VARIABLE    ' HEADER , ' variable# ,  ' , , ' 0 , ' , , ;Word "
 
  db " Word: 0x,     ' 0x ,  '  LIT, ,    ;Word "
 
@@ -141,6 +215,7 @@ db " ALIGN    "
  db " WORD: ((   ) WORD             ;WORD   "
 
 
+
  db " WORD: Begin       BEGIN  ;WORD "
  db " WORD: Until       UNTIL  ;WORD "
  db " WORD: Again       AGAIN  ;WORD "
@@ -160,6 +235,7 @@ db " ALIGN    "
  db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
 
 
+ db " WORD: DOES>  COMPILE COMPILE COMPILE BRANCH   HERE  CELL+ CELL+ CELL+  LIT,  COMPILE ,  ;Word   ;WORD "
 
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
