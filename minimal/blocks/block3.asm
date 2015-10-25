@@ -27,6 +27,8 @@
  db     "                   0x CA 0x 0F 0x 2 opcode bswap_edx                 "
 
  db     "                   0x 31 0x 0F 0x 2 opcode rdtsc                     "
+ db     "                   0x A2 0x 0F 0x 2 opcode cpuid                     "
+ db     "                   0x 32 0x 0F 0x 2 opcode rdmsr                     "
 
  db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
  db     "                   0x E0 0x D1 0x 2 opcode shl_eax,1                 "
@@ -80,6 +82,7 @@
  db     "                   0x D8 0x 31 0x 2 opcode xor_eax,ebx               "
  db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
  db     "                   0x C8 0x 09 0x 2 opcode or_eax,ecx                "
+ db     "                   0x E8 0x 09 0x 2 opcode or_eax,ebp                "
  db     "                   0x C9 0x 80 0x 2 opcode or_cl,#                   "
  db     "                   0x 05 0x 09 0x 2 opcode or_[],eax                 "
  db     "                   0x 0D 0x 81 0x 2 opcode or_d[],#                  "
@@ -94,6 +97,7 @@
  db     "                   0x 64 0x E4 0x 2 opcode in_al,64h                 "
  db     "                   0x 64 0x E6 0x 2 opcode out_64h,al                "
  db     "                   0x EF 0x 66 0x 2 opcode out_dx,ax                 "
+ db     "                   0x ED 0x 66 0x 2 opcode in_ax,dx                  "
 
  db     "                   0x 84 0x 0F 0x 2 opcode je                        "
  db     "                   0x 85 0x 0F 0x 2 opcode jne                       "

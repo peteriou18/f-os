@@ -43,6 +43,24 @@ db " out_dx,al  "
 db " ret "
 db " ALIGN "
 
+db " HEADER wport@ HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " mov_edx,eax "
+db " xor_eax,eax "
+db " in_ax,dx  "
+db " mov_edx,# ' Push @ , call_edx " ;
+db " ret "
+db " ALIGN "
+
+db " HEADER wport! HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ; port
+db " mov_ecx,eax "
+db " call_edx " ;data
+db " mov_edx,ecx        "
+db " out_dx,ax  "
+db " ret "
+db " ALIGN "
+
 db " HEADER pci_register HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx " ;
 db " shl_eax,# 0x 2 B, "
@@ -90,82 +108,7 @@ db " mov_edx,# ' Push @ , call_edx " ;
 db " ret "
 db " ALIGN "
 
-db " HEADER init_PIT HERE CELL+ , "
-db " mov_eax,# 0x 36 , " ;set PIT CH0  mode
-db " mov_edx,# 0x 43 ,  "
-db " out_dx,al          "
-db " xor_eax,eax        "
-db " mov_d[],#  0x 4C0 , 0x FBF0 , "
-db " ret "
-db " ALIGN "
 
-db " HEADER init_speaker HERE CELL+ , "
-db " mov_eax,# 0x B6 , " ;set PIT CH2  mode
-db " mov_edx,# 0x 43 ,  "
-db " out_dx,al          "
-db " ret "
-db " ALIGN "
-
-
-db " HEADER start_timer HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx " ;
-db " mov_ecx,eax "
-db " mov_edx,# 0x 40 , "
-db " mov_al,cl "
-db " out_dx,al "
-db " mov_al,ch "
-db " out_dx,al "
-db " mov_d[],# 0x  0FEE00380 , 0x FFFFFFFF ,  "
-db " mov_d[],#  apic_ticks , 0x 0 ,       "
-db " mov_d[],# 0x 0B8140 , 0x 40404040 , "
-db " ret "
-
-db " ALIGN "
-
-
-db " HEADER st HERE CELL+ , "
-db " "
-db " mov_d[],# 0x 0B8140 , 0x 40404040 , "
-db " iretd "
-
-db " ALIGN "
-
-db " HEADER stop_beep HERE CELL+ , "
-db " pushad "
-db " mov_edx,# 0x 61 , "
-db " in_al,dx  "
-db " and_eax,# 0x 0FFFFFFFC ,    "
-db " out_dx,al                "
-db " mov_d[],# 0x 0FEE000B0 , 0x 42424242 , "
-db " eoi   "
-db " popad "
-db " iretd "
-db " ALIGN "
-
-
-db " HEADER set_tone HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx " ;
-db " mov_ecx,eax "
-db " mov_edx,# 0x 42 , "
-db " mov_al,cl "
-db " out_dx,al "
-db " mov_al,ch "
-db " out_dx,al "
-db " ret "
-db " ALIGN "
-
-db " HEADER (beep) HERE CELL+ , "
-db " mov_d[],# 0x 0FEE00320 , 0x 0030 , "
-db " mov_edx,# ' Pop @ , call_edx " ;
-db " mov_[],eax 0x  0FEE00380 , "
-
-db " mov_ecx,eax "
-db " mov_edx,# 0x 61 , "
-db " in_al,dx  "
-db " or_eax,# 0x 3 ,    "
-db " out_dx,al           "
-db " ret "
-db " ALIGN "
 
 db " HEADER Rdmsr HERE CELL+ , "
 db " mov_edx,# ' Pop @ , call_edx "
@@ -234,11 +177,7 @@ db " RCBA 0x 3400 + @ DUP HEX. CONSTANT RC   "
 db " RCBA 0x  168 + @ DUP HEX. CONSTANT HDBA "
 ;db " get_apic_id  .( APIC ID: )  HEX. HEX. "
 
-db " WORD: send_ipiaa     (( #proc -- )  hex, 1000000 *  apic_base hex, 310 + !  hex, 4002 apic_base hex, 300 + ! ;WORD "
-db " WORD: send_nmi       (( #proc -- )  hex, 1000000 *  apic_base hex, 310 + !  hex, 4400 apic_base hex, 300 + ! ;WORD "
-db " WORD: send_ipiab     (( #proc -- )  hex, 1000000 *  apic_base hex, 310 + !  hex, AB apic_base hex, 300 + ! ;WORD "
-db " WORD: send_sipi      (( #proc -- )  hex, 1000000 *  apic_base hex, 310 + !  hex, 460E apic_base hex, 300 + ! ;WORD "
-db " WORD: send_init      (( #proc -- )  hex, 1000000 *  apic_base hex, 310 + !  hex, 4500 apic_base hex, 300 + ! ;WORD "
+
 
 db " WORD: usb_pci_adr NOOP ;WORD "
 db " WORD: usb_base_adr CELL+ ;WORD "
@@ -290,23 +229,38 @@ db " CRLF .( USB1:)USB1 usb_state get USB1 usb_frame_num get USB1 usb_base_frame
 db " CRLF .( USB2:)USB2 usb_state get USB2 usb_frame_num get USB2 usb_base_frame get USB2 usb_sof get USB2 usb_port_status get "
 db " CRLF .( USB3:)USB3 usb_state get USB3 usb_frame_num get USB3 usb_base_frame get USB3 usb_sof get USB3 usb_port_status get "
 
-db ' WORD: usb_states   CRLF ."  USB0:"  USB0 usb_state get   ."  USB1:"  USB1 usb_state get  ."  USB2:"  USB2 usb_state get  ."  USB3:"  USB3 usb_state get ;WORD '
+db ' WORD: usb_states   CRLF ."  USB0:"  USB0 usb_state wport@ HEX.   ."  USB1:"  USB1 usb_state wport@ HEX.  ."  USB2:"  USB2 usb_state wport@ HEX.  ."  USB3:"  USB3 usb_state wport@ HEX. ;WORD '
 
-db " WORD: usb_stop  0 SWAP usb_state put ;WORD "
+db ' WORD: usb_ports    CRLF ."  USB0:"  USB0 usb_port_status wport@ HEX.  USB0 hex, 12 + wport@ HEX.  ."  USB1:"  USB1 usb_port_status wport@ HEX.  USB1 hex, 12 + wport@ HEX.       '
+db '                    CRLF ."  USB2:"  USB2 usb_port_status wport@ HEX.  USB2 hex, 12 + wport@ HEX.  ."  USB3:"  USB3 usb_port_status wport@ HEX.  USB3 hex, 12 + wport@ HEX. ;WORD '
+
+db " WORD: usb_stop  0 SWAP usb_state wport! ;WORD "
+db " WORD: frame_list  0 hex, 3FF Do DUP usb_base_frame port@ hex, FFF NOT AND R@ CELLs + DUP DUP HEX. @ HEX. SPACE  hex, C AND If CRLF KEY Pop Then  Loop ;WORD "
+
 
 db " CREATE  Terminate  1 , "
 db " ( Link_Pointer dword ) "
 db " ( Act_len&status dword ) "
 db " ( PID adr endpoint ) "
 db " ( buffer pointer ) "
-db " CREATE setup_TD    Terminate , ( link pointer) "
-db "                    0 ,                 "
-db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 7FE  B, B, ( max packet length - 1024) "
+db " CREATE setup_TD    Terminate @ , ( link pointer) "
+db "                    0x 10800000 ,                 "
+db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E0  B, 0x FF B, ( max packet length - 1024) "
 db "                    0x 2000 , ( buffer pointer )       "
 
+db " CREATE IN_TD    Terminate @ , ( link pointer) "
+db "                    0x 10800000 ,                 "
+db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E0  B, 0x FF B, ( max packet length - 1024) "
+db "                    0x 2000 , ( buffer pointer )       "
+
+db " CREATE OUT_TD    Terminate @ , ( link pointer) "
+db "                    0x 10800000 ,                 "
+db "                    0x E1 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E0  B, 0x FF B, ( max packet length - 1024) "
+db "                    0x 2000 , ( buffer pointer )       "
+
+db " WORD:  view_TD   (( addr --   )  DUP @ HEX. CELL+ DUP @ HEX. CELL+ DUP @ HEX. CELL+ @ HEX. CRLF ;WORD "
 ;db " setup_TD USB0 usb_base_frame port@ @ 0x F NOT AND  DUP HEX. ! "
 
-db " WORD: beep   [ ' stop_beep @ 0x 30 make_interrupt_gate ]   "
-db "                 hex, 344 set_tone hex, FFFFFF (beep)   ;WORD "
+
 db 0
 alignhe20
