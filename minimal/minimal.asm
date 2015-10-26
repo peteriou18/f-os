@@ -186,7 +186,9 @@ USE32
         iretd
 
 ll2:
-
+        or      eax,ebp
+        mov     [esi],ax
+        in      ax,dx
         jmp 0x12345678
         test    eax,12345678h
         cmp eax, 1234567h
@@ -655,11 +657,16 @@ rdsec1:
         mov ah,42h
         int 13h
         jnb rdsec3
-mov dword [gs:0],"D i "
-mov dword [gs:4],"s k "
-mov dword [gs:8],"  E "
-mov dword [gs:12],"r r "
-mov dword [gs:16],"o r "
+mov dword [gs:160],"D i "
+mov dword [gs:164],"s k "
+mov dword [gs:168],"  E "
+mov dword [gs:172],"r r "
+mov dword [gs:176],"o r "
+          mov         ecx,0ffh
+rdsec4:
+          hlt
+          loop  rdsec4
+
 rdsec3:
 
         jmp switch_to_pm
@@ -942,6 +949,9 @@ sixes:          dq      0606060606060606h
 fes:            dq      0x0f0f0f0f0f0f0f0f
                 dq      0x0f0f0f0f0f0f0f0f
 
+lowupmask:      dq      0xdfdfdfdfdfdfdfdf
+                dq      0xdfdfdfdfdfdfdfdf
+
 
 ;-----------------------
         align 4
@@ -970,12 +980,15 @@ _0xd:
         mov             [eax+4],ebx
         mov             [eax],ecx
         movdqu          xmm0,[eax]
+        movdqu          xmm1,[lowupmask]
+
         movdqu          xmm2,[fes]
         movdqu          xmm3,[sixes]
         movdqu          xmm4,[zeroes]
         movdqu          xmm7,[bytemask]
-        psubb           xmm0,xmm4       ; ????? ????
-        paddb           xmm0,xmm3       ; ???? ?????
+        psubb           xmm0,xmm4       ; sub 30h ascii zero
+        pand            xmm0,xmm1
+        paddb           xmm0,xmm3       ; add six.
         movdqa          xmm5,xmm0       ;
         pand            xmm0,xmm2       
         psubb           xmm0,xmm3       ;????? ?????
