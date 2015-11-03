@@ -76,6 +76,7 @@
  db     "                   0x C1 0x 29 0x 2 opcode sub_ecx,eax               "
  db     "                   0x 05 0x 29 0x 2 opcode sub_[],eax                "
  db     "                   0x 05 0x FF 0x 2 opcode inc_d[]                   "
+ db     "                   0x 0D 0x FF 0x 2 opcode dec_d[]                   "
  db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "

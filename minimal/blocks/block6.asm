@@ -58,6 +58,16 @@
 
  db " ALIGN                    "
 
+ db " HEADER OR        HERE CELL+ ,                "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_ebp,eax           "
+ db " call_edx                                                                                                                                                                  "
+ db " or_eax,ebp          "
+ db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret                                     "
+
+ db " ALIGN     "
+
  db " HEADER =        HERE CELL+ ,                "                    ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "

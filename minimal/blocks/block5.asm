@@ -1,5 +1,5 @@
-; block 5   CELL-  lit# hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
- ;   2HEX.  HEX.  SWAP- +  TIMER@  lit# 1+ 1- 2* 2/ C@ C! ALLOT SLIT  DUP >R R> R@ SWAP!
+; block 5   CELL- lit# SWAP- *  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
+ ;   2HEX.  HEX.   +  TIMER@  1+ 1- 2* 2/ C@ C! ALLOT SLIT  DUP >R R> R@ SWAP!
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER  CELL-     HERE CELL+ ,             "
@@ -15,11 +15,7 @@
  db " add_d[esp+4],4      "
  db " ret    "
 
-
-
  db " ASSEMBLER FORTH32 LINK                        "
-
-
 
  db " HEADER SWAP-           HERE CELL+ ,     "
  db " mov_edx,# ' Pop @ ,      "
@@ -32,7 +28,6 @@
  db " ret           "
 
  db " ALIGN           "
-
 
 
  db " HEADER *        HERE CELL+ ,                "
@@ -71,6 +66,14 @@
 
  db " ALIGN    "
 
+ db " HEADER 2+         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " inc_eax    inc_eax        "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
  db " HEADER 2*         HERE CELL+ ,       "
  db " mov_edx,#  ' Pop @ ,            call_edx       "
  db " shl_eax,1            "
@@ -99,6 +102,15 @@
  db " mov_esi,eax  "
  db " call_edx         "
  db " mov_[esi],al      "
+ db " ret        "
+
+ db " ALIGN        "
+
+ db " HEADER W!         HERE CELL+ ,   "
+ db " mov_edx,#  ' Pop @ ,            call_edx      "
+ db " mov_esi,eax  "
+ db " call_edx         "
+ db " mov_[esi],ax      "
  db " ret        "
 
  db " ALIGN        "

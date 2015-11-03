@@ -36,14 +36,26 @@
 
 
 
-; db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
+; db " WORD: PAUSE  (( pit ticks -- ) pit_interval ! Begin pit_interval @ 0 <> Until ;WORD "
 ; db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
 ; db " WORD: CREATE      HEADER variable# , ;WORD "
 
  db " ASSEMBLER CONTEXT ! ASSEMBLER FORTH32 LINK  "
  db " FORTH32 CURRENT !  "
-                    ;
+
+ db " ALIGN "
+ ;
+ db " HEADER pause       HERE CELL+ , "
+ db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " mov_[],eax pit_interval , "
+ db " backward<   "
+ db " hlt         "
+ db " mov_eax,[] pit_interval , "
+ db " test_eax,eax            "
+ db " jne   <backward         "
+ db " ret                     "
+
 
  db " ALIGN     "
 
