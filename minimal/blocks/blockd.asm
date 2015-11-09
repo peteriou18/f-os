@@ -98,37 +98,37 @@ db " ( buffer pointer ) "
 
 
 db " ALIGN16 "
-db " CREATE OUT_TD      1 , ( link pointer) "
-db "                    0x 18800000 ,                 "
+db " CREATE OUT_TD      1 , ( link pointer ) "
+db "                    0x 1c800000 ,                 "
 db "                    0x E1 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x FFE8 W, ( max packet length - 1024) "
 db "                    0 , ( buffer pointer )       "
 
-db " CREATE IN_TD2      OUT_TD   0x 4 OR  , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db " CREATE IN_TD3      OUT_TD    0x 4 OR , ( link pointer) "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E8  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor 0x 10 + , ( buffer pointer )       "
 
-db " CREATE IN_TD0      IN_TD2    0x 4 OR  , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db " CREATE IN_TD2      IN_TD3    0x 4 OR  , ( link pointer) "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E0  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor 0x 8 + , ( buffer pointer )       "
 
-db " CREATE IN_TD1      IN_TD0   0x 4 OR  , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db " CREATE IN_TD1      IN_TD2   0x 4 OR  , ( link pointer) "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E8  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor , ( buffer pointer )    0 , 0 , 0 ,   "
 
 db " CREATE setup_TD1    IN_TD1    0x 4 OR   , ( link pointer) "
-db "                    0x 18800000 ,                 "
+db "                    0x 1c800000 ,                 "
 db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 00E0  W,  ( max packet length - 1024) "
 db "                    usb_request_block_device_descriptor , ( buffer pointer )      0 , 0 , 0 , "
 
 db " CREATE setup_TD2   IN_TD1   0x 4 OR    , ( link pointer) "
-db "                    0x 18800000 ,                 "
+db "                    0x 1c800000 ,                 "
 db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 00E0  W,  ( max packet length - 1024) "
 db "                    usb_request_block_get_cfg , ( buffer pointer )     0 ,   "
 
-db " CREATE QH         ( 1 , ) QH 0x 2 OR ,  "
+db " CREATE QH          QH 0x 2 OR  ,   "
 db "                    setup_TD1  , "
 db " "
 
@@ -142,16 +142,16 @@ db '                                  R>  Pop ;WORD '
 db " WORD: usb_run       DUP wport@ 1 OR SWAP wport!  "
 db "                     ;WORD "
 
-db " WORD: fl8!         hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + ! ;WORD "
+db " WORD: fl8!        QH USB0 hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + SWAP hex, 2 OR SWAP!  hex, 5 pause  setup_TD1 view_TD ;WORD "
 
 db " WORD: TD           0 , 0 , 0 , 0 , ;WORD "
 
 db " WORD: usb_disable_interrupts  hex, 4 + 0 SWAP wport! ;WORD "
 db " WORD: usb_clear_frame_index   hex, 6 + 0 SWAP wport! ;WORD "
 
-db " WORD: set_frame_list       hex, 88000 hex, 88fff Do  R@ HEX. 1 R@ ! R> hex, 3 + >R Loop  hex, 8 + hex, 88000 port! ;WORD "
+db " WORD: set_frame_list       hex, 88000 hex, 88fff Do   1 R@ ! R> hex, 3 + >R Loop  hex, 8 + hex, 88000 SWAP port! ;WORD "
 
-db " WORD: usb_host_reset    (( controller -- ) DUP DUP DUP DUP DUP DUP   "
+db " WORD: usb_host_reset    (( controller -- ) USB0 DUP DUP DUP DUP DUP DUP   "
 db "                                                      hex, 4 SWAP wport!  hex, 3 pause "
 db "                                                           0 SWAP wport!  hex, 3 pause "
 db "                                                      set_frame_list                   "
@@ -161,10 +161,11 @@ db "                                                      usb_clear_frame_index 
 db "       DUP DUP wport@  hex, c0  OR  SWAP wport!   DUP  wport@  1  OR  SWAP wport!  ;WORD "
 
 
-db " WORD: usb_port_reset     hex, 12 + DUP DUP  hex, 100 SWAP wport!  1 pause  hex, fffffeff SWAP wport!  1 pause  hex, 4 SWAP wport! ;WORD "
+db " WORD: usb_port_reset    USB0  hex, 12 + DUP DUP DUP hex, 200 SWAP wport!   hex, 3 pause  hex, fffffdff SWAP wport!  hex, 3 pause  wport@ hex, 4 OR SWAP wport! ;WORD "
 
 db " WORD: get_desc      QH  hex, 2 OR  R@ hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + ! ;WORD "
 
+db " WORD: get_port     USB0 hex, 12 + wport@ ;WORD    WORD: set_port   USB0 hex, 12 + wport! ;WORD "
 
 
 

@@ -1,6 +1,6 @@
 
- ;block 6    COMPILE BRANCH ?OF ?BRANCH  AND  =  <> < stop break exec_point WITNIN rWITHIN  SP@
- ;           SWAP OVER NEGATE CELLs strcopy clear
+ ;block 6    COMPILE BRANCH ?OF ?BRANCH  AND  OR =  <> < stop break exec_point WITNIN rWITHIN  SP@
+ ;	     SWAP OVER NEGATE NOT CELLs strcopy clear
 
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
@@ -14,6 +14,7 @@
  db " ret    "
 
  db " ALIGN    "
+
  db " HEADER BRANCH          HERE   CELL+ , "
  db " mov_eax,[esp+4]                        "
  db " mov_eax,[eax+4]          "
@@ -24,8 +25,8 @@
 
  db " HEADER ?OF          HERE   CELL+ , "
  db " mov_ecx,[esp+4]                        " ; addrr interpr point
- db " mov_ebp,[ecx+4]          "               ; branch value
- db " add_ecx,4     "                          ; next cell
+ db " mov_ebp,[ecx+4]          "	       ; branch value
+ db " add_ecx,4     "			       ; next cell
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " test_eax,eax "
  db " cmove_ecx,ebp     " ; if false-> branch
@@ -37,8 +38,8 @@
 
  db " HEADER ?BRANCH         HERE   CELL+ , "
  db " mov_ecx,[esp+4]         " ; addrr interpr point
- db " mov_ebp,[ecx+4]          "               ; branch value
- db " add_ecx,4     "                          ; next cell
+ db " mov_ebp,[ecx+4]          "	       ; branch value
+ db " add_ecx,4     "			       ; next cell
  db " mov_edx,#  ' Pop @ ,   call_edx      "
  db " test_eax,eax "
  db " cmovne_ecx,ebp     " ; if true-> branch
@@ -48,27 +49,27 @@
 
  db " ALIGN "
 
- db " HEADER AND        HERE CELL+ ,                "                    ; code field
+ db " HEADER AND        HERE CELL+ ,                "			 ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
- db " call_edx                                                                                                                                                                  "
+ db " call_edx                    "
  db " and_eax,ebp          "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
 
  db " ALIGN                    "
 
- db " HEADER OR        HERE CELL+ ,                "                    ; code field
+ db " HEADER OR        HERE CELL+ ,                "			; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
- db " call_edx                                                                                                                                                                  "
+ db " call_edx                   "
  db " or_eax,ebp          "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
 
  db " ALIGN     "
 
- db " HEADER =        HERE CELL+ ,                "                    ; code field
+ db " HEADER =        HERE CELL+ ,                "		       ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                 "
@@ -82,7 +83,7 @@
 
  db " ALIGN                    "
 
- db " HEADER <>        HERE CELL+ ,                "                    ; code field
+ db " HEADER <>        HERE CELL+ ,                "			; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                          "
@@ -95,7 +96,7 @@
 
  db " ALIGN  "
 
- db " HEADER <        HERE CELL+ ,                "                    ; code field
+ db " HEADER <        HERE CELL+ ,                "		       ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                          "
@@ -127,7 +128,7 @@
 
  db " ALIGN  "
 
- db " HEADER WITHIN     HERE CELL+ , "      ; x low high
+ db " HEADER WITHIN     HERE CELL+ , "	    ; x low high
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_esi,eax "
  db " call_edx    "
@@ -147,7 +148,7 @@
 
  db " ALIGN      "
 
- db " HEADER rWITHIN     HERE CELL+ , "      ;  low high x
+ db " HEADER rWITHIN     HERE CELL+ , "      ;	low high x
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax "
  db " call_edx    "
@@ -233,11 +234,11 @@
  db " ALIGN    "
 
  db " HEADER strcopy            HERE CELL+ ,                      "
- db " mov_edx,#  ' Pop @ ,            call_edx      "   ; copy to
+ db " mov_edx,#  ' Pop @ ,            call_edx      "	; copy to
  db " mov_edi,eax        "
  db " mov_edx,#  ' Pop @ ,            call_edx         "   ; copy from
  db " mov_esi,eax                "
- db " movzx_ecx,b[esi]            "     ;counter
+ db " movzx_ecx,b[esi]            "	;counter
  db " shr_ecx,2                "
  db " inc_ecx           "
  db " cld               "
@@ -261,5 +262,5 @@
 
  db " EXIT "
 
- db     0
+ db	0
  alignhe20

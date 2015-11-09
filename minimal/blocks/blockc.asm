@@ -1,4 +1,5 @@
 ; block c
+; port@ port!
 
 db " FORTH32 CONTEXT ! FORTH32 CURRENT ! "
 
@@ -105,6 +106,17 @@ db " out_dx,eax   "
 db " mov_edx,# 0x CFC ,   "
 db " in_eax,dx "
 db " mov_edx,# ' Push @ , call_edx " ;
+db " ret "
+db " ALIGN "
+
+db " HEADER pci_write HERE CELL+ , "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " or_eax,# 0x 80000000 , "
+db " mov_edx,# 0x CF8 ,   "
+db " out_dx,eax   "
+db " mov_edx,# ' Pop @ , call_edx " ;
+db " mov_edx,# 0x CFC ,   "
+db " out_dx,eax "
 db " ret "
 db " ALIGN "
 

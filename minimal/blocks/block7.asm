@@ -1,9 +1,15 @@
 
  ;block 7
- ; - set_cursor CONSTANT 0 1 -1 BL ) QUOTE VARIABLE LIT, ;Word Word: 0x, ', WORD .( PAD Word+ S"
- ; ," make_badword   make_exit  VOCABULARY NOOP compiler  (
- ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   IMMEDIATES ;WORD   WORD: [ ] ."
- ; .((  (( Begin  Until  Again  If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
+ ; - + hex_dot_value  sixes   efes   sevens     zeroes      hexstr         
+;  inverse_hexstr   (hex_dot)  2HEX.   HEX.  
+; set_cursor VARIABLE  0x,  ',  WORD  .( PAD Word+   S"  ,"       
+ ;  make_badword   make_exit	VOCABULARY NOOP compiler  ( 
+ ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   
+; IMMEDIATES ;WORD   WORD: [ ] ." .((	((                              CONSTANT 0 1 -1 BL ) QUOTE LIT, ;Word Word: 
+ ;  Begin  Until  Again	If  Then   Else  hex,  Case  Of  EndOf	EndCase   Do  Loop
+; DOES> CHAR B, W, CREATE 
+
+
  db " ASSEMBLER FORTH32 LINK    "
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
@@ -19,7 +25,7 @@
 
  db " ALIGN          "
 
- db " HEADER +        HERE CELL+ ,                "                    ; code field
+ db " HEADER +        HERE CELL+ ,                "		       ; code field
  db " mov_edx,# ' Pop @ ,   call_edx              "
  db " mov_ebp,eax           "
  db " call_edx                                                                                                                                                                  "
@@ -37,6 +43,7 @@
  db " ASSEMBLER FORTH32 LINK                           "
 
  db " ALIGN    "
+
  db " HEADER    inverse_hexstr  HERE CELL+ ,           "
  db " mov_eax,[] hexstr ,                              "
  db " mov_ebx,[] hexstr CELL+ ,                        "
@@ -229,7 +236,7 @@ db " ALIGN    "
  db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
  db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
  db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
-             ;
+	     ;
  db " WORD: Do        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
  db " WORD: Loop      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
  db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
@@ -240,7 +247,8 @@ db " ALIGN    "
  db " FORTH32 CURRENT !    IMMEDIATES UNLINK "
 
  db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
- db " WORD: B,        HERE C! [ ' HERE CELL+ LIT, ] @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+ db " WORD: B,        HERE C!  [ ' HERE CELL+ LIT, ]  @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+ db " WORD: W,	HERE W! [ ' HERE CELL+ LIT, ] @ 2+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
  db " WORD: CREATE      HEADER variable# , ;WORD "
 
