@@ -3,10 +3,10 @@
  ; - + hex_dot_value  sixes   efes   sevens     zeroes      hexstr         
 ;  inverse_hexstr   (hex_dot)  2HEX.   HEX.  
 ; set_cursor VARIABLE  0x,  ',  WORD  .( PAD Word+   S"  ,"       
- ;  make_badword   make_exit	VOCABULARY NOOP compiler  ( 
+ ;  make_badword   make_exit    VOCABULARY NOOP compiler  ( 
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   
-; IMMEDIATES ;WORD   WORD: [ ] ." .((	((                              CONSTANT 0 1 -1 BL ) QUOTE LIT, ;Word Word: 
- ;  Begin  Until  Again	If  Then   Else  hex,  Case  Of  EndOf	EndCase   Do  Loop
+; IMMEDIATES ;WORD   WORD: [ ] ." .((   ((                              CONSTANT 0 1 -1 BL ) QUOTE LIT, ;Word Word: 
+ ;  Begin  Until  Again If  Then   Else  hex,  Case  Of  EndOf  EndCase   Do  Loop
 ; DOES> CHAR B, W, CREATE 
 
 
@@ -16,19 +16,19 @@
  db " HEADER -      HERE CELL+ ,      "
  db " mov_edx,# ' Pop @ ,     "
  db " call_edx           "
- db " mov_ebp,eax                                 "
+ db " mov_ebp,eax       "
  db " call_edx          "
  db " sub_eax,ebp       "
- db " mov_edx,#  ' Push @ ,                       "
+ db " mov_edx,#  ' Push @ ,   "
  db " call_edx    "
  db " ret         "
 
  db " ALIGN          "
 
- db " HEADER +        HERE CELL+ ,                "		       ; code field
- db " mov_edx,# ' Pop @ ,   call_edx              "
+ db " HEADER +        HERE CELL+ ,     "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx      "
  db " mov_ebp,eax           "
- db " call_edx                                                                                                                                                                  "
+ db " call_edx       "
  db " add_eax,ebp          "
  db " mov_edx,#  ' Push @ ,   call_edx            "
  db " ret                                     "
@@ -58,11 +58,21 @@
 
  db " ALIGN                                            "
 
- db " HEADER (hex_dot) HERE CELL+ ,                    "
-
- db " mov_edx,#  ' Pop @ ,                             "
- db " call_edx                                                                                                                                                                  "
+ db " HEADER (hex_pop) HERE CELL+ ,     "
+ db " mov_edx,#  ' Pop @ , call_edx                    "
  db " mov_[],eax   hex_dot_value  ,                    "
+ db " ret "
+
+ db " ALIGN   "
+
+ db " HEADER (hex_pop2) HERE CELL+ ,     "
+ db " mov_edx,#  ' Pop @ , call_edx                    "
+ db " mov_[],eax   hex_dot_value  CELL+ ,              "
+ db " ret "
+
+ db " ALIGN   "
+
+ db " HEADER (hex_convert) HERE CELL+ , "
  db " movdqu_xmm0,[]   hex_dot_value  ,                "
  db " pxor_xmm1,xmm1                                   "
  db " punpcklbw_xmm0,xmm1                              "
@@ -87,32 +97,48 @@
  db " movdqu_[],xmm0 hexstr ,                   "
  db " ret                                              "
 
- db " ALIGN                                           "
+ db " ALIGN                      "
 
- db " ASSEMBLER FORTH32 LINK                        "
+ ;db " ASSEMBLER FORTH32 LINK           "
 
- db " HEADER 2HEX.   HERE CELL+ ,                  "
- db " mov_edx,#  ' Pop @ ,            call_edx "
- db " mov_[],eax   hex_dot_value CELL+ ,                "
- db " mov_edx,#  ' (hex_dot) @ ,      call_edx       "
- db " mov_edx,#  ' inverse_hexstr @ , call_edx         "
+ ;db " HEADER (hex_dot) HERE CELL+ ,                    "
+ ;db " mov_edx,#  ' (hex_pop) @ , call_edx       "
+ ;db " mov_edx,# ' (hex_convert) @ , call_edx    "
+ ;db " ret "
+ ;db " ALIGN "
 
- db " mov_eax,# hexstr ,                             "
- db " mov_edx,#  ' Push @ ,           call_edx         "
- db " mov_edx,#  ' TYPEZ @ ,          call_edx        "
- db " ret                                              "
-
- db " ALIGN       "
-
- db " HEADER HEX.   HERE CELL+ ,                  "
+ db " HEADER (clear_hex)   HERE CELL+ ,                  "
  db " pxor_xmm0,xmm0                             "
  db " movdqu_[],xmm0  hex_dot_value  ,           "
- db " mov_edx,#  ' (hex_dot) @ ,      call_edx   "
- db " mov_edx,#  ' inverse_hexstr @ , call_edx        "
- db " mov_eax,# hexstr CELL+ CELL+  ,            "
- db " mov_edx,#  ' Push @ ,           call_edx        "
- db " mov_edx,#  ' TYPEZ @ ,          call_edx     "
- db " ret                                            "
+ db " ret "
+
+
+ ; db " ASSEMBLER FORTH32 LINK                        "
+
+ ;db " HEADER 2HEX.   HERE CELL+ ,                  "
+ ;db " mov_edx,#  ' (hex_pop2) @ ,            call_edx "
+ ;db " mov_edx,#  ' (hex_pop) @ ,            call_edx "
+ ;db " mov_edx,#  ' (hex_convert) @ ,            call_edx "
+; db " mov_[],eax   hex_dot_value CELL+ ,                "
+; db " mov_edx,#  ' (hex_dot) @ ,      call_edx       "
+ ;db " mov_edx,#  ' inverse_hexstr @ , call_edx         "
+
+ ;db " mov_eax,# hexstr ,                             "
+ ;db " mov_edx,#  ' Push @ ,           call_edx         "
+ ;db " mov_edx,#  ' TYPEZ @ ,          call_edx        "
+ ;db " ret                                              "
+
+ ;db " ALIGN       "
+
+ ;db " HEADER HEX.   HERE CELL+ ,                  "
+ ;db " pxor_xmm0,xmm0                             "
+ ;db " movdqu_[],xmm0  hex_dot_value  ,           "
+ ;db " mov_edx,#  ' (hex_dot) @ ,      call_edx   "
+ ;db " mov_edx,#  ' inverse_hexstr @ , call_edx        "
+ ;db " mov_eax,# hexstr CELL+ CELL+  ,            "
+ ;db " mov_edx,#  ' Push @ ,           call_edx        "
+ ;db " mov_edx,#  ' TYPEZ @ ,          call_edx     "
+ ;db " ret                                            "
 
  db " ALIGN        "
 db " HEADER set_cursor HERE CELL+ , "
@@ -130,7 +156,8 @@ db " ALIGN    "
 
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
-
+ db " Word: 2HEX.       ' (hex_pop2) ,   ' (hex_pop) ,  ' (hex_convert) ,  ' inverse_hexstr ,  ' hexstr ,  ' TYPEZ , ;Word "
+ db " Word: HEX.        ' (clear_hex) , ' (hex_pop) , ' (hex_convert) , ' inverse_hexstr , ' hexstr , ' CELL+ , ' CELL+ , ' TYPEZ , ;Word "
 
  db " Word: VARIABLE    ' HEADER , ' variable# ,  ' , , ' 0 , ' , , ;Word "
 
@@ -236,7 +263,7 @@ db " ALIGN    "
  db " WORD: Of         COMPILE ?OF     HERE    COMPILE 0    ;WORD "
  db " WORD: EndOf      COMPILE BRANCH  HERE >R COMPILE 0 THEN  R>    ;WORD "
  db " WORD: EndCase    Begin DUP   0 <>   If   -1 Else   THEN  0 Then   Until Pop  ;WORD "
-	     ;
+             ;
  db " WORD: Do        BEGIN    COMPILE >R   COMPILE >R   ;WORD "
  db " WORD: Loop      COMPILE R>   COMPILE 1+   COMPILE DUP   COMPILE R@   COMPILE <   COMPILE R>   COMPILE SWAP "
  db "                 COMPILE ?OF ,             COMPILE Pop   COMPILE Pop ;WORD      "
@@ -248,7 +275,7 @@ db " ALIGN    "
 
  db " WORD: CHAR      PARSE HERE 1+ C@  ;WORD "
  db " WORD: B,        HERE C!  [ ' HERE CELL+ LIT, ]  @ 1+ [ ' HERE CELL+ LIT, ] ! ;WORD "
- db " WORD: W,	HERE W! [ ' HERE CELL+ LIT, ] @ 2+ [ ' HERE CELL+ LIT, ] ! ;WORD "
+ db " WORD: W,  HERE W! [ ' HERE CELL+ LIT, ] @ 2+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
  db " WORD: CREATE      HEADER variable# , ;WORD "
 
