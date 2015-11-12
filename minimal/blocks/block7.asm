@@ -74,6 +74,7 @@
 
  db " HEADER (hex_convert) HERE CELL+ , "
  db " movdqu_xmm0,[]   hex_dot_value  ,                "
+
  db " pxor_xmm1,xmm1                                   "
  db " punpcklbw_xmm0,xmm1                              "
  db " movdqa_xmm1,xmm0                                 "
@@ -112,6 +113,12 @@
  db " movdqu_[],xmm0  hex_dot_value  ,           "
  db " ret "
 
+ db " HEADER (swap_ab) HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx "
+ db " xchg_al,ah  "
+ db " mov_edx,# ' Push @ , call_edx "
+ db " ret "
+  db " ALIGN                      "
 
  ; db " ASSEMBLER FORTH32 LINK                        "
 
