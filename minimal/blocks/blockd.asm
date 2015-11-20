@@ -133,7 +133,7 @@ db "                    setup_TD1  , "
 db " "
 
 
-db " WORD:  view_TD   (( addr --   )  DUP @ HEX. CELL+ DUP @ >R R@ (( status ) HEX. CELL+ DUP @ HEX. CELL+ @ HEX. CRLF "
+db " WORD:  view_TD   (( addr --   )  CRLF DUP @ HEX. CELL+ DUP @ >R R@ (( status ) HEX. CELL+ DUP @ HEX. CELL+ @ HEX.  "
 db "                                    "
 db '                                  R@  hex, 4000  AND 0 = If ."  CRC/Timeout error "  Then   '
 db '                                  R@  hex, 40000 AND 0 = If ."  Stalled  " Then  '
@@ -161,7 +161,7 @@ db "                                                      usb_clear_frame_index 
 db "       DUP DUP wport@  hex, c0  OR  SWAP wport!   DUP  wport@  1  OR  SWAP wport!  ;WORD "
 
 
-db " WORD: usb_port_reset    USB0  hex, 12 + DUP DUP DUP hex, 200 SWAP wport!   hex, 3 pause  hex, fffffdff SWAP wport!  hex, 3 pause  wport@ hex, 4  SWAP wport! ;WORD "
+db " WORD: usb_port_reset    USB0  hex, 12 +  (( DUP ) DUP DUP hex, 200 SWAP wport!   hex, 3 pause  hex, fffffdff SWAP wport!  hex, 4 pause (( wport@ ) hex, 4  SWAP wport! ;WORD "
 
 db " WORD: get_desc      QH  hex, 2 OR  R@ hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + ! ;WORD "
 
@@ -170,18 +170,6 @@ db " WORD: get_port     USB0 hex, 12 + wport@ ;WORD    WORD: set_port   USB0 hex
 db " WORD: 2@   >R R@ @ R> CELL+ @ ;WORD "
 
 db " WORD: (dump)   0 hex, 10 Do hexstr R@ + @ hex, ffff AND (swap_ab) hex, 200000 OR EMIT  R> 1+ >R Loop  ;WORD "
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

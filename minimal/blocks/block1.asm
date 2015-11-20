@@ -6,6 +6,7 @@
  db     " 0x 8 LOAD        0x 9 LOAD      "
  db     " 0x A LOAD        0x B LOAD      "
  db     " 0x C LOAD        0x D LOAD      "
+ db     " 0x E LOAD        0x F LOAD      "
 
  db     " .( End of loads)   "
  db     " 0x F0F0 0x 4C0 !    init_rtc "
@@ -48,7 +49,7 @@
  db     '                 Begin set_console_input CRLF ." SP:" SP@ HEX. ." HERE:" HERE HEX. ." TICKs:" TIMER@ 2HEX.  '
  db     '                 CRLF ." OK>" EXPECT   CRLF 0 >IN !  INTERPRET next_cmd Again ;WORD '
 
- db     "   F-SYSTEM   "
+ db     "  init_rtc  F-SYSTEM   "
 
  db     " CR .( ----------) CR "
 

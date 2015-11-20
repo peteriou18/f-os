@@ -1,5 +1,6 @@
-; block 5   CELL- lit# SWAP- *  hex_dot_value sixes efes sevens zeroes hexstr inverse_hexstr (hex_dot)
- ;   2HEX.  HEX.   +  TIMER@  1+ 1- 2* 2/ C@ C! ALLOT SLIT  DUP >R R> R@ SWAP!
+; block 5
+;        CELL-  lit#   SWAP-  *  TIMER@    1+ 1-  2+ 2* 2/    C@ C! W!   ALLOT SLIT  DUP  >R R> R@  SWAP!
+;        LIT,   ;Word  Word:  CONSTANT    0 1 -1 BL ) QUOTE    vect#  variable#
  db " FORTH32 CURRENT ! ASSEMBLER CONTEXT !    "
 
  db " HEADER  CELL-     HERE CELL+ ,             "

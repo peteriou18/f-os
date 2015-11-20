@@ -1,4 +1,5 @@
 ; block a
+; chr span's VECTOR
 
 db ' WORD: chr   HERE 1+ @  ;WORD '
 

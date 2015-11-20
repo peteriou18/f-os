@@ -1,8 +1,9 @@
 
  ;block 7
  ; - + hex_dot_value  sixes   efes   sevens     zeroes      hexstr         
-;  inverse_hexstr   (hex_dot)  2HEX.   HEX.  
-; set_cursor VARIABLE  0x,  ',  WORD  .( PAD Word+   S"  ,"       
+;  inverse_hexstr   (hex_pop) (hex_pop2) (hex_convert) (clear_hex) (swap_ab)
+; set_cursor
+; VARIABLE  0x,  ',  WORD  .( PAD Word+   S"  ,"
  ;  make_badword   make_exit    VOCABULARY NOOP compiler  ( 
  ; BEGIN AGAIN UNTIL   IF THEN ELSE    ENDOF OF   
 ; IMMEDIATES ;WORD   WORD: [ ] ." .((   ((                              CONSTANT 0 1 -1 BL ) QUOTE LIT, ;Word Word: 
@@ -74,7 +75,6 @@
 
  db " HEADER (hex_convert) HERE CELL+ , "
  db " movdqu_xmm0,[]   hex_dot_value  ,                "
-
  db " pxor_xmm1,xmm1                                   "
  db " punpcklbw_xmm0,xmm1                              "
  db " movdqa_xmm1,xmm0                                 "
@@ -100,14 +100,6 @@
 
  db " ALIGN                      "
 
- ;db " ASSEMBLER FORTH32 LINK           "
-
- ;db " HEADER (hex_dot) HERE CELL+ ,                    "
- ;db " mov_edx,#  ' (hex_pop) @ , call_edx       "
- ;db " mov_edx,# ' (hex_convert) @ , call_edx    "
- ;db " ret "
- ;db " ALIGN "
-
  db " HEADER (clear_hex)   HERE CELL+ ,                  "
  db " pxor_xmm0,xmm0                             "
  db " movdqu_[],xmm0  hex_dot_value  ,           "
@@ -118,53 +110,26 @@
  db " xchg_al,ah  "
  db " mov_edx,# ' Push @ , call_edx "
  db " ret "
-  db " ALIGN                      "
 
- ; db " ASSEMBLER FORTH32 LINK                        "
-
- ;db " HEADER 2HEX.   HERE CELL+ ,                  "
- ;db " mov_edx,#  ' (hex_pop2) @ ,            call_edx "
- ;db " mov_edx,#  ' (hex_pop) @ ,            call_edx "
- ;db " mov_edx,#  ' (hex_convert) @ ,            call_edx "
-; db " mov_[],eax   hex_dot_value CELL+ ,                "
-; db " mov_edx,#  ' (hex_dot) @ ,      call_edx       "
- ;db " mov_edx,#  ' inverse_hexstr @ , call_edx         "
-
- ;db " mov_eax,# hexstr ,                             "
- ;db " mov_edx,#  ' Push @ ,           call_edx         "
- ;db " mov_edx,#  ' TYPEZ @ ,          call_edx        "
- ;db " ret                                              "
-
- ;db " ALIGN       "
-
- ;db " HEADER HEX.   HERE CELL+ ,                  "
- ;db " pxor_xmm0,xmm0                             "
- ;db " movdqu_[],xmm0  hex_dot_value  ,           "
- ;db " mov_edx,#  ' (hex_dot) @ ,      call_edx   "
- ;db " mov_edx,#  ' inverse_hexstr @ , call_edx        "
- ;db " mov_eax,# hexstr CELL+ CELL+  ,            "
- ;db " mov_edx,#  ' Push @ ,           call_edx        "
- ;db " mov_edx,#  ' TYPEZ @ ,          call_edx     "
- ;db " ret                                            "
 
  db " ALIGN        "
-db " HEADER set_cursor HERE CELL+ , "
-db " mov_edx,# ' Pop @ , call_edx "
-db " mov_ecx,eax "
-db " mov_edx,# 0x 3D4 , "
-db " mov_eax,# 0x 030F , "
-db " mov_ah,cl "
-db " out_dx,ax "
-db " mov_eax,# 0x 040E , "
-db " mov_ah,ch "
-db " out_dx,ax "
-db " ret "
-db " ALIGN    "
+
+ db " HEADER set_cursor HERE CELL+ , "
+ db " mov_edx,# ' Pop @ , call_edx "
+ db " mov_ecx,eax "
+ db " mov_edx,# 0x 3D4 , "
+ db " mov_eax,# 0x 030F , "
+ db " mov_ah,cl "
+ db " out_dx,ax "
+ db " mov_eax,# 0x 040E , "
+ db " mov_ah,ch "
+ db " out_dx,ax "
+ db " ret "
+ db " ALIGN    "
 
  db " FORTH32 CURRENT ! FORTH32 CONTEXT !  "
 
- db " Word: 2HEX.       ' (hex_pop2) ,   ' (hex_pop) ,  ' (hex_convert) ,  ' inverse_hexstr ,  ' hexstr ,  ' TYPEZ , ;Word "
- db " Word: HEX.        ' (clear_hex) , ' (hex_pop) , ' (hex_convert) , ' inverse_hexstr , ' hexstr , ' CELL+ , ' CELL+ , ' TYPEZ , ;Word "
+
 
  db " Word: VARIABLE    ' HEADER , ' variable# ,  ' , , ' 0 , ' , , ;Word "
 
@@ -285,6 +250,8 @@ db " ALIGN    "
  db " WORD: W,  HERE W! [ ' HERE CELL+ LIT, ] @ 2+ [ ' HERE CELL+ LIT, ] ! ;WORD "
 
  db " WORD: CREATE      HEADER variable# , ;WORD "
+
+
 
  db " EXIT "
  db  0
