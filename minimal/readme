@@ -67,7 +67,7 @@ Block5
  LIT,   ;Word  Word:  CONSTANT    0 1 -1 BL ) QUOTE    vect#  variable#        
 
 Block6 
- COMPILE BRANCH ?OF ?BRANCH AND OR = <> < stop break exec_point WITNIN rWITHIN SP@
+ COMPILE BRANCH ?OF ?BRANCH AND OR XOR = <> < stop break exec_point WITNIN rWITHIN SP@
  SWAP OVER NEGATE NOT CELLs strcopy clear
 
 Block 7 
