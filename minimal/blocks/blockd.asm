@@ -99,44 +99,43 @@ db " ( buffer pointer ) "
 
 db " ALIGN16 "
 db " CREATE OUT_TD      1 , ( link pointer ) "
-db "                    0x 18800000 ,                 "
+db "                    0x 1c800000 ,                 "
 db "                    0x E1 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x FFE8 W, ( max packet length - 1024) "
 db "                    0 , ( buffer pointer )       "
 
 db " CREATE IN_TD3      OUT_TD    0x 4 OR , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E8  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor 0x 10 + , ( buffer pointer )       "
 
 db " CREATE IN_TD2      IN_TD3    0x 4 OR  , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E0  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor 0x 8 + , ( buffer pointer )       "
 
 db " CREATE IN_TD1      IN_TD2   0x 4 OR  , ( link pointer) "
-db "                    0x 18800000 ,     ( Low speed, active)            "
+db "                    0x 1c800000 ,     ( Low speed, active)            "
 db "                    0x 69 B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x E8  W,  ( max packet length - 1024) "
 db "                    usb_device_descriptor , ( buffer pointer )    0 , 0 , 0 ,   "
 
 db " CREATE setup_TD1    IN_TD1    0x 4 OR   , ( link pointer) "
-db "                    0x 18800000 ,                 "
+db "                    0x 1c800000 ,                 "
 db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 00E0  W,  ( max packet length - 1024) "
 db "                    usb_request_block_device_descriptor , ( buffer pointer )      0 , 0 , 0 , "
 
-db " CREATE setup_TD2   IN_TD1   0x 4 OR    , ( link pointer) "
-db "                    0x 18800000 ,                 "
-db "                    0x 2D B,  0 B,  ( device address 7 bits + endpoint 4 bits )  0x 00E0  W,  ( max packet length - 1024) "
-db "                    usb_request_block_get_cfg , ( buffer pointer )     0 ,   "
 
-db " CREATE QH          QH 0x 2 OR  ,   "
+
+db " CREATE QH         QH 0x 2 OR  ,   "
 db "                    setup_TD1  , "
 db " "
 
 
 db " WORD:  view_TD   (( addr --   )  CRLF DUP @ HEX. CELL+ DUP @ >R R@ (( status ) HEX. CELL+ DUP @ HEX. CELL+ @ HEX.  "
 db "                                    "
-db '                                  R@  hex, 4000  AND 0 = If ."  CRC/Timeout error "  Then   '
-db '                                  R@  hex, 40000 AND 0 = If ."  Stalled  " Then  '
+db '                                  R@  hex, 00004000  AND 0 = If ."  CRC/Timeout error "  Then   '
+db '                                  R@  hex, 00400000  AND 0 = If ."  Data buffer error "  Then   '
+db '                                  R@  hex, 00100000  AND 0 = If ."  Babble "    Then '
+db '                                  R@  hex, 00040000  AND 0 = If ."  Stalled  " Then  '
 db '                                  R>  Pop ;WORD '
 
 db " WORD: usb_run       DUP wport@ 1 OR SWAP wport!  "
@@ -166,10 +165,6 @@ db " WORD: usb_port_reset    USB0  hex, 12 +  (( DUP ) DUP DUP hex, 200 SWAP wpo
 db " WORD: get_desc      QH  hex, 2 OR  R@ hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + ! ;WORD "
 
 db " WORD: get_port     USB0 hex, 12 + wport@ ;WORD    WORD: set_port   USB0 hex, 12 + wport! ;WORD "
-
-db " WORD: 2@   >R R@ @ R> CELL+ @ ;WORD "
-
-db " WORD: (dump)   0 hex, 10 Do hexstr R@ + @ hex, ffff AND (swap_ab) hex, 200000 OR EMIT  R> 1+ >R Loop  ;WORD "
 
 
 

@@ -82,6 +82,7 @@
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "
  db     "                   0x D8 0x 31 0x 2 opcode xor_eax,ebx               "
+ db     "                   0x E8 0x 31 0x 2 opcode xor_eax,ebp               "
  db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
  db     "                   0x C8 0x 09 0x 2 opcode or_eax,ecx                "
  db     "                   0x E8 0x 09 0x 2 opcode or_eax,ebp                "
