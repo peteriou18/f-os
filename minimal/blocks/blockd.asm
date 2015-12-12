@@ -90,12 +90,6 @@ db "        0 B, ( iProduct ) "
 db "        0 B, ( iSerialNumber ) "
 db "        0 B, ( bNumConfigurations )  0 , 0 , ALIGN  "
 
-db " CREATE  Terminate  1 , "
-db " ( Link_Pointer dword ) "
-db " ( Act_len&status dword ) "
-db " ( PID adr endpoint ) "
-db " ( buffer pointer ) "
-
 
 db " ALIGN16 "
 db " CREATE OUT_TD      1 , ( link pointer ) "
@@ -143,8 +137,6 @@ db "                     ;WORD "
 
 db " WORD: fl8!        QH USB0 hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + SWAP hex, 2 OR SWAP!  hex, 5 pause  setup_TD1 view_TD ;WORD "
 
-db " WORD: TD           0 , 0 , 0 , 0 , ;WORD "
-
 db " WORD: usb_disable_interrupts  hex, 4 + 0 SWAP wport! ;WORD "
 db " WORD: usb_clear_frame_index   hex, 6 + 0 SWAP wport! ;WORD "
 
@@ -165,6 +157,10 @@ db " WORD: usb_port_reset    USB0  hex, 12 +  (( DUP ) DUP DUP hex, 200 SWAP wpo
 db " WORD: get_desc      QH  hex, 2 OR  R@ hex, 8 + port@  hex, FFFFF000 AND  hex, 8 + ! ;WORD "
 
 db " WORD: get_port     USB0 hex, 12 + wport@ ;WORD    WORD: set_port   USB0 hex, 12 + wport! ;WORD "
+
+
+
+
 
 
 

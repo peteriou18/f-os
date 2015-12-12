@@ -32,7 +32,19 @@
  db " call_edx       "
  db " add_eax,ebp          "
  db " mov_edx,#  ' Push @ ,   call_edx            "
- db " ret                                     "
+ db " ret           "
+
+ db " ALIGN          "
+
+ db " HEADER +!        HERE CELL+ ,     "                    ; code field
+ db " mov_edx,# ' Pop @ ,   call_edx      "
+ db " mov_ecx,eax           "
+ db " call_edx       "
+ db " add_[ecx],eax          "
+; db " mov_edx,#  ' Push @ ,   call_edx            "
+ db " ret           "
+
+ db " ALIGN          "
 
  db " HEADER   hex_dot_value  variable#  , 0xd 0 , , 0xd 0 , ,                                  "
  db " HEADER   sixes          variable#  , 0xd 0606060606060606 , , 0xd   0606060606060606 , ,  "

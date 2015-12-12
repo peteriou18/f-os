@@ -63,8 +63,8 @@ Block4
 3, 4, 5 bytes opcodes.
 
 Block5
- CELL-  lit#   SWAP-  *  TIMER@    1+ 1-  2+ 2* 2/    C@ C! W!   ALLOT SLIT  DUP  >R R> R@  SWAP!
- LIT,   ;Word  Word:  CONSTANT    0 1 -1 BL ) QUOTE    vect#  variable#        
+  CELL-  lit#   SWAP-  *  TIMER@    1+ 1-  2+ 2* Lshift 2/  Rshift  C@ C! W!   ALLOT SLIT  DUP  >R R> R@  SWAP!
+  LIT,   ;Word  Word:  CONSTANT    0 1 -1 BL ) QUOTE    vect#  variable#   
 
 Block6 
  COMPILE BRANCH ?OF ?BRANCH AND OR XOR = <> < stop break exec_point WITNIN rWITHIN SP@
@@ -102,3 +102,9 @@ editor
 
 Block C
 Ports, PCI
+
+Block D
+
+Block E
+
+Block F

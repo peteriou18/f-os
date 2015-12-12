@@ -83,6 +83,16 @@
 
  db " ALIGN    "
 
+ db " HEADER Lshift         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " mov_ecx,eax  "
+ db " call_edx "
+ db " shl_eax,cl            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
  db " HEADER 2/         HERE CELL+ ,       "
  db " mov_edx,#  ' Pop @ ,            call_edx       "
  db " shr_eax,1            "
@@ -90,6 +100,17 @@
  db " ret        "
 
  db " ALIGN    "
+
+ db " HEADER Rshift         HERE CELL+ ,       "
+ db " mov_edx,#  ' Pop @ ,            call_edx       "
+ db " mov_ecx,eax  "
+ db " call_edx "
+ db " shr_eax,cl            "
+ db " mov_edx,#  ' Push @ ,           call_edx           "
+ db " ret        "
+
+ db " ALIGN    "
+
  db " HEADER C@         HERE CELL+ ,   "
  db " mov_edx,#  ' Pop @ ,            call_edx      "
  db " movzx_eax,b[eax]         "
