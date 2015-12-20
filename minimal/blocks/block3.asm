@@ -35,6 +35,7 @@
  db     "                   0x D2 0x FF 0x 2 opcode call_edx                  "
  db     "                   0x E0 0x D1 0x 2 opcode shl_eax,1                 "
  db     "                   0x E0 0x D3 0x 2 opcode shl_eax,cl                "
+ db     "                   0x E0 0x C0 0x 2 opcode shl_al,#                  "
  db     "                   0x E0 0x C1 0x 2 opcode shl_eax,#                 "
  db     "                   0x E1 0x C1 0x 2 opcode shl_ecx,#                 "
  db     "                   0x E8 0x D1 0x 2 opcode shr_eax,1                 "
@@ -60,6 +61,7 @@
  db     "                   0x E5 0x 88 0x 2 opcode mov_ch,ah                 "
  db     "                   0x C8 0x 88 0x 2 opcode mov_al,cl                 "
  db     "                   0x E8 0x 88 0x 2 opcode mov_al,ch                 "
+ db     "                   0x C4 0x 88 0x 2 opcode mov_ah,al                 "
  db     "                   0x CC 0x 88 0x 2 opcode mov_ah,cl                 "
  db     "                   0x EC 0x 88 0x 2 opcode mov_ah,ch                 "
  db     "                   0x C4 0x 86 0x 2 opcode xchg_al,ah                "
@@ -86,6 +88,7 @@
  db     "                   0x C0 0x 31 0x 2 opcode xor_eax,eax               "
  db     "                   0x DB 0x 31 0x 2 opcode xor_ebx,ebx               "
  db     "                   0x C9 0x 31 0x 2 opcode xor_ecx,ecx               "
+ db     "                   0x D2 0x 31 0x 2 opcode xor_edx,edx               "
  db     "                   0x D8 0x 31 0x 2 opcode xor_eax,ebx               "
  db     "                   0x E8 0x 31 0x 2 opcode xor_eax,ebp               "
  db     "                   0x 35 0x 81 0x 2 opcode xor_d[],#                 "
@@ -107,8 +110,10 @@
  db     "                   0x EF 0x 66 0x 2 opcode out_dx,ax                 "
  db     "                   0x ED 0x 66 0x 2 opcode in_ax,dx                  "
 
+ db     "                   0x 82 0x 0F 0x 2 opcode jb                        "
  db     "                   0x 84 0x 0F 0x 2 opcode je                        "
  db     "                   0x 85 0x 0F 0x 2 opcode jne                       "
+
 
  db     " EXIT                                                                "
 
